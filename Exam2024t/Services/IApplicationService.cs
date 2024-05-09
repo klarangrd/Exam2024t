@@ -1,6 +1,6 @@
 ﻿using Core.Models;
 
-namespace eksamensprojekttester.Services
+namespace Exam2024t.Services
 {
     public interface IApplicationService
     {

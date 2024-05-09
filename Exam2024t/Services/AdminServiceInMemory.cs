@@ -1,7 +1,7 @@
 ﻿using Core.Models;
 using System.Diagnostics.Metrics;
 
-namespace eksamensprojekttester.Services
+namespace Exam2024t.Services
 { 
         public class AdminServiceInMemory : IAdminService
         {

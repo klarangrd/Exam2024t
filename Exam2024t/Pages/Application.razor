@@ -1,0 +1,65 @@
+﻿@page "/Application"
+@using Core.Models
+@using eksamensprojekttester.Services
+@using eksamensprojekttester.Components.Layout
+
+@using Microsoft.AspNetCore.Components.Forms
+
+<PageTitle>Application</PageTitle>
+
+<h3>Tilmeld til børneklub</h3>
+
+<button class="btn btn-primary" @onclick="OnClickAddDialog">Tilmeld børneklub</button>
+
+<button @onclick="TestOnClick" class="mb-3 mt-3">test</button>
+
+
+
+<ModalDialog @ref="addDialog" Title="Tilmeld børneklub">
+    <EditForm EditContext="@aEditContext" class="row p-3" OnValidSubmit="@HandleValidSubmit">
+        <DataAnnotationsValidator />
+        <ValidationSummary />
+
+        <!-- Form fields -->
+
+        <div class="col-12 mb-3">
+            <button type="submit" class="btn btn-primary">Opret</button>
+        </div>
+    </EditForm>
+</ModalDialog>
+
+@code {
+    Core.Models.Application application = new Core.Models.Application();
+    Core.Models.Child children = new Core.Models.Child();
+
+    private EditContext aEditContext;
+    private ModalDialog? addDialog { get; set; }
+
+    [Inject]
+    private IApplicationService mService { get; set; }
+
+    protected override void OnInitialized()
+    {
+        aEditContext = new EditContext(application);
+    }
+
+    private void OnClickAddDialog()
+    {
+        Console.WriteLine("Button clicked!"); // Add debugging statement
+        addDialog?.Open();
+        Console.WriteLine("Modal opened!"); // Add debugging statement
+    }
+
+    public async Task HandleValidSubmit()
+    {
+        await mService.Add(application);
+        addDialog?.Close();
+
+
+    }
+
+    private void TestOnClick()
+    {
+        Console.WriteLine("TestOnClick method called!");
+    }
+}

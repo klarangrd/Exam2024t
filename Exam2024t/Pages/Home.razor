@@ -2,6 +2,27 @@
 
 <PageTitle>Home</PageTitle>
 
-<h1>Hello, world!</h1>
+<h1>Velkommen til Børneklubbens tilmeldingssystem!</h1>
 
-Welcome to your new app.
+<!-- Her vil der være information omkring hvad du kan på siden - evt. informere forældre at de både skal tilmelde sig selv og deres børn -->
+<div>
+    <p>Her kan du tilmelde dit barn til Børneklubben.</p>
+    <p>Husk på, at du ikke automatisk tilmeldes når dit barn er timeldt til børneklubben. Dette skal du også selv </p>
+</div>
+
+<!-- Her kan vi indsætte et billede der viser noget relevant til siden - måske et link til tilmelding? -->
+<div>
+    <href></href>
+</div>
+
+
+<button @onclick="TestOnClick" class="mb-3 mt-3">test</button>
+
+
+@code {
+    private void TestOnClick()
+    {
+        Console.WriteLine("TestOnClick method called!");
+    }
+
+}

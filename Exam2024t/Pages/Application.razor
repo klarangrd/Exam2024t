@@ -22,15 +22,105 @@
 
         <!-- Form fields -->
 
-        <div class="col-12 mb-3">
-            <button type="submit" class="btn btn-primary">Opret</button>
-        </div>
-    </EditForm>
+    <div class="col-md-6 mb-3">
+        <label for="ChildName">Navn Barn</label>
+        <InputText id="ChildName" @bind-Value="children.ChildName" class="form-control" />
+    </div
+    <div class="col-md-2 mb-6">
+        <label for="ChildAge">Alder barn</label>
+        <InputNumber id="ChildAge" @bind-Value="children.ChildAge" class="form-control" />
+    </div>
+   
+    <div class="col-md-6 mb-3">
+        <label for="Clothingsize">Tøj størrelse</label>
+        <InputText id="Clothingsize" @bind-Value="children.ClothingSize" class="form-control" />
+    </div>
+    <div class="col-md-6 mb-3">
+        <label for="BeenBefore">Har du været i børneklub før?</label>
+        <InputCheckbox id="BeenBefore" @bind-Value="children.Beenbefore" />
+    </div>
+    <div class="col-md-6 mb-3">
+        <label for="FirstPriorityWeek">Førsteprioritet uge</label>
+        <InputSelect @bind-Value="selectedOptionUge" @oninput="OnInputUge">
+            @foreach (var anOption in optionsUge)
+            {
+                <option value="@anOption"> @anOption</option>
+            }
+            </InputSelect>
+    </div>
+    <div class="col-md-6 mb-6">
+        <label for="FirstPriorityPeriod">Førsteprioritet periode</label>
+        <InputSelect @bind-Value="selectedOptionPeriode" @oninput="OnInputPeriode">
+            @foreach (var anOption in optionsPeriode)
+            {
+                <option value="@anOption"> @anOption</option>
+            }
+            </InputSelect>
+    </div>
+    <div class="col-md-6 mb-3">
+        <label for="SecondPriorityWeek">Andenprioritet uge</label>
+        <InputSelect @bind-Value="selectedOptionUge" @oninput="OnInputUge">
+            @foreach (var anOption in optionsUge)
+            {
+                <option value="@anOption"> @anOption</option>
+            }
+            </InputSelect>
+    </div>
+    <div class="col-md-6 mb-6">
+        <label for="SecondPriorityPeriod">Andenprioritet periode</label>
+        <InputSelect @bind-Value="selectedOptionPeriode" @oninput="OnInputPeriode">
+            @foreach (var anOption in optionsPeriode)
+            {
+                <option value="@anOption"> @anOption</option>
+            }
+            </InputSelect>
+    </div>
+    
+    <div class="col-md-12 mb-3">
+        <label for="Interests">Interresser </label>
+        <InputText id="Interests" @bind-Value="children.Interest" class="form-control" />
+    </div>
+    <div class="col-md-12 mb-3">
+        <label for="Comment">Kommentarer</label>
+        <InputText id="Comment" @bind-Value="children.Comment" class="form-control" />
+    </div>
+     <div class="col-md-6 mb-3">
+        <label for="IsVolunteer">Vil du være frivillig? kun for 15-18 årige </label>
+        <InputCheckbox id="IsVolunteer" @bind-Value="application.IsVolunteer" />
+    </div>
+    <p>Info om frivillig</p>
+    <div class="col-md-12 mb-3">
+        <label for="ParentInformation">Info fra frivillig</label>
+        <label for="VolunteerName">Navn</label>
+        <InputText id="VolunteerNavn" @bind-Value="volunteer.Name" class="form-control" />
+    </div>
+    <div class="col-md-12 mb-3">
+        <label for="VolunteerEmail">Email</label>
+        <InputText id="VolunteerEmail" @bind-Value="volunteer.Email" class="form-control" />
+    </div>
+    <div class="col-md-12 mb-3">
+        <label for="Kræwnr">Kræwnr.</label>
+        <InputNumber id="Kræwnr" @bind-Value="volunteer.Kræwnr" class="form-control" />
+    </div>
+
+
+    <div class="col-12 mb-3">
+            <button type="submit" class="btn btn-primary" >Opret</button>
+    </div>
+
+</EditForm>
 </ModalDialog>
+    
 
 @code {
+    string[] optionsUge = { "Vælg", "Uge 27", "Uge 28", "Uge 29", "Uge 30", "31" };
+    string[] optionsPeriode = { "Vælg", "Onsdag-Søndag", "Onsdag-Fredag", "Fredag-Søndag" };
+    string selectedOptionUge = "Vælg";
+    string selectedOptionPeriode = "Vælg"; 
+
     Core.Models.Application application = new Core.Models.Application();
     Core.Models.Child children = new Core.Models.Child();
+    Volunteer volunteer = new Volunteer();
 
     private EditContext aEditContext;
     private ModalDialog? addDialog { get; set; }
@@ -43,6 +133,21 @@
         aEditContext = new EditContext(application);
     }
 
+     // Tager sig af kategorien
+    void OnInputUge(ChangeEventArgs e)
+    {
+        selectedOptionUge = e.Value?.ToString() ?? "null";
+        Console.WriteLine($"OnInput: content = {selectedOptionUge}");
+
+    }
+    // Tager sig af status
+    void OnInputPeriode(ChangeEventArgs e)
+    {
+        selectedOptionPeriode = e.Value?.ToString() ?? "null";
+        Console.WriteLine($"OnInput: content = {selectedOptionPeriode}");
+
+    }
+
     private void OnClickAddDialog()
     {
         Console.WriteLine("Button clicked!"); // Add debugging statement
@@ -53,6 +158,8 @@
     public async Task HandleValidSubmit()
     {
         await mService.Add(application);
+        await mService.Add(children);
+        await mService.Add(volunteer);
         addDialog?.Close();
 
 

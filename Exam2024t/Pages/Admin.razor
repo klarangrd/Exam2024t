@@ -1,13 +1,45 @@
 ﻿@page "/Admin"
 @using System.Diagnostics
+@using Core.Models
+@using Exam2024t.Services
+@inject HttpClient Http
+@inject IAdminService AdminService
+@inject NavigationManager NavigationManager
 
-<PageTitle>Error</PageTitle>
 
-<h1 class="text-danger">Error.</h1>
-<h2 class="text-danger">An error occurred while processing your request.</h2>
+<PageTitle>Admin</PageTitle>
 
+<h2>Login as Admin</h2>
 
+<EditForm Model="@adminLogin" OnValidSubmit="@HandleLogin">
+    <DataAnnotationsValidator />
+    <ValidationSummary />
 
-@code{
-   
+    <div class="form-group">
+        <label for="username">Username:</label>
+        <InputText id="username" @bind-Value="adminLogin.Username" class="form-control" />
+    </div>
+    <div class="form-group">
+        <label for="password">Password:</label>
+        <InputText id="password" @bind-Value="adminLogin.Password" type="password" class="form-control" />
+    </div>
+    <button type="submit" class="btn btn-primary">Login</button>
+</EditForm>
+
+@code {
+    private Core.Models.Admin adminLogin = new Core.Models.Admin();
+
+    private async Task HandleLogin()
+    {
+        var result = await AdminService.LoginAdmin(adminLogin.Username, adminLogin.Password);
+        if (result)
+        {
+            NavigationManager.NavigateTo("/AdminDashboard");
+            Console.WriteLine("login succesful!");
+        }
+        else
+        {
+            Console.WriteLine("login failed");
+        }
+    }
 }

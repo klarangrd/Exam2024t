@@ -1,17 +1,16 @@
 ﻿using Core.Models;
-using System.Diagnostics.Metrics;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace Exam2024t.Services
-{ 
-        public class AdminServiceInMemory : IAdminService
+{
+    public class AdminServiceInMemory : IAdminService
+    {
+        private static List<Admin> Admins = new List<Admin>()
         {
-            private static List<Admin> Admins = new List<Admin>(){ new Admin { Name="klara n", Email="klara@example.dk", Username="klara1", Password="klarabanan1" },
-
+            new Admin { Name="Klara N", Email="klara@example.dk", Username="klara1", Password="klarabanan1" },
         };
-
-        public AdminServiceInMemory()
-        {
-        }
 
         public Task<Admin[]> GetAll()
         {
@@ -20,5 +19,10 @@ namespace Exam2024t.Services
             return t;
         }
 
+        public Task<bool> LoginAdmin(string username, string password)
+        {
+            var admin = Admins.FirstOrDefault(a => a.Username == username && a.Password == password);
+            return Task.FromResult(admin != null);
+        }
     }
 }

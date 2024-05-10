@@ -1,0 +1,34 @@
+﻿@page "/AdminDashboard"
+@using Core.Models
+@using Exam2024t.Services
+@inject IAdminService AdminService
+
+<PageTitle>Admin Dashboard</PageTitle>
+
+<h2>Admin Dashboard</h2>
+
+@if (admins == null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    <div>
+        <h3>List of Admins</h3>
+        <ul>
+            @foreach (var admin in admins)
+            {
+                <li>@admin.Username (@admin.Email)</li>
+            }
+        </ul>
+    </div>
+}
+
+@code {
+    private Core.Models.Admin[] admins;
+
+    protected override async Task OnInitializedAsync()
+    {
+        admins = await AdminService.GetAll();
+    }
+}

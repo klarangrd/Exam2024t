@@ -24,11 +24,69 @@ else
     </div>
 }
 
+
+<h1>Alle Applicationer</h1>
+
+<table class="table">
+    <tbody>
+        @foreach (var application in applications)
+        {
+            @foreach (var child in children)
+            {
+                @foreach (var volunteer in volunteers)
+                {<tr>
+                <td>
+                    <p><strong>Child Name:</strong> @child.ChildName</p>
+                    <p><strong>Age:</strong> @child.ChildAge</p>
+                    <p><strong>Comment:</strong> @child.Comment</p>
+                    <p><strong>Been Before:</strong> @child.Beenbefore</p>
+                    <p><strong>Interest:</strong> @child.Interest</p>
+                        
+                </td>
+                <td>
+                    <p><strong>Volunteer Name:</strong> @volunteer.Name</p>
+                    <p><strong>Email:</strong> @volunteer.Email</p>
+                    <p><strong>Kræwnr:</strong>  @volunteer.Kræwnr</p>
+                </td>
+                <td>
+                    <p><strong>Volunteer:</strong> @application.IsVolunteer</p>
+                    <p><strong>First Priority Week:</strong> @application.FirstpriorityWeek</p>
+                    <p><strong>First Priority Period:</strong> @application.FirstpriorityPeriod</p>
+                    <p><strong>Second Priority Week:</strong> @application.SecondpriorityWeek</p>
+                    <p><strong>Second Priority Period:</strong> @application.SecondpriorityPeriod</p>
+                </td>
+            </tr>
+        }
+        }
+        }
+    </tbody>
+</table>
+
+
+
 @code {
     private Core.Models.Admin[] admins;
 
     protected override async Task OnInitializedAsync()
     {
         admins = await AdminService.GetAll();
+
+        applications = await applicationService.GetAllApplications();
+
+        children = await applicationService.GetAllChildren();
+
+        volunteers = await applicationService.GetAllVolunteers();
+
     }
+
+    //get all applications method
+
+    private Core.Models.Application[] applications = new Core.Models.Application [0];
+    private Core.Models.Child[] children = new Core.Models.Child[0];
+    private Core.Models.Volunteer[] volunteers = new Core.Models.Volunteer[0];
+
+    [Inject]
+    private IApplicationService applicationService { get; set; }
+
+    
 }

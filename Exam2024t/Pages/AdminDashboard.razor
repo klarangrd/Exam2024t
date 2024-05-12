@@ -24,7 +24,11 @@ else
     </div>
 }
 
+<button class="btn btn-primary" @onclick="ShowAllApplications">Show All Applications</button>
 
+
+@if (showApplications)
+{
 <h1>Alle Applicationer</h1>
 
 <table class="table">
@@ -61,6 +65,8 @@ else
         }
     </tbody>
 </table>
+}
+
 
 
 
@@ -71,12 +77,6 @@ else
     {
         admins = await AdminService.GetAll();
 
-        applications = await applicationService.GetAllApplications();
-
-        children = await applicationService.GetAllChildren();
-
-        volunteers = await applicationService.GetAllVolunteers();
-
     }
 
     //get all applications method
@@ -84,9 +84,16 @@ else
     private Core.Models.Application[] applications = new Core.Models.Application [0];
     private Core.Models.Child[] children = new Core.Models.Child[0];
     private Core.Models.Volunteer[] volunteers = new Core.Models.Volunteer[0];
+    private bool showApplications = false;
 
     [Inject]
     private IApplicationService applicationService { get; set; }
 
-    
+    private async Task ShowAllApplications()
+    {
+        applications = await applicationService.GetAllApplications();
+        children = await applicationService.GetAllChildren();
+        volunteers = await applicationService.GetAllVolunteers();
+        showApplications = true;
+    }
 }

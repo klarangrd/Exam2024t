@@ -1,0 +1,47 @@
+/* General body styles */
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f4f4f9;
+    margin: 0;
+    padding: 0;
+}
+
+/* Header styles */
+h1 {
+    color: #333;
+    text-align: center;
+    padding-top: 20px;
+    font-size: 32px;
+}
+
+/* Information box styling */
+.information {
+    margin: 20px auto;
+    padding: 20px;
+    width: 60%;
+    background-color: #ffffff;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    border-radius: 8px;
+}
+
+.information p {
+    color: #666;
+    font-size: 18px;
+    line-height: 1.6;
+}
+
+/* Styling for images, centering the image */
+.picture {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 20px 0;
+}
+
+.picture img {
+    max-width: 100%;
+    height: auto;
+    border-radius: 5px;
+}
+
+

@@ -19,40 +19,6 @@
 doesnt work-->
 
 
-<h3>Application overview</h3>
-@if (applications == null)
-{
-    <p><em>Loading...</em></p>
-}
-else
-{
-    <table class="table">
-        <thead>
-            <tr>
-                <th>Child Name</th>
-                <th>Age</th>
-                <th>Clothing Size</th>
-                <th>First Priority Week</th>
-                <th>Actions</th>
-            </tr>
-        </thead>
-        <tbody>
-        @foreach (var app in applications)
-        {
-            <tr>
-                <td>@app.Child.ChildName</td>
-                <td>@app.Child.ChildAge</td>
-                <td>@app.Child.ClothingSize</td>
-                <td>@app.FirstpriorityWeek</td>
-                <td>
-
-                </td>
-            </tr>
-        }
-        </tbody>
-    </table>
-}
-
 <button class="btn btn-primary" @onclick="ShowAllApplications">Show All Applications</button>
 
 

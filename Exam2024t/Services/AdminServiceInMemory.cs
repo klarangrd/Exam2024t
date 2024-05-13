@@ -24,5 +24,6 @@ namespace Exam2024t.Services
             var admin = Admins.FirstOrDefault(a => a.Username == username && a.Password == password);
             return Task.FromResult(admin != null);
         }
+
     }
 }

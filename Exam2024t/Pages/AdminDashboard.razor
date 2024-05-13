@@ -1,34 +1,75 @@
 ﻿@page "/AdminDashboard"
 @using Core.Models
 @using Exam2024t.Services
-@inject IAdminService AdminService
+@using MongoDB.Bson
+@using Microsoft.AspNetCore.Authorization
+@inject IApplicationService ApplicationService
 
 <PageTitle>Admin Dashboard</PageTitle>
 
 <h2>Admin Dashboard</h2>
 
-@if (admins == null)
+<!--
+<h3>You are logged in as:</h3>
+<div>
+    <p>Username: @admin?.Username</p>
+    <p>Name: @admin?.Name</p>
+    <p>Email: @admin?.Email</p>
+</div>
+doesnt work-->
+
+
+<h3>Application overview</h3>
+@if (applications == null)
 {
     <p><em>Loading...</em></p>
 }
 else
 {
-    <div>
-        <h3>List of Admins</h3>
-        <ul>
-            @foreach (var admin in admins)
-            {
-                <li>@admin.Username (@admin.Email)</li>
-            }
-        </ul>
-    </div>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Child Name</th>
+                <th>Age</th>
+                <th>Clothing Size</th>
+                <th>First Priority Week</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        @foreach (var app in applications)
+        {
+            <tr>
+                <td>@app.Child.ChildName</td>
+                <td>@app.Child.ChildAge</td>
+                <td>@app.Child.ClothingSize</td>
+                <td>@app.FirstpriorityWeek</td>
+                <td>
+
+                </td>
+            </tr>
+        }
+        </tbody>
+    </table>
 }
 
 @code {
-    private Core.Models.Admin[] admins;
+    private List<Core.Models.Application> applications;
+    private Core.Models.Admin admin = new Core.Models.Admin();
+
+
 
     protected override async Task OnInitializedAsync()
     {
-        admins = await AdminService.GetAll();
+    }
+
+    private void EditApplication(ObjectId id)
+    {
+        
+    }
+
+    private async Task DeleteApplication(ObjectId id)
+    {
+        
     }
 }

@@ -7,5 +7,6 @@ namespace Exam2024t.Services
     {
         Task<Admin[]> GetAll();
         Task<bool> LoginAdmin(string username, string password);
+
     }
 }

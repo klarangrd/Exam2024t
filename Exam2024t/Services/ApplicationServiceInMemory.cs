@@ -6,9 +6,27 @@ namespace Exam2024t.Services
     public class ApplicationServiceInMemory : IApplicationService
     {
         
-        private static List<Application> Applications = new List<Application>(){ new Application {IsVolunteer = false, FirstpriorityWeek = "uge 28", FirstpriorityPeriod ="Onsdag - Søndag", SecondpriorityWeek = "Uge 30", SecondpriorityPeriod ="Lørdag - Søndag", 
-                                        Child = new Child {ChildName = "Dennis", ChildAge = 13, ClothingSize = "s", Comment = "whatever", Beenbefore = true, Interest = "Golf", 
-                                        Volunteer = new Volunteer { Name = "Carl", Email = "Carl@gmail.com", Kræwnr = 84282 } } }
+        private static List<Application> Applications = new List<Application>(){ new Application
+    {
+        IsVolunteer = false,
+        FirstpriorityWeek = "uge 28",
+        FirstpriorityPeriod ="Onsdag - Søndag",
+        SecondpriorityWeek = "Uge 30",
+        SecondpriorityPeriod ="Lørdag - Søndag",
+        Child = new Child
+        {
+            ChildName = "Dennis",
+            ChildAge = 13,
+            ClothingSize = "s",
+            Comment = "whatever",
+            Beenbefore = true,
+            Interest = "Golf",
+            Volunteer = new Volunteer
+            {
+                Name = "Carl",
+                Email = "Carl@gmail.com",
+                Kræwnr = 84282
+            }  } }
 
         };
             public ApplicationServiceInMemory()

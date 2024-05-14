@@ -169,6 +169,13 @@
 
     protected override void OnInitialized()
     {
+        application = new Core.Models.Application
+            {
+                Child = new Child
+                {
+                    Volunteer = new Volunteer()
+                }
+            };
         aEditContext = new EditContext(application);
     }
 

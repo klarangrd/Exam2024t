@@ -27,42 +27,38 @@
 {
     <h1>Alle Applicationer</h1>
 
-    <table class="table">
-        <tbody>
-            @foreach (var application in applications)
-            {
-                @foreach (var child in children)
-                {
-                    @foreach (var volunteer in volunteers)
-                    {
-                        <tr>
-                            <td>
-                                <p><strong>Child Name:</strong> @child.ChildName</p>
-                                <p><strong>Age:</strong> @child.ChildAge</p>
-                                <p><strong>Comment:</strong> @child.Comment</p>
-                                <p><strong>Been Before:</strong> @child.Beenbefore</p>
-                                <p><strong>Interest:</strong> @child.Interest</p>
-
-                            </td>
-                            <td>
-                                <p><strong>Volunteer Name:</strong> @volunteer.Name</p>
-                                <p><strong>Email:</strong> @volunteer.Email</p>
-                                <p><strong>Kræwnr:</strong>  @volunteer.Kræwnr</p>
-                            </td>
-                            <td>
-                                <p><strong>Volunteer:</strong> @application.IsVolunteer</p>
-                                <p><strong>First Priority Week:</strong> @application.FirstpriorityWeek</p>
-                                <p><strong>First Priority Period:</strong> @application.FirstpriorityPeriod</p>
-                                <p><strong>Second Priority Week:</strong> @application.SecondpriorityWeek</p>
-                                <p><strong>Second Priority Period:</strong> @application.SecondpriorityPeriod</p>
-
-                            </td>
-                        </tr>
-                    }
-                }
-            }
-        </tbody>
-    </table>
+<table class="table">
+    <tbody>
+        @foreach (var application in applications)
+        {
+          
+               <tr>
+                <td>
+                    <p><strong>Child Name:</strong> @application.Child.ChildName</p>
+                                <p><strong>Age:</strong> @application.Child.ChildAge</p>
+                                <p><strong>Comment:</strong> @application.Child.Comment</p>
+                                <p><strong>Been Before:</strong> @application.Child.Beenbefore</p>
+                                <p><strong>Interest:</strong> @application.Child.Interest</p>
+                        
+                </td>
+                <td>
+                                <p><strong>Volunteer Name:</strong> @application.Child.Volunteer.Name</p>
+                                <p><strong>Email:</strong> @application.Child.Volunteer.Email</p>
+                                <p><strong>Kræwnr:</strong>  @application.Child.Volunteer.Kræwnr</p>
+                </td>
+                <td>
+                    <p><strong>Volunteer:</strong> @application.IsVolunteer</p>
+                    <p><strong>First Priority Week:</strong> @application.FirstpriorityWeek</p>
+                    <p><strong>First Priority Period:</strong> @application.FirstpriorityPeriod</p>
+                    <p><strong>Second Priority Week:</strong> @application.SecondpriorityWeek</p>
+                    <p><strong>Second Priority Period:</strong> @application.SecondpriorityPeriod</p>
+                </td>
+            </tr>
+        }
+        
+        
+    </tbody>
+</table>
 }
 
 
@@ -81,9 +77,8 @@
 
     //get all applications method
 
-    private Core.Models.Application[] applications = new Core.Models.Application[0];
-    private Core.Models.Child[] children = new Core.Models.Child[0];
-    private Core.Models.Volunteer[] volunteers = new Core.Models.Volunteer[0];
+    private Core.Models.Application[] applications = new Core.Models.Application [0];
+    
     private bool showApplications = false;
 
     [Inject]
@@ -92,8 +87,6 @@
     private async Task ShowAllApplications()
     {
         applications = await applicationService.GetAllApplications();
-        children = await applicationService.GetAllChildren();
-        volunteers = await applicationService.GetAllVolunteers();
         showApplications = true;
     }
 }

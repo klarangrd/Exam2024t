@@ -30,22 +30,20 @@ doesnt work-->
     <tbody>
         @foreach (var application in applications)
         {
-            @foreach (var child in children)
-            {
-                @foreach (var volunteer in volunteers)
-                {<tr>
+          
+               <tr>
                 <td>
-                    <p><strong>Child Name:</strong> @child.ChildName</p>
-                    <p><strong>Age:</strong> @child.ChildAge</p>
-                    <p><strong>Comment:</strong> @child.Comment</p>
-                    <p><strong>Been Before:</strong> @child.Beenbefore</p>
-                    <p><strong>Interest:</strong> @child.Interest</p>
+                    <p><strong>Child Name:</strong> @application.Child.ChildName</p>
+                                <p><strong>Age:</strong> @application.Child.ChildAge</p>
+                                <p><strong>Comment:</strong> @application.Child.Comment</p>
+                                <p><strong>Been Before:</strong> @application.Child.Beenbefore</p>
+                                <p><strong>Interest:</strong> @application.Child.Interest</p>
                         
                 </td>
                 <td>
-                    <p><strong>Volunteer Name:</strong> @volunteer.Name</p>
-                    <p><strong>Email:</strong> @volunteer.Email</p>
-                    <p><strong>Kræwnr:</strong>  @volunteer.Kræwnr</p>
+                                <p><strong>Volunteer Name:</strong> @application.Child.Volunteer.Name</p>
+                                <p><strong>Email:</strong> @application.Child.Volunteer.Email</p>
+                                <p><strong>Kræwnr:</strong>  @application.Child.Volunteer.Kræwnr</p>
                 </td>
                 <td>
                     <p><strong>Volunteer:</strong> @application.IsVolunteer</p>
@@ -56,8 +54,8 @@ doesnt work-->
                 </td>
             </tr>
         }
-        }
-        }
+        
+        
     </tbody>
 </table>
 }
@@ -79,8 +77,7 @@ doesnt work-->
     //get all applications method
 
     private Core.Models.Application[] applications = new Core.Models.Application [0];
-    private Core.Models.Child[] children = new Core.Models.Child[0];
-    private Core.Models.Volunteer[] volunteers = new Core.Models.Volunteer[0];
+    
     private bool showApplications = false;
 
     [Inject]
@@ -89,8 +86,6 @@ doesnt work-->
     private async Task ShowAllApplications()
     {
         applications = await applicationService.GetAllApplications();
-        children = await applicationService.GetAllChildren();
-        volunteers = await applicationService.GetAllVolunteers();
         showApplications = true;
     }
 }

@@ -20,28 +20,28 @@
         <div class="form-group row">
             <label for="ChildName" class="col-md-4 col-form-label">Navn Barn</label>
             <div class="col-md-4">
-                <InputText id="ChildName" @bind-Value="children.ChildName" class="form-control" />
+                <InputText id="ChildName" @bind-Value="application.Child.ChildName" class="form-control" />
             </div>
         </div>
 
         <div class="form-group row">
             <label for="ChildAge" class="col-md-4 col-form-label">Alder barn</label>
             <div class="col-md-4">
-                <InputNumber id="ChildAge" @bind-Value="children.ChildAge" class="form-control" />
+                <InputNumber id="ChildAge" @bind-Value="application.Child.ChildAge" class="form-control" />
             </div>
         </div>
 
         <div class="form-group row">
             <label for="Clothingsize" class="col-md-4 col-form-label">Tøj størrelse</label>
             <div class="col-md-4">
-                <InputText id="Clothingsize" @bind-Value="children.ClothingSize" class="form-control" />
+                <InputText id="Clothingsize" @bind-Value="application.Child.ClothingSize" class="form-control" />
             </div>
         </div>
 
         <div class="form-group row">
             <label for="BeenBefore" class="col-md-4 col-form-label">Har du været i børneklub før?</label>
             <div class="col-md-4">
-                <InputCheckbox id="BeenBefore" @bind-Value="children.Beenbefore" />
+                <InputCheckbox id="BeenBefore" @bind-Value="application.Child.Beenbefore" />
             </div>
         </div>
 
@@ -84,7 +84,7 @@
         <div class="form-group row">
             <label for="SecondPriorityPeriod" class="col-md-4 col-form-label">Andenprioritet periode</label>
             <div class="col-md-4">
-                <InputSelect @bind-Value="selectedOptionPeriode2" @oninput="OnInputPeriode2">
+                <InputSelect @bind-Value="selectedOptionPeriode2 " @oninput="OnInputPeriode2">
                     @foreach (var anOption in optionsPeriode2)
                     {
                         <option value="@anOption"> @anOption</option>
@@ -96,14 +96,14 @@
         <div class="form-group row">
             <label for="Interests" class="col-md-4 col-form-label">Interresser</label>
             <div class="col-md-4">
-                <InputText id="Interests" @bind-Value="children.Interest" class="form-control" />
+                <InputText id="Interests" @bind-Value="application.Child.Interest" class="form-control" />
             </div>
         </div>
 
         <div class="form-group row">
             <label for="Comment" class="col-md-4 col-form-label">Kommentarer</label>
             <div class="col-md-4">
-                <InputText id="Comment" @bind-Value="children.Comment" class="form-control" />
+                <InputText id="Comment" @bind-Value="application.Child.Comment" class="form-control" />
             </div>
         </div>
 
@@ -121,21 +121,21 @@
         <div class="form-group row">
             <label for="VolunteerNavn" class="col-md-4 col-form-label">Navn</label>
             <div class="col-md-4">
-                <InputText id="VolunteerNavn" @bind-Value="volunteer.Name" class="form-control" />
+                <InputText id="VolunteerNavn" @bind-Value="application.Child.Volunteer.Name" class="form-control" />
             </div>
         </div>
 
         <div class="form-group row">
             <label for="VolunteerEmail" class="col-md-4 col-form-label">Email</label>
             <div class="col-md-4">
-                <InputText id="VolunteerEmail" @bind-Value="volunteer.Email" class="form-control" />
+                <InputText id="VolunteerEmail" @bind-Value="application.Child.Volunteer.Email" class="form-control" />
             </div>
         </div>
 
         <div class="form-group row">
             <label for="Kræwnr" class="col-md-4 col-form-label">Kræwnr.</label>
             <div class="col-md-4">
-                <InputNumber id="Kræwnr" @bind-Value="volunteer.Kræwnr" class="form-control" />
+                <InputNumber id="Kræwnr" @bind-Value="application.Child.Volunteer.Kræwnr" class="form-control" />
             </div>
         </div>
 
@@ -159,8 +159,7 @@
     string selectedOptionPeriode2 = "Vælg";
 
     Core.Models.Application application = new Core.Models.Application();
-    Core.Models.Child children = new Core.Models.Child();
-    Volunteer volunteer = new Volunteer();
+
 
     private EditContext aEditContext;
     private ModalDialog? addDialog { get; set; }
@@ -173,7 +172,7 @@
         aEditContext = new EditContext(application);
     }
 
-     // Uge select
+    // Uge select
     void OnInputUge1(ChangeEventArgs e)
     {
         selectedOptionUge1 = e.Value?.ToString() ?? "null";
@@ -196,14 +195,12 @@
     private void OnClickAddDialog()
     {     
         addDialog?.Open();
-   
+        
     }
 
     public async Task HandleValidSubmit()
     {
         await mService.Add(application);
-        await mService.Add(children);
-        await mService.Add(volunteer);
         addDialog?.Close();
 
 

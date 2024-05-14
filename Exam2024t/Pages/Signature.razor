@@ -1,13 +1,62 @@
 ﻿@page "/Signature"
+@using Exam2024t.Services
 
 <PageTitle>Signature</PageTitle>
 
 <h1>Signatur underskrivning</h1>
 
-<p>Du kan i boksen nedenunder skrive din signatur for at færdiggøre din applikation.</p>
+<button class="btn btn-primary" @onclick="OnClickAddDialog">Underskriv applikation</button>
 
-<SignaturePad @bind-Value="Core.Models.Signature.Sign" style="width: 100%" />
+ <ModalDialog @ref="addDialog" Title="Underskriv applikation">
+    <EditForm EditContext="@aEditContext" class="application-form" OnValidSubmit="@HandleValidSubmit">
+        <DataAnnotationsValidator />
+        <ValidationSummary />
+        <div class="form-group row">
+            <div class="col-md-12">
+                <SignaturePad @bind-Value="Core.Models.Signature.Sign" Options="_options" style="width: 100%; height: 200px" />
+            </div>
+        </div>
+
+        <div class="form-group row">
+            <div class="col-md-12">
+                <button type="submit" class="btn btn-primary btn-submit">Indsend signatur</button>
+            </div>
+        </div>
+    </EditForm>
+</ModalDialog>
+
 
 @code {
+    Core.Models.Signature signature = new Core.Models.Signature();
+    [Inject]
+    private ISignatureService sService { get; set; }
+    
+    private EditContext aEditContext;
+    private ModalDialog? addDialog { get; set; }
+    
+    protected override void OnInitialized()
+    {
+        aEditContext = new EditContext(signature);
+    }
+    
+    private void OnClickAddDialog()
+    {     
+        addDialog?.Open();
+   
+    }
+    
+    public async Task HandleValidSubmit()
+    {
+        await sService.Add(signature);
+        addDialog?.Close();
 
+
+    }
+    
+    private SignaturePadOptions _options = new SignaturePadOptions
+    {
+        LineCap = LineCap.Round,
+        LineJoin = LineJoin.Round,
+        LineWidth = 20
+    };
 }

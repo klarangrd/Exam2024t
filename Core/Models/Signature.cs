@@ -10,5 +10,5 @@ public class Signature
     
     public DateTime SignatureDate { get; set; }
     
-    public string DocumentPath { get; set; }
+    public static byte[] Sign { get; set; }
 }

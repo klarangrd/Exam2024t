@@ -18,6 +18,8 @@ namespace Exam2024t
 
             builder.Services.AddSingleton<IAdminService, AdminServiceInMemory>();
 
+
+
             await builder.Build().RunAsync();
         }
     }

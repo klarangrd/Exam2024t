@@ -3,20 +3,21 @@
 @using Exam2024t.Services
 @using MongoDB.Bson
 @using Microsoft.AspNetCore.Authorization
-@inject IApplicationService ApplicationService
+@inject IAdminService AdminService
 
 <PageTitle>Admin Dashboard</PageTitle>
 
 <h2>Admin Dashboard</h2>
 
-<!--
+
 <h3>You are logged in as:</h3>
 <div>
     <p>Username: @admin?.Username</p>
     <p>Name: @admin?.Name</p>
     <p>Email: @admin?.Email</p>
 </div>
-doesnt work-->
+
+<div>:3</div>
 
 
 <button class="btn btn-primary" @onclick="ShowAllApplications">Show All Applications</button>
@@ -24,42 +25,44 @@ doesnt work-->
 
 @if (showApplications)
 {
-<h1>Alle Applicationer</h1>
+    <h1>Alle Applicationer</h1>
 
-<table class="table">
-    <tbody>
-        @foreach (var application in applications)
-        {
-            @foreach (var child in children)
+    <table class="table">
+        <tbody>
+            @foreach (var application in applications)
             {
-                @foreach (var volunteer in volunteers)
-                {<tr>
-                <td>
-                    <p><strong>Child Name:</strong> @child.ChildName</p>
-                    <p><strong>Age:</strong> @child.ChildAge</p>
-                    <p><strong>Comment:</strong> @child.Comment</p>
-                    <p><strong>Been Before:</strong> @child.Beenbefore</p>
-                    <p><strong>Interest:</strong> @child.Interest</p>
-                        
-                </td>
-                <td>
-                    <p><strong>Volunteer Name:</strong> @volunteer.Name</p>
-                    <p><strong>Email:</strong> @volunteer.Email</p>
-                    <p><strong>Kræwnr:</strong>  @volunteer.Kræwnr</p>
-                </td>
-                <td>
-                    <p><strong>Volunteer:</strong> @application.IsVolunteer</p>
-                    <p><strong>First Priority Week:</strong> @application.FirstpriorityWeek</p>
-                    <p><strong>First Priority Period:</strong> @application.FirstpriorityPeriod</p>
-                    <p><strong>Second Priority Week:</strong> @application.SecondpriorityWeek</p>
-                    <p><strong>Second Priority Period:</strong> @application.SecondpriorityPeriod</p>
-                </td>
-            </tr>
-        }
-        }
-        }
-    </tbody>
-</table>
+                @foreach (var child in children)
+                {
+                    @foreach (var volunteer in volunteers)
+                    {
+                        <tr>
+                            <td>
+                                <p><strong>Child Name:</strong> @child.ChildName</p>
+                                <p><strong>Age:</strong> @child.ChildAge</p>
+                                <p><strong>Comment:</strong> @child.Comment</p>
+                                <p><strong>Been Before:</strong> @child.Beenbefore</p>
+                                <p><strong>Interest:</strong> @child.Interest</p>
+
+                            </td>
+                            <td>
+                                <p><strong>Volunteer Name:</strong> @volunteer.Name</p>
+                                <p><strong>Email:</strong> @volunteer.Email</p>
+                                <p><strong>Kræwnr:</strong>  @volunteer.Kræwnr</p>
+                            </td>
+                            <td>
+                                <p><strong>Volunteer:</strong> @application.IsVolunteer</p>
+                                <p><strong>First Priority Week:</strong> @application.FirstpriorityWeek</p>
+                                <p><strong>First Priority Period:</strong> @application.FirstpriorityPeriod</p>
+                                <p><strong>Second Priority Week:</strong> @application.SecondpriorityWeek</p>
+                                <p><strong>Second Priority Period:</strong> @application.SecondpriorityPeriod</p>
+
+                            </td>
+                        </tr>
+                    }
+                }
+            }
+        </tbody>
+    </table>
 }
 
 
@@ -78,7 +81,7 @@ doesnt work-->
 
     //get all applications method
 
-    private Core.Models.Application[] applications = new Core.Models.Application [0];
+    private Core.Models.Application[] applications = new Core.Models.Application[0];
     private Core.Models.Child[] children = new Core.Models.Child[0];
     private Core.Models.Volunteer[] volunteers = new Core.Models.Volunteer[0];
     private bool showApplications = false;

@@ -8,16 +8,9 @@ namespace Exam2024t.Services
     public class AdminServiceInMemory : IAdminService
     {
         private static List<Admin> Admins = new List<Admin>()
-        {
-            new Admin { Name="Klara N", Email="klara@example.dk", Username="klara1", Password="klarabanan1" },
-        };
-
-        public Task<Admin[]> GetAll()
-        {
-            Task<Admin[]> t = new Task<Admin[]>(() => Admins.ToArray());
-            t.Start();
-            return t;
-        }
+    {
+        new Admin { Name="Klara N", Email="klara@example.dk", Username="klara1", Password="klarabanan1" },
+    };
 
         public Task<bool> LoginAdmin(string username, string password)
         {
@@ -25,5 +18,13 @@ namespace Exam2024t.Services
             return Task.FromResult(admin != null);
         }
 
+        public Task<Admin[]> GetAllAdmin()
+        {
+            Task<Admin[]> t = new Task<Admin[]>(() => Admins.ToArray());
+            t.Start();
+            return t;
+        }
     }
+
+
 }

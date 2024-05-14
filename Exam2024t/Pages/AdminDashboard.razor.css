@@ -16,6 +16,11 @@ div > p {
     padding-left: 20px; /* Indentation to visually nest content */
 }
 
+.infotext {
+    font-size: 1px; /* Increased font size for better readability */
+    color: #333; /* Dark color for better visibility */
+}
+
 /* Styling for the applications section */
 .applications {
     margin-top: 20px;

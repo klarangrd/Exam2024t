@@ -17,15 +17,55 @@
     <p>Email: @admin?.Email</p>
 </div>
 
-<div>:3</div>
+<div>
+    <!--
+    <div class="search">
+        Søgekriterier:
+        <form method="get">
+            <label for="email">Email:</label>
+            <InputSelect @bind-Value="selectedOptionemail" @oninput="OnInputEmail">
+                @foreach (var anOption in optionsEmail)
+                {
+                    //<option value="@anOption"> @anOption</option>
+                }
+            </InputSelect>
+
+            <label for="Week">Week:</label>
+            <InputSelect @bind-Value="selectedOptionstatus" @oninput="OnInputWeek">
+                @foreach (var anOption in optionsWeek)
+                {
+                    //<option value="@anOption"> @anOption</option>
+                }
+            </InputSelect>
+
+            <label for="Period">Period:</label>
+            <InputSelect @bind-Value="selectedOptionperiod" @oninput="OnInputPeriod">
+                @foreach (var anOption in optionsPeriod)
+                {
+                    //<option value="@anOption"> @anOption</option>
+                }
+            </InputSelect>
+            <button>Søg</button>
+
+        </form>
+    </div>
+    -->
+
+    <button class="btn btn-primary" @onclick="ShowApplicationsToEdit">Applications to edit</button>
+    @if (showApplications)
+    {
+    <h1>Godkendte</h1>
+    }
+
+</div>
 
 
-<button class="btn btn-primary" @onclick="ShowAllApplications">Show All Applications</button>
+<button class="btn btn-primary" @onclick="ShowQueuedApplications">Show All Applications</button>
 
 
 @if (showApplications)
 {
-    <h1>Alle Applicationer</h1>
+    <h1>Venteliste</h1>
 
 <table class="table">
     <tbody>
@@ -33,30 +73,52 @@
         {
           
                <tr>
-                <td>
-                    <p><strong>Child Name:</strong> @application.Child.ChildName</p>
-                                <p><strong>Age:</strong> @application.Child.ChildAge</p>
-                                <p><strong>Comment:</strong> @application.Child.Comment</p>
-                                <p><strong>Been Before:</strong> @application.Child.Beenbefore</p>
-                                <p><strong>Interest:</strong> @application.Child.Interest</p>
-                        
-                </td>
-                <td>
-                                <p><strong>Volunteer Name:</strong> @application.Child.Volunteer.Name</p>
-                                <p><strong>Email:</strong> @application.Child.Volunteer.Email</p>
-                                <p><strong>Kræwnr:</strong>  @application.Child.Volunteer.Kræwnr</p>
-                </td>
-                <td>
-                    <p><strong>Volunteer:</strong> @application.IsVolunteer</p>
-                    <p><strong>First Priority Week:</strong> @application.FirstpriorityWeek</p>
-                    <p><strong>First Priority Period:</strong> @application.FirstpriorityPeriod</p>
-                    <p><strong>Second Priority Week:</strong> @application.SecondpriorityWeek</p>
-                    <p><strong>Second Priority Period:</strong> @application.SecondpriorityPeriod</p>
-                </td>
+                   <td>
+                    <td>
+                   <p class="infotext"><strong>Volunteer Name:</strong> @application.Child.Volunteer.Name</p>
+                    </td>
+                    <td>
+                        <p class="infotext"><strong>Email:</strong> @application.Child.Volunteer.Email</p>
+                    </td>
+                    <td>
+                        <p class="infotext"><strong>First Priority Week:</strong> @application.FirstpriorityWeek</p>
+                    </td>
+                    <td>
+                        <p class="infotext"><strong>First Priority Period:</strong> @application.FirstpriorityPeriod</p>
+                    </td>
+                    <td>
+                    <button  @onclick="() => ShowApplicationDetails(application)">Se detaljer</button>
+                    </td>
+                    </td>
             </tr>
-        }
-        
-        
+            <ModalDialog @ref="DetailsDialog" Title="application details">
+                @if (selectedApplication != null)
+                {
+                    <div>
+                        <h5>Name</h5>
+                        <td>
+                        <p><strong>Kræwnr:</strong>  @application.Child.Volunteer.Kræwnr</p>
+                        <p><strong>Volunteer Name:</strong> @application.Child.Volunteer.Name</p>
+                        <p><strong>Email:</strong> @application.Child.Volunteer.Email</p>
+                        </td>
+                        <td>
+                        <p><strong>Child Name:</strong> @application.Child.ChildName</p>
+                        <p><strong>Age:</strong> @application.Child.ChildAge</p>
+                        <p><strong>Comment:</strong> @application.Child.Comment</p>
+                        <p><strong>Been Before:</strong> @application.Child.Beenbefore</p>
+                        <p><strong>Interest:</strong> @application.Child.Interest</p>
+                        <p><strong>Volunteer:</strong> @application.IsVolunteer</p>
+                        <p><strong>First Priority Week:</strong> @application.FirstpriorityWeek</p>
+                        <p><strong>First Priority Period:</strong> @application.FirstpriorityPeriod</p>
+                        <p><strong>Second Priority Week:</strong> @application.SecondpriorityWeek</p>
+                        <p><strong>Second Priority Period:</strong> @application.SecondpriorityPeriod</p>
+                        </td>
+                    </div>
+                        <button>Edit application</button>
+
+                }
+            </ModalDialog>
+            }
     </tbody>
 </table>
 }
@@ -67,7 +129,26 @@
 @code {
     //private List<Core.Models.Application> applications;
     private Core.Models.Admin admin = new Core.Models.Admin();
+    private Core.Models.Application[] applications = new Core.Models.Application[0];
 
+
+    private Core.Models.Application? selectedApplication;
+    private ModalDialog DetailsDialog;
+    private bool showApplications = false;
+
+    string[] optionsEmail = { "Vælg", "Tøj", "Sko", "Tasker", "Møbler", "El", "Sport" };
+    string[] optionsstatus = { "Vælg", "Aktiv", "Reserveret", "Inaktiv" };
+    string selectedOptionkat = "Vælg";
+    string selectedOptionstatus = "Vælg"; // Default to "Aktiv"
+
+    private async Task FetchFilteredAdvertisements()
+    {
+        // Tjekker hvorvidt der er valgt "Vælg" for kategori og status
+        if (selectedOptionkat == "Vælg" && selectedOptionstatus == "Vælg")
+        {
+            OnInitializedAsync();
+        }
+    }
 
     protected override async Task OnInitializedAsync()
     {
@@ -75,18 +156,29 @@
 
     }
 
-    //get all applications method
+    private void ShowApplicationDetails(Core.Models.Application application)
+    {
+        selectedApplication = application;
+        DetailsDialog.Open();
+    }
 
-    private Core.Models.Application[] applications = new Core.Models.Application [0];
-    
-    private bool showApplications = false;
+    private void MoveApplicationToEdit(Core.Models.Application application)
+    {
+        
+    }
 
     [Inject]
     private IApplicationService applicationService { get; set; }
 
-    private async Task ShowAllApplications()
+    private async Task ShowQueuedApplications()
     {
         applications = await applicationService.GetAllApplications();
         showApplications = true;
+    }
+
+    private async Task ShowApplicationsToEdit()
+    {
+        //applications = await applicationService.GetAllApplications();
+        //showApplications = true;
     }
 }

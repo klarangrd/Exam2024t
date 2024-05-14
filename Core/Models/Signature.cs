@@ -4,7 +4,7 @@ public class Signature
 {
     public int SignatureID { get; set; }
     
-    public int ApplicationID { get; set; }
+    public Application Application { get; set; }
     
     public bool Signed { get; set; }
     

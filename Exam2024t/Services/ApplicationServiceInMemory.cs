@@ -5,28 +5,35 @@ namespace Exam2024t.Services
 {
     public class ApplicationServiceInMemory : IApplicationService
     {
-        private static List<Child> Children = new List<Child>() { new Child { ChildName = "Dennis", ChildAge = 13, ClothingSize = "s", Comment = "whatever", Beenbefore = true, Interest = "Golf" } };
-        private static List<Volunteer> Volunteers = new List<Volunteer>() { new Volunteer { Name = "Carl", Email = "Carl@gmail.com", Kræwnr = 84282 } };
-
-        private static List<Application> Applications = new List<Application>(){ new Application {IsVolunteer = false, FirstpriorityWeek = "uge 28", FirstpriorityPeriod ="Onsdag - Søndag", SecondpriorityWeek = "Uge 30", SecondpriorityPeriod ="Lørdag - Søndag",  }
+        
+        private static List<Application> Applications = new List<Application>(){ new Application
+    {
+        IsVolunteer = false,
+        FirstpriorityWeek = "uge 28",
+        FirstpriorityPeriod ="Onsdag - Søndag",
+        SecondpriorityWeek = "Uge 30",
+        SecondpriorityPeriod ="Lørdag - Søndag",
+        Child = new Child
+        {
+            ChildName = "Dennis",
+            ChildAge = 13,
+            ClothingSize = "s",
+            Comment = "whatever",
+            Beenbefore = true,
+            Interest = "Golf",
+            Volunteer = new Volunteer
+            {
+                Name = "Carl",
+                Email = "Carl@gmail.com",
+                Kræwnr = 84282
+            }  } }
 
         };
             public ApplicationServiceInMemory()
             {
             }
 
-        public Task Add(Child child)
-        {
-            Task t = new Task(() => Children.Add(child));
-            t.Start();
-            return t;
-        }
-        public Task Add(Volunteer volunteer)
-        {
-            Task t = new Task(() => Volunteers.Add(volunteer));
-            t.Start();
-            return t;
-        }
+       
         public Task Add(Application application)
             {
                 Task t = new Task(() => Applications.Add( application));
@@ -40,21 +47,7 @@ namespace Exam2024t.Services
                 t.Start();
                 return t;
             }
-        public Task<Child[]> GetAllChildren()
-        {
-            Task<Child[]> t = new Task<Child[]>(() => Children.ToArray());
-            t.Start();
-            return t;
-        }
-        public Task<Volunteer[]> GetAllVolunteers()
-        {
-            Task<Volunteer[]> t = new Task<Volunteer[]>(() => Volunteers.ToArray());
-            t.Start();
-            return t;
-        }
-
-
-
+    
     }
     }
 

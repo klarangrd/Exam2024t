@@ -1,0 +1,56 @@
+﻿/* General styling for the page */
+body {
+    font-family: Arial, sans-serif;
+    font-size: 14px;
+    color: #333;
+}
+
+/* Styling for the user information section */
+h3 {
+    font-size: 16px;
+    color: #444;
+}
+
+div > p {
+    margin: 4px 0; /* Reduces space between paragraphs */
+    padding-left: 20px; /* Indentation to visually nest content */
+}
+
+/* Styling for the applications section */
+.applications {
+    margin-top: 20px;
+    border: 1px solid #ccc;
+    padding: 10px;
+    background-color: #f9f9f9;
+}
+
+    .applications h1 {
+        font-size: 18px;
+        color: #555;
+    }
+
+.table {
+    width: 100%; /* Full-width table */
+    font-size: 12px; /* Smaller font size for table */
+}
+
+table td {
+    border-top: 1px solid #eee;
+    padding: 8px; /* Compact padding */
+}
+
+.btn-primary {
+    font-size: 12px;
+    padding: 5px 10px; /* Smaller button */
+    margin-bottom: 10px; /* Space before the table */
+}
+
+/* Specific nesting and visual hierarchy */
+td > p {
+    margin: 2px 0; /* Reduce margin between paragraphs within cells */
+    padding-left: 10px; /* Further indentation inside table cells */
+}
+
+strong {
+    color: #333; /* Darker color for labels to add emphasis */
+}

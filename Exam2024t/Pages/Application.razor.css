@@ -58,3 +58,56 @@ label {
     margin-right: 5px;
     cursor: pointer;
 }
+/* tabel til */
+.week-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+    .week-table th, .week-table td {
+        border: 1px solid #ddd;
+        padding: 8px;
+        text-align: left;
+    }
+
+    .week-table th {
+        background-color: #f2f2f2;
+    }
+
+    /*alertmodaldialog*/
+.alertdiv {
+    text-align: center;
+}
+
+.h3 {
+    font-size: 24px;
+    margin-bottom: 16px;
+}
+
+.btn-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 20px;
+}
+
+    .btn-container button {
+        padding: 10px 20px;
+        margin: 0 10px;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+        background-color: #007bff;
+        color: #fff;
+        font-size: 16px;
+        transition: background-color 0.3s ease;
+    }
+
+        .btn-container button:hover {
+            background-color: #0056b3;
+        }
+
+        .btn-container button:active {
+            background-color: #004080;
+        }
+

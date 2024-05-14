@@ -9,6 +9,47 @@
 
 <h3>Tilmeld til børneklub</h3>
 
+<table class="week-table">
+    <thead>
+        <tr>
+            <th></th>
+            <th>Onsdag - fredag</th>
+            <th>Lørdag - søndag</th>
+            <th>Onsdag - søndag</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <th>Uge 27</th>
+            <td>3. juli - 5.juli</td>
+            <td>6. juli - 7 juli</td>
+            <td>3.juli - 7. juli</td>
+        </tr>
+        <tr>
+            <th>Uge 28</th>
+            <td>10. juli - 12. juli</td>
+            <td>13. juli - 14. juli</td>
+            <td>10. juli - 14. juli</td>
+            
+        </tr>
+        <tr>
+            <th>Uge 30</th>
+            <td>24. juli - 26. juli</td>
+            <td>27. juli - 28. juli</td>
+            <td>24. juli - 28. juli</td>
+            
+        </tr>
+        <tr>
+            <th>Uge 31</th>
+            <td>31. juli - 2. august</td>
+            <td>3. august - 4. august</td>
+            <td>31. juli - 4. august</td>
+            
+        </tr>
+    </tbody>
+</table>
+
+
 <button class="btn btn-primary" @onclick="OnClickAddDialog">Tilmeld børneklub</button>
 
 
@@ -147,10 +188,22 @@
     </EditForm>
 </ModalDialog>
     
+<ModalDialog @ref="alertDialog" Title="">
+   <div class="alertdiv"> 
+       <h3 class="h3">Tilmelding indsent!</h3>
+    <h3 class="h3">Vil du underskrive nu?</h3>
+    </div>
+    <div class="btn-container"> 
+        <button @onclick="CloseDialog">Nej</button>
+        <NavLink href="/Signature"> <button @onclick="CloseDialog">Ja</button> </NavLink>
+        
+    </div>
+
+</ModalDialog>
 
 @code {
-    string[] optionsUge1 = { "Vælg", "Uge 27", "Uge 28", "Uge 29", "Uge 30", "31" };
-    string[] optionsUge2 = { "Vælg", "Uge 27", "Uge 28", "Uge 29", "Uge 30", "31" };
+    string[] optionsUge1 = { "Vælg", "Uge 27", "Uge 28", "Uge 30", "31" };
+    string[] optionsUge2 = { "Vælg", "Uge 27", "Uge 28", "Uge 30", "31" };
     string[] optionsPeriode1 = { "Vælg", "Onsdag-Søndag", "Onsdag-Fredag", "Fredag-Søndag" };
     string[] optionsPeriode2 = { "Vælg", "Onsdag-Søndag", "Onsdag-Fredag", "Fredag-Søndag" };
     string selectedOptionUge1 = "Vælg";
@@ -163,6 +216,8 @@
 
     private EditContext aEditContext;
     private ModalDialog? addDialog { get; set; }
+    private ModalDialog? alertDialog { get; set; }
+
 
     [Inject]
     private IApplicationService mService { get; set; }
@@ -202,14 +257,24 @@
     private void OnClickAddDialog()
     {     
         addDialog?.Open();
-        
+
+    }
+    private void CloseDialog()
+    {
+        alertDialog?.Close();
+    }
+    private void GoToSignPage()
+    {
+
+        alertDialog?.Open();
+
     }
 
     public async Task HandleValidSubmit()
     {
         await mService.Add(application);
         addDialog?.Close();
-
+        alertDialog?.Open();
 
     }
 

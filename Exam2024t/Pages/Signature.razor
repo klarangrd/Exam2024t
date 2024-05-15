@@ -61,6 +61,7 @@
 
 
 @code {
+    private Core.Models.Application[] applications = new Core.Models.Application[0];
     Core.Models.Signature signature = new Core.Models.Signature();
     [Inject]
     private ISignatureService sService { get; set; }

@@ -20,17 +20,20 @@ namespace Core.Models
         public bool IsVolunteer { get; set; }
 
 
-
-        [RequiredDropdownSelection("Vælg", ErrorMessage = "Førsteprioritet uge er påkrævet")]
+        //[RequiredDropdownSelection("Vælg", ErrorMessage = "Førsteprioritet uge er påkrævet")]
+        [Required(ErrorMessage = "Førsteprioritet uge er påkrævet.")]
         public string FirstpriorityWeek { get; set; }
 
-        [RequiredDropdownSelection("Vælg", ErrorMessage = "Førsteprioritet Periode er påkrævet")] 
+        //[RequiredDropdownSelection("Vælg", ErrorMessage = "Førsteprioritet Periode er påkrævet")] 
+        [Required(ErrorMessage = "Førsteprioritet Periode er påkrævet.")]
         public string FirstpriorityPeriod { get; set; }
 
-        [RequiredDropdownSelection("Vælg", ErrorMessage = "Andenprioritet uge er påkrævet")] 
+        //[RequiredDropdownSelection("Vælg", ErrorMessage = "Andenprioritet uge er påkrævet")] 
+        [Required(ErrorMessage = "Andenprioritet uge er påkrævet.")]
         public string SecondpriorityWeek { get; set; }
 
-        [RequiredDropdownSelection("Vælg", ErrorMessage = "Andenprioritet Periode er påkrævet")] 
+        //[RequiredDropdownSelection("Vælg", ErrorMessage = "Andenprioritet Periode er påkrævet")] 
+        [Required(ErrorMessage = "Andenprioritet Periode er påkrævet.")]
         public string SecondpriorityPeriod { get; set; }
 
         public Child Child { get; set; }

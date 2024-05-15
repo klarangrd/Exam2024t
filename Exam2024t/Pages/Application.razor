@@ -65,7 +65,7 @@
         <div class="form-group row">
             <label for="ChildName" class="col-md-4 col-form-label">Navn Barn</label>
             <div class="col-md-4">
-                <InputText id="ChildName" @bind-Value="application.Child.ChildName" class="form-control" />
+                <InputText id="ChildName" @bind-Value="application.Child.ChildName" class="form-control" placeholder="navn" />
                 <ValidationMessage For="@(() => application.Child.ChildName)" />
             </div>
         </div>
@@ -73,7 +73,7 @@
         <div class="form-group row">
             <label for="ChildAge" class="col-md-4 col-form-label">Alder barn</label>
             <div class="col-md-4">
-                <InputNumber id="ChildAge" @bind-Value="application.Child.ChildAge" class="form-control" />
+                <InputNumber id="ChildAge" @bind-Value="application.Child.ChildAge" class="form-control" placeholder="Alder" />
                 <ValidationMessage For="@(() => application.Child.ChildAge)" />
             </div>
         </div>
@@ -81,9 +81,8 @@
         <div class="form-group row">
             <label for="Clothingsize" class="col-md-4 col-form-label">Tøj størrelse</label>
             <div class="col-md-4">
-                <InputText id="Clothingsize" @bind-Value="application.Child.ClothingSize" class="form-control" />
+                <InputText id="Clothingsize" @bind-Value="application.Child.ClothingSize" class="form-control" placeholder="fx M" />
                 <ValidationMessage For="@(() => application.Child.ClothingSize)" />
-
             </div>
         </div>
 
@@ -132,7 +131,6 @@
                     }
                 </InputSelect>
                 <ValidationMessage For="@(() => application.SecondpriorityWeek)" />
-
             </div>
         </div>
 
@@ -146,21 +144,20 @@
                     }
                 </InputSelect>
                 <ValidationMessage For="@(() => application.SecondpriorityPeriod)" />
-
             </div>
         </div>
 
         <div class="form-group row">
             <label for="Interests" class="col-md-4 col-form-label">Interesser</label>
             <div class="col-md-4">
-                <InputText id="Interests" @bind-Value="application.Child.Interest" class="form-control" />
+                <InputText id="Interests" @bind-Value="application.Child.Interest" class="form-control" placeholder="fx flotte store saftige heste" />
             </div>
         </div>
 
         <div class="form-group row">
             <label for="Comment" class="col-md-4 col-form-label">Kommentarer</label>
             <div class="col-md-4">
-                <InputText id="Comment" @bind-Value="application.Child.Comment" class="form-control" />
+                <InputText id="Comment" @bind-Value="application.Child.Comment" class="form-control" placeholder="fx han er retaderet" />
             </div>
         </div>
 
@@ -178,7 +175,7 @@
         <div class="form-group row">
             <label for="VolunteerNavn" class="col-md-4 col-form-label">Navn</label>
             <div class="col-md-4">
-                <InputText id="VolunteerNavn" @bind-Value="application.Child.Volunteer.Name" class="form-control" />
+                <InputText id="VolunteerNavn" @bind-Value="application.Child.Volunteer.Name" class="form-control" placeholder="navn" />
                 <ValidationMessage For="@(() => application.Child.Volunteer.Name)" />
             </div>
         </div>
@@ -186,7 +183,7 @@
         <div class="form-group row">
             <label for="VolunteerEmail" class="col-md-4 col-form-label">Email</label>
             <div class="col-md-4">
-                <InputText id="VolunteerEmail" @bind-Value="application.Child.Volunteer.Email" class="form-control" />
+                <InputText id="VolunteerEmail" @bind-Value="application.Child.Volunteer.Email" class="form-control" placeholder="email" />
                 <ValidationMessage For="@(() => application.Child.Volunteer.Email)" />
             </div>
         </div>
@@ -194,7 +191,7 @@
         <div class="form-group row">
             <label for="Kræwnr" class="col-md-4 col-form-label">Kræwnr.</label>
             <div class="col-md-4">
-                <InputNumber id="Kræwnr" @bind-Value="application.Child.Volunteer.Kræwnr" class="form-control" />
+                <InputNumber id="Kræwnr" @bind-Value="application.Child.Volunteer.Kræwnr" class="form-control" placeholder="krævnr" />
                 <ValidationMessage For="@(() => application.Child.Volunteer.Kræwnr)" />
             </div>
         </div>
@@ -244,6 +241,8 @@
 
     protected override void OnInitialized()
     {
+      
+
         application = new Core.Models.Application
             {
                 Child = new Child
@@ -276,6 +275,8 @@
         selectedOptionPeriode2 = e.Value?.ToString() ?? "null";
 
     }
+
+
 
     private void OnClickAddDialog()
     {     

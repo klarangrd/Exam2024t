@@ -7,10 +7,7 @@ namespace Exam2024t.Services
 {
     public class SignatureServiceInMemory : ISignatureService
     {
-        private static List<Signature> Signatures = new List<Signature>()
-        {
-            new Signature { SignatureID= 1, Signed = false, SignatureDate = DateTime.Now},
-        };
+        private static List<Signature> Signatures = new List<Signature>();
 
         public Task Add(Signature signature)
         {

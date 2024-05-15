@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Components.Web;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
 using Exam2024t.Services;
+using Blazored.LocalStorage;
 
 namespace Exam2024t
 {
@@ -20,7 +21,7 @@ namespace Exam2024t
 
             builder.Services.AddSingleton<IAdminService, AdminServiceInMemory>();
 
-
+            builder.Services.AddBlazoredLocalStorage();
 
             await builder.Build().RunAsync();
         }

@@ -1,9 +1,40 @@
 ﻿@page "/Signature"
 @using Exam2024t.Services
+@inject Blazored.LocalStorage.ILocalStorageService localStore
 
 <PageTitle>Signature</PageTitle>
 
 <h1>Signatur underskrivning</h1>
+
+<h3>Dine applikationer</h3>
+
+
+    @if (applicationliste != null)
+    {
+        
+<div>
+
+    @foreach (var item in applicationliste)
+    {
+        <td> 
+            <p><strong>Kræwnr:</strong>  @item.Child.Volunteer.Kræwnr</p>
+            <p><strong>Volunteer Name:</strong> @item.Child.Volunteer.Name</p>
+            <p><strong>Email:</strong> @item.Child.Volunteer.Email</p>
+            <p><strong>Child Name:</strong> @item.Child.ChildName</p>
+            <p><strong>Age:</strong> @item.Child.ChildAge</p>
+            <p><strong>Tøj størrelse: </strong>@item.Child.ClothingSize</p>
+            <p><strong>Comment:</strong> @item.Child.Comment</p>
+            <p><strong>Been Before:</strong> @item.Child.Beenbefore</p>
+            <p><strong>Interest:</strong> @item.Child.Interest</p>
+            <p><strong>Volunteer:</strong> @item.IsVolunteer</p>
+            <p><strong>First Priority Week:</strong> @item.FirstpriorityWeek</p>
+            <p><strong>First Priority Period:</strong> @item.FirstpriorityPeriod</p>
+            <p><strong>Second Priority Week:</strong> @item.SecondpriorityWeek</p>
+            <p><strong>Second Priority Period:</strong> @item.SecondpriorityPeriod</p>
+        </td>
+    }
+</div>
+}
 
 <button class="btn btn-primary" @onclick="OnClickAddDialog">Underskriv applikation</button>
 
@@ -34,10 +65,10 @@
     [Inject]
     private ISignatureService sService { get; set; }
     private bool isModalVisible = false;
-    
+
     private EditContext aEditContext;
     private ModalDialog? addDialog { get; set; }
-    
+
     protected override void OnInitialized()
     {
         aEditContext = new EditContext(signature);
@@ -52,18 +83,26 @@
             StateHasChanged();
         }
     }
-    
+
     public async Task HandleValidSubmit()
     {
         await sService.Add(signature);
         addDialog?.Close();
     }
-    
+
     private SignaturePadOptions _options = new SignaturePadOptions
     {
         LineCap = LineCap.Round,
         LineJoin = LineJoin.Round,
         LineWidth = 5
     };
+
+    Core.Models.Application[] applicationliste;
+
+    protected override async Task OnInitializedAsync()
+    {
+        applicationliste = await localStore.GetItemAsync<Core.Models.Application[]>("applicationList") ?? new Core.Models.Application[0];
+    }
+
 }
 

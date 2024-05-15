@@ -5,6 +5,8 @@
 @using System.ComponentModel.DataAnnotations
 @using Core.Validation;
 @using Microsoft.AspNetCore.Components.Forms
+@using System.Text.Json
+@using Blazored.LocalStorage
 @inject Blazored.LocalStorage.ILocalStorageService localStore
 
 <PageTitle>Application</PageTitle>
@@ -230,7 +232,7 @@
     string selectedOptionPeriode2 = "Vælg";
 
     Core.Models.Application application = new Core.Models.Application();
-
+    List<Core.Models.Application> applicationList = new List<Core.Models.Application>();
 
     private EditContext aEditContext;
     private ModalDialog? addDialog { get; set; }
@@ -293,7 +295,33 @@
 
     public async Task HandleValidSubmit()
     {
-        
+        applicationList.Add(new Core.Models.Application
+            {
+                Child = new Child
+                {
+                    ChildName = application.Child.ChildName,
+                    ChildAge = application.Child.ChildAge,
+                    ClothingSize = application.Child.ClothingSize,
+                    Beenbefore = application.Child.Beenbefore,
+                    Comment = application.Child.Comment,
+                    Interest = application.Child.Interest,
+
+                    Volunteer = new Volunteer
+                    {
+                        Name = application.Child.Volunteer.Name,
+                        Email = application.Child.Volunteer.Email,
+                        Kræwnr = application.Child.Volunteer.Kræwnr
+                    }
+                },
+                FirstpriorityWeek = application.FirstpriorityWeek,
+                FirstpriorityPeriod = application.FirstpriorityPeriod,
+                SecondpriorityWeek = application.SecondpriorityWeek,
+                SecondpriorityPeriod = application.SecondpriorityPeriod,
+                IsVolunteer = application.IsVolunteer
+            });
+
+
+        await localStore.SetItemAsync("applicationList", applicationList);
 
         await mService.Add(application);
         addDialog?.Close();

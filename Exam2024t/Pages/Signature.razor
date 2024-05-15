@@ -5,7 +5,34 @@
 
 <h1>Signatur underskrivning</h1>
 
-<button class="btn btn-primary" @onclick="OnClickAddDialog">Underskriv applikation</button>
+<table class="table">
+    <tbody>
+    @foreach (var application in applications)
+    {
+        <tr>
+            <td>
+                <td>
+                    <p class="infotext"><strong>Volunteer Name:</strong> @application.Child.Volunteer.Name</p>
+                </td>
+                <td>
+                    <p class="infotext"><strong>Email:</strong> @application.Child.Volunteer.Email</p>
+                </td>
+                <td>
+                    <p class="infotext"><strong>First Priority Week:</strong> @application.FirstpriorityWeek</p>
+                </td>
+                <td>
+                    <p class="infotext"><strong>First Priority Period:</strong> @application.FirstpriorityPeriod</p>
+                </td>
+                <td>
+                    <button class="btn btn-primary" @onclick="OnClickAddDialog">Underskriv applikation</button>
+                </td>
+            </td>
+        </tr>
+    }
+    </tbody>
+</table>
+
+
 
 <ModalDialog @ref="addDialog" Title="Underskriv applikation">
     <EditForm EditContext="@aEditContext" class="application-form" OnValidSubmit="@HandleValidSubmit">
@@ -30,6 +57,7 @@
 
 
 @code {
+    private Core.Models.Application[] applications = new Core.Models.Application[0];
     Core.Models.Signature signature = new Core.Models.Signature();
     [Inject]
     private ISignatureService sService { get; set; }

@@ -3,6 +3,7 @@
 @using Exam2024t.Services
 @using MongoDB.Bson
 @using Microsoft.AspNetCore.Authorization
+@inject NavigationManager NavigationManager
 @inject IAdminService AdminService
 
 <PageTitle>Admin Dashboard</PageTitle>
@@ -16,52 +17,19 @@
     <p>Name: @admin?.Name</p>
     <p>Email: @admin?.Email</p>
 </div>
+<button class="btn btn-primary" @onclick="Logout">Logout</button>
 
 <div>
-    <!--
-    <div class="search">
-        Søgekriterier:
-        <form method="get">
-            <label for="email">Email:</label>
-            <InputSelect @bind-Value="selectedOptionemail" @oninput="OnInputEmail">
-                @foreach (var anOption in optionsEmail)
-                {
-                    //<option value="@anOption"> @anOption</option>
-                }
-            </InputSelect>
 
-            <label for="Week">Week:</label>
-            <InputSelect @bind-Value="selectedOptionstatus" @oninput="OnInputWeek">
-                @foreach (var anOption in optionsWeek)
-                {
-                    //<option value="@anOption"> @anOption</option>
-                }
-            </InputSelect>
-
-            <label for="Period">Period:</label>
-            <InputSelect @bind-Value="selectedOptionperiod" @oninput="OnInputPeriod">
-                @foreach (var anOption in optionsPeriod)
-                {
-                    //<option value="@anOption"> @anOption</option>
-                }
-            </InputSelect>
-            <button>Søg</button>
-
-        </form>
-    </div>
-    -->
-
-    <button class="btn btn-primary" @onclick="ShowApplicationsToEdit">Applications to edit</button>
-    @if (showApplications)
+    <button class="btn btn-primary" @onclick="ShowApplicationsApproved">Applications approved</button>
+    @if (showApplicationsApproved)
     {
     <h1>Godkendte</h1>
     }
-
 </div>
 
-
+<div>
 <button class="btn btn-primary" @onclick="ShowQueuedApplications">Show All Applications</button>
-
 
 @if (showApplications)
 {
@@ -114,55 +82,118 @@
                         <p><strong>Second Priority Period:</strong> @application.SecondpriorityPeriod</p>
                         </td>
                     </div>
-                        <button>Edit application</button>
+            <button @onclick="() => ShowEditModal(application)" class="btn btn-primary">Edit</button>
 
                 }
             </ModalDialog>
+
+        <ModalDialog @ref="EditDialog" Title="Edit Application">
+                        @if (selectedApplication != null)
+                        {
+                <EditForm Model="@selectedApplication" OnValidSubmit="HandleEditApplication">
+                    <DataAnnotationsValidator />
+                    <ValidationSummary />
+                   
+              <div class="form-group row">
+            <label for="FirstPriorityWeek" class="col-md-4 col-form-label">Føreste prioritet uge</label>
+            <div class="col-md-4">
+                <InputSelect id="FirstPriorityWeek" @bind-Value="application.FirstpriorityWeek" class="form-control" @oninput="OnInputUge1">
+                    @foreach (var anOption in optionsUge1)
+                    {
+                        <option value="@anOption">@anOption</option>
+                    }
+                </InputSelect>
+                </div>
+                </div>
+                      
+              <div class="form-group row">
+            <label for="FirstPriorityPeriod" class="col-md-4 col-form-label">Føreste periode</label>
+            <div class="col-md-4">
+                    <InputSelect id="FirstPriorityPeriod" @bind-Value="application.FirstpriorityPeriod" class="form-control" @oninput="OnInputPeriode1">
+                                    @foreach (var anOption in optionsPeriode1)
+                                    {
+                            <option value="@anOption"> @anOption</option>
+                                    }
+                    </InputSelect>
+
+                        </div>
+                    </div>
+
+                    <InputText @bind-Value="selectedApplication.Child.Volunteer.Name" />
+                    <InputText @bind-Value="selectedApplication.Child.Volunteer.Email" />
+                    <InputText @bind-Value="selectedApplication.FirstpriorityWeek" />
+                    <!-- Add more input fields as necessary -->
+
+                    <button type="submit" class="btn btn-success">Save Changes</button>
+                </EditForm>
+                        }
+        </ModalDialog>
             }
     </tbody>
 </table>
 }
-
-
+</div>
 
 
 @code {
-    //private List<Core.Models.Application> applications;
     private Core.Models.Admin admin = new Core.Models.Admin();
     private Core.Models.Application[] applications = new Core.Models.Application[0];
 
-
     private Core.Models.Application? selectedApplication;
     private ModalDialog DetailsDialog;
+    private ModalDialog EditDialog;
     private bool showApplications = false;
+    private bool showApplicationsApproved = false;
 
-    string[] optionsEmail = { "Vælg", "Tøj", "Sko", "Tasker", "Møbler", "El", "Sport" };
-    string[] optionsstatus = { "Vælg", "Aktiv", "Reserveret", "Inaktiv" };
-    string selectedOptionkat = "Vælg";
-    string selectedOptionstatus = "Vælg"; // Default to "Aktiv"
+    //options for dropdowns
+    string[] optionsUge1 = { "Vælg", "Uge 27", "Uge 28", "Uge 30", "Uge 31" };
+    string[] optionsPeriode1 = { "Vælg", "Onsdag-Søndag", "Onsdag-Fredag", "Fredag-Søndag" };
+    string selectedOptionUge1 = "Vælg";
+    string selectedOptionPeriode1 = "Vælg";
 
-    private async Task FetchFilteredAdvertisements()
-    {
-        // Tjekker hvorvidt der er valgt "Vælg" for kategori og status
-        if (selectedOptionkat == "Vælg" && selectedOptionstatus == "Vælg")
-        {
-            OnInitializedAsync();
-        }
-    }
 
     protected override async Task OnInitializedAsync()
     {
-        //admin = await AdminService.GetAll();
 
     }
 
-    private void ShowApplicationDetails(Core.Models.Application application)
+    private void Logout()//logging out of the account
+    {
+        NavigationManager.NavigateTo("/Admin", forceLoad: true);
+    }
+
+    private void ShowApplicationDetails(Core.Models.Application application)//showing details of the application
     {
         selectedApplication = application;
         DetailsDialog.Open();
     }
 
-    private void MoveApplicationToEdit(Core.Models.Application application)
+    private void ShowEditModal(Core.Models.Application application)
+    {
+        selectedApplication = application;
+        EditDialog.Open();
+    }
+
+    void OnInputUge1(ChangeEventArgs e)
+    {
+        selectedOptionUge1 = e.Value?.ToString() ?? "null";
+    }
+
+    void OnInputPeriode1(ChangeEventArgs e)
+    {
+        selectedOptionPeriode1 = e.Value?.ToString() ?? "null";
+    }
+
+    private async Task HandleEditApplication()
+    {
+        if (selectedApplication != null)
+        {
+            await applicationService.UpdateApplication(selectedApplication);
+            EditDialog.Close();  // Close the modal after submission
+        }
+    }
+
+    private void MoveApplicationToEdit(Core.Models.Application application)//to move the application when edited and approved
     {
         
     }
@@ -170,15 +201,15 @@
     [Inject]
     private IApplicationService applicationService { get; set; }
 
-    private async Task ShowQueuedApplications()
+    private async Task ShowQueuedApplications()//shows the queued applications
     {
         applications = await applicationService.GetAllApplications();
         showApplications = true;
     }
 
-    private async Task ShowApplicationsToEdit()
+    private async Task ShowApplicationsApproved()//shows the applications that have been edited and approved
     {
-        //applications = await applicationService.GetAllApplications();
-        //showApplications = true;
+        applications = await applicationService.GetAllApplications();
+        showApplicationsApproved = true;
     }
 }

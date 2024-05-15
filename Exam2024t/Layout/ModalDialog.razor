@@ -24,11 +24,25 @@
 
     [Parameter]
     public RenderFragment? ChildContent { get; set; }
+    public bool IsVisible { get; private set; } = false;
 
+    public event Action OnShow;
+    public event Action OnClose;
     private string modalDisplay = "none;";
     private string modalClass = string.Empty;
     private bool showBackdrop = false;
+    private bool isModalVisible = false;
+    
 
+    public async Task OpenAsync()
+    {
+        showBackdrop = true;
+        modalDisplay = "block";
+        modalClass = "show";
+        await Task.Delay(100); 
+        OnShow?.Invoke();
+    }
+    
     public void Open()
     {
         modalDisplay = "block";
@@ -41,5 +55,6 @@
         modalDisplay = "none";
         modalClass = string.Empty;
         showBackdrop = false;
+        OnClose?.Invoke();
     }
 }

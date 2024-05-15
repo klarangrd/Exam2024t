@@ -47,7 +47,19 @@ namespace Exam2024t.Services
                 t.Start();
                 return t;
             }
-    
+
+        public Task UpdateApplication(Application application)
+        {
+            var existingApplication = Applications.FirstOrDefault(a => a.Child.Volunteer.Kræwnr == application.Child.Volunteer.Kræwnr);
+            if (existingApplication != null)
+            {
+                // Update properties
+                existingApplication = application;
+            }
+            return Task.CompletedTask;
+        }
+
+
     }
-    }
+}
 

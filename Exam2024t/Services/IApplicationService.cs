@@ -8,7 +8,7 @@ namespace Exam2024t.Services
 
         Task Add(Application application);
 
-
+        Task UpdateApplication(Application application);
     }
 }
 

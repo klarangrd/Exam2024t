@@ -17,7 +17,7 @@ div > p {
 }
 
 .infotext {
-    font-size: 1px; /* Increased font size for better readability */
+    font-size: 15px; /* Increased font size for better readability */
     color: #333; /* Dark color for better visibility */
 }
 
@@ -27,8 +27,8 @@ div > p {
     border: 1px solid #ccc;
     padding: 10px;
     background-color: #f9f9f9;
+   
 }
-
     .applications h1 {
         font-size: 18px;
         color: #555;

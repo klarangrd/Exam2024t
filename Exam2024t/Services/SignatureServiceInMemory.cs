@@ -9,7 +9,7 @@ namespace Exam2024t.Services
     {
         private static List<Signature> Signatures = new List<Signature>()
         {
-            new Signature { SignatureID= 1, ApplicationID= 1, Signed = false, SignatureDate = DateTime.Now},
+            new Signature { SignatureID= 1, Signed = false, SignatureDate = DateTime.Now},
         };
 
         public Task Add(Signature signature)

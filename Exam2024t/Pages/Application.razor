@@ -2,7 +2,8 @@
 @using Core.Models
 @using Exam2024t.Services
 @using Exam2024t.Layout
-
+@using System.ComponentModel.DataAnnotations
+@using Core.Validation;
 @using Microsoft.AspNetCore.Components.Forms
 
 <PageTitle>Application</PageTitle>
@@ -54,7 +55,7 @@
 
 
 <ModalDialog @ref="addDialog" Title="Tilmeld børneklub">
-    <EditForm EditContext="@aEditContext" class="application-form" OnValidSubmit="@HandleValidSubmit">
+    <EditForm EditContext="@aEditContext" class="application-form" OnValidSubmit="@HandleValidSubmit"> 
         <DataAnnotationsValidator />
         <ValidationSummary />
 
@@ -62,6 +63,7 @@
             <label for="ChildName" class="col-md-4 col-form-label">Navn Barn</label>
             <div class="col-md-4">
                 <InputText id="ChildName" @bind-Value="application.Child.ChildName" class="form-control" />
+                <ValidationMessage For="@(() => application.Child.ChildName)" />
             </div>
         </div>
 
@@ -69,6 +71,7 @@
             <label for="ChildAge" class="col-md-4 col-form-label">Alder barn</label>
             <div class="col-md-4">
                 <InputNumber id="ChildAge" @bind-Value="application.Child.ChildAge" class="form-control" />
+                <ValidationMessage For="@(() => application.Child.ChildAge)" />
             </div>
         </div>
 
@@ -76,6 +79,8 @@
             <label for="Clothingsize" class="col-md-4 col-form-label">Tøj størrelse</label>
             <div class="col-md-4">
                 <InputText id="Clothingsize" @bind-Value="application.Child.ClothingSize" class="form-control" />
+                <ValidationMessage For="@(() => application.Child.ClothingSize)" />
+
             </div>
         </div>
 
@@ -85,57 +90,65 @@
                 <InputCheckbox id="BeenBefore" @bind-Value="application.Child.Beenbefore" />
             </div>
         </div>
-
+        
         <div class="form-group row">
             <label for="FirstPriorityWeek" class="col-md-4 col-form-label">Førsteprioritet uge</label>
             <div class="col-md-4">
-                <InputSelect @bind-Value="selectedOptionUge1" @oninput="OnInputUge1">
+                <InputSelect id="FirstPriorityWeek" @bind-Value="application.FirstpriorityWeek" class="form-control" @oninput="OnInputUge1">
                     @foreach (var anOption in optionsUge1)
                     {
-                        <option value="@anOption"> @anOption</option>
+                        <option value="@anOption">@anOption</option>
                     }
                 </InputSelect>
+                <ValidationMessage For="@(() => application.FirstpriorityWeek)" />
             </div>
         </div>
+
+
 
         <div class="form-group row">
             <label for="FirstPriorityPeriod" class="col-md-4 col-form-label">Førsteprioritet periode</label>
             <div class="col-md-4">
-                <InputSelect @bind-Value="selectedOptionPeriode1" @oninput="OnInputPeriode1">
+                <InputSelect id="FirstPriorityPeriod" @bind-Value="application.FirstpriorityPeriod" class="form-control" @oninput="OnInputPeriode1">
                     @foreach (var anOption in optionsPeriode1)
                     {
                         <option value="@anOption"> @anOption</option>
                     }
                 </InputSelect>
+                <ValidationMessage For="@(() => application.FirstpriorityPeriod)" />
             </div>
         </div>
 
         <div class="form-group row">
             <label for="SecondPriorityWeek" class="col-md-4 col-form-label">Andenprioritet uge</label>
             <div class="col-md-4">
-                <InputSelect @bind-Value="selectedOptionUge2" @oninput="OnInputUge2">
+                <InputSelect id="SecondPriorityWeek" @bind-Value="application.SecondpriorityWeek" class="form-control" @oninput="OnInputUge2">
                     @foreach (var anOption in optionsUge2)
                     {
                         <option value="@anOption"> @anOption</option>
                     }
                 </InputSelect>
+                <ValidationMessage For="@(() => application.SecondpriorityWeek)" />
+
             </div>
         </div>
 
         <div class="form-group row">
             <label for="SecondPriorityPeriod" class="col-md-4 col-form-label">Andenprioritet periode</label>
             <div class="col-md-4">
-                <InputSelect @bind-Value="selectedOptionPeriode2 " @oninput="OnInputPeriode2">
+                <InputSelect id="SecondPriorityPeriod" @bind-Value="application.SecondpriorityPeriod" class="form-control" @oninput="OnInputPeriode2">
                     @foreach (var anOption in optionsPeriode2)
                     {
                         <option value="@anOption"> @anOption</option>
                     }
                 </InputSelect>
+                <ValidationMessage For="@(() => application.SecondpriorityPeriod)" />
+
             </div>
         </div>
 
         <div class="form-group row">
-            <label for="Interests" class="col-md-4 col-form-label">Interresser</label>
+            <label for="Interests" class="col-md-4 col-form-label">Interesser</label>
             <div class="col-md-4">
                 <InputText id="Interests" @bind-Value="application.Child.Interest" class="form-control" />
             </div>
@@ -163,6 +176,7 @@
             <label for="VolunteerNavn" class="col-md-4 col-form-label">Navn</label>
             <div class="col-md-4">
                 <InputText id="VolunteerNavn" @bind-Value="application.Child.Volunteer.Name" class="form-control" />
+                <ValidationMessage For="@(() => application.Child.Volunteer.Name)" />
             </div>
         </div>
 
@@ -170,6 +184,7 @@
             <label for="VolunteerEmail" class="col-md-4 col-form-label">Email</label>
             <div class="col-md-4">
                 <InputText id="VolunteerEmail" @bind-Value="application.Child.Volunteer.Email" class="form-control" />
+                <ValidationMessage For="@(() => application.Child.Volunteer.Email)" />
             </div>
         </div>
 
@@ -177,6 +192,7 @@
             <label for="Kræwnr" class="col-md-4 col-form-label">Kræwnr.</label>
             <div class="col-md-4">
                 <InputNumber id="Kræwnr" @bind-Value="application.Child.Volunteer.Kræwnr" class="form-control" />
+                <ValidationMessage For="@(() => application.Child.Volunteer.Kræwnr)" />
             </div>
         </div>
 
@@ -191,6 +207,7 @@
 <ModalDialog @ref="alertDialog" Title="">
    <div class="alertdiv"> 
        <h3 class="h3">Tilmelding indsent!</h3>
+       <p>Husk at du skal underskrive for at dine børns tilmelding er gyldig!</p>
     <h3 class="h3">Vil du underskrive nu?</h3>
     </div>
     <div class="btn-container"> 
@@ -202,8 +219,8 @@
 </ModalDialog>
 
 @code {
-    string[] optionsUge1 = { "Vælg", "Uge 27", "Uge 28", "Uge 30", "31" };
-    string[] optionsUge2 = { "Vælg", "Uge 27", "Uge 28", "Uge 30", "31" };
+    string[] optionsUge1 = { "Vælg", "Uge 27", "Uge 28", "Uge 30", "Uge 31" };
+    string[] optionsUge2 = { "Vælg", "Uge 27", "Uge 28", "Uge 30", "Uge 31" };
     string[] optionsPeriode1 = { "Vælg", "Onsdag-Søndag", "Onsdag-Fredag", "Fredag-Søndag" };
     string[] optionsPeriode2 = { "Vælg", "Onsdag-Søndag", "Onsdag-Fredag", "Fredag-Søndag" };
     string selectedOptionUge1 = "Vælg";
@@ -232,7 +249,10 @@
                 }
             };
         aEditContext = new EditContext(application);
+       
     }
+
+   
 
     // Uge select
     void OnInputUge1(ChangeEventArgs e)

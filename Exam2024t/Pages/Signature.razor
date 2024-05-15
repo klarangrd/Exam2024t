@@ -7,13 +7,16 @@
 
 <button class="btn btn-primary" @onclick="OnClickAddDialog">Underskriv applikation</button>
 
- <ModalDialog @ref="addDialog" Title="Underskriv applikation">
+<ModalDialog @ref="addDialog" Title="Underskriv applikation">
     <EditForm EditContext="@aEditContext" class="application-form" OnValidSubmit="@HandleValidSubmit">
         <DataAnnotationsValidator />
         <ValidationSummary />
         <div class="form-group row">
             <div class="col-md-12">
-                <SignaturePad @bind-Value="Core.Models.Signature.Sign" Options="_options" style="width: 100%; height: 200px" />
+                @if (isModalVisible)
+                {
+                    <SignaturePad class="signature" @bind-Value="Core.Models.Signature.Sign" Options="_options" style="width: 100%; height: 200px"/>
+                }
             </div>
         </div>
 
@@ -30,6 +33,7 @@
     Core.Models.Signature signature = new Core.Models.Signature();
     [Inject]
     private ISignatureService sService { get; set; }
+    private bool isModalVisible = false;
     
     private EditContext aEditContext;
     private ModalDialog? addDialog { get; set; }
@@ -38,25 +42,28 @@
     {
         aEditContext = new EditContext(signature);
     }
-    
-    private void OnClickAddDialog()
-    {     
-        addDialog?.Open();
-   
+
+    private async Task OnClickAddDialog()
+    {
+        if (addDialog != null)
+        {
+            await addDialog.OpenAsync();
+            isModalVisible = true;
+            StateHasChanged();
+        }
     }
     
     public async Task HandleValidSubmit()
     {
         await sService.Add(signature);
         addDialog?.Close();
-
-
     }
     
     private SignaturePadOptions _options = new SignaturePadOptions
     {
         LineCap = LineCap.Round,
         LineJoin = LineJoin.Round,
-        LineWidth = 20
+        LineWidth = 5
     };
 }
+

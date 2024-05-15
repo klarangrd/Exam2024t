@@ -23,7 +23,7 @@ namespace Core.Models
         [Required(ErrorMessage = "Du skal skrive dit barns alder")]
         public int ChildAge { get; set; }
 
-         [Required(ErrorMessage = "Du skal skrive dit barns trøje størrelse")]
+        [Required(ErrorMessage = "Du skal skrive dit barns trøje størrelse")]
         public String ClothingSize { get; set; }
 
         public string Comment { get; set; }

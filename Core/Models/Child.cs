@@ -6,7 +6,6 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Core.Validation;
 
 
 namespace Core.Models
@@ -24,7 +23,7 @@ namespace Core.Models
         [Required(ErrorMessage = "Du skal skrive dit barns alder")]
         public int ChildAge { get; set; }
 
-         [Required(ErrorMessage = "Du skal skrive dit barns trøje størrelse")]
+        [Required(ErrorMessage = "Du skal skrive dit barns trøje størrelse")]
         public String ClothingSize { get; set; }
 
         public string Comment { get; set; }

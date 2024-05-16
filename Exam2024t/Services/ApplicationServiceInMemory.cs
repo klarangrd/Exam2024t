@@ -10,9 +10,9 @@ namespace Exam2024t.Services
     {
         IsVolunteer = false,
         FirstpriorityWeek = "Uge 28",
-        FirstpriorityPeriod ="Onsdag - Søndag",
+        FirstpriorityPeriod ="Onsdag-Søndag",
         SecondpriorityWeek = "Uge 30",
-        SecondpriorityPeriod ="Lørdag - Søndag",
+        SecondpriorityPeriod ="Lørdag-Søndag",
         Child = new Child
         {
             ChildName = "Dennis",

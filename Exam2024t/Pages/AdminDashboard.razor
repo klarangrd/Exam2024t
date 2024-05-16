@@ -88,6 +88,13 @@
                     <option value="@anOption">@anOption</option>
                 }
             </InputSelect>
+            <label for="FirstPriorityPeriod">Prioritetperiode</label>
+            <InputSelect id="FirstPriorityPeriod" @bind-Value="selectedPeriod" @oninput="OnInputPeriode1">
+                @foreach (var anOption in optionsPeriode1)
+                {
+                    <option value="@anOption">@anOption</option>
+                }
+            </InputSelect>
             <button @onclick="FilterAndSort">Filter & Sort</button>
         </div>
 
@@ -243,6 +250,7 @@
     private Core.Models.Application[] filteredAndSortedApplications = new Core.Models.Application[0];
     private string Emailfilter = "";
     private string selectedWeek = "Vælg";
+    private string selectedPeriod = "Vælg";
 
     //options for dropdowns
     string[] optionsUge1 = { "Vælg", "Uge 27", "Uge 28", "Uge 30", "Uge 31" };
@@ -354,10 +362,14 @@
             {
                 filteredApplications = filteredApplications.Where(application => application.FirstpriorityWeek == selectedWeek);
             }
+            if (!string.IsNullOrEmpty(selectedPeriod) && selectedPeriod != "Vælg")
+            {
+                filteredApplications = filteredApplications.Where(application => application.FirstpriorityPeriod == selectedPeriod);
+            }
+
 
             // Sort filtered applications by volunteer name
             filteredAndSortedApplications = filteredApplications.OrderBy(application => application.Child.Volunteer.Name).ToArray();
         }
-        else Console.WriteLine("error");
     }
 }

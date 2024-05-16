@@ -6,7 +6,6 @@ using System.Threading.Tasks;
 using MongoDB.Bson.Serialization.Attributes;
 using MongoDB.Bson;
 using System.ComponentModel.DataAnnotations;
-using Core.Validation;
 
 namespace Core.Models
 {

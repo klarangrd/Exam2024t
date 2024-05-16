@@ -10,16 +10,16 @@
 
 <h2>Admin Dashboard</h2>
 
-<h3>You are logged in as:</h3>
+<h3>You are logged in as:</h3><!--admin info to show which is logged in-->
 <div>
     <p>Username: @admin?.Username</p>
     <p>Name: @admin?.Name</p>
     <p>Email: @admin?.Email</p>
 </div>
-<button class="btn btn-primary" @onclick="Logout">Logout</button>
+<button class="btn btn-primary" @onclick="Logout">Logout</button><!--logout button-->
 
 <div>
-    <button class="btn btn-primary" @onclick="ShowApplicationsApproved">Applications approved</button>
+    <button class="btn btn-primary" @onclick="ShowApplicationsApproved">Applications approved</button><!--see all approved applications-->
     @if (showApprovedApplications)
     {
         <h1>Godkendte</h1>
@@ -41,7 +41,7 @@
                             <p class="infotext"><strong>First Priority Period:</strong> @application.FirstpriorityPeriod</p>
                         </td>
                         <td>
-                            <button @onclick="() => ShowApplicationDetails(application)">Se detaljer</button>
+                            <button @onclick="() => ShowApplicationDetails(application)">Se detaljer</button><!---->
                         </td>
                     </tr>
 
@@ -242,7 +242,7 @@
         var admins = await AdminService.GetAllAdmin();
         if (admins.Length > 0)
         {
-            admin = admins[0]; // Assuming there is only one admin in this example
+            admin = admins[0]; 
         }
     }
 

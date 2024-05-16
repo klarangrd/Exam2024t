@@ -10,37 +10,24 @@
 
 <h2>Admin Dashboard</h2>
 
-
 <h3>You are logged in as:</h3>
 <div>
-    <table>
-        <tr>
-            <td>
     <p>Username: @admin?.Username</p>
-            </td>
-            <td>
     <p>Name: @admin?.Name</p>
-            </td>
-    <td>
     <p>Email: @admin?.Email</p>
-            </td>
-        </tr>
-    </table>
 </div>
 <button class="btn btn-primary" @onclick="Logout">Logout</button>
 
 <div>
     <button class="btn btn-primary" @onclick="ShowApplicationsApproved">Applications approved</button>
-    @if (showApplications)
+    @if (showApprovedApplications)
     {
         <h1>Godkendte</h1>
         <table class="table">
             <tbody>
-                @foreach (var application in applications)
+                @foreach (var application in approvedApplications)
                 {
-
                     <tr>
-                        <td>
                         <td>
                             <p class="infotext"><strong>Volunteer Name:</strong> @application.Child.Volunteer.Name</p>
                         </td>
@@ -55,7 +42,6 @@
                         </td>
                         <td>
                             <button @onclick="() => ShowApplicationDetails(application)">Se detaljer</button>
-                        </td>
                         </td>
                     </tr>
 
@@ -64,61 +50,41 @@
                         {
                             <div>
                                 <h5>Application details</h5>
-                            <td>
-                                <p><strong>Kræwnr:</strong>  @application.Child.Volunteer.Kræwnr</p>
-                                <p><strong>Volunteer Name:</strong> @application.Child.Volunteer.Name</p>
-                                <p><strong>Email:</strong> @application.Child.Volunteer.Email</p>
-                            </td>
-                            <td>
-                                <p><strong>Child Name:</strong> @application.Child.ChildName</p>
-                                <p><strong>Age:</strong> @application.Child.ChildAge</p>
-                                <p><strong>Tøj størrelse:</strong> @application.Child.ClothingSize</p>
-                                <p><strong>Comment:</strong> @application.Child.Comment</p>
-                                <p><strong>Been Before:</strong> @application.Child.Beenbefore</p>
-                                <p><strong>Interest:</strong> @application.Child.Interest</p>
-                                <p><strong>Volunteer:</strong> @application.IsVolunteer</p>
-                                <p><strong>First Priority Week:</strong> @application.FirstpriorityWeek</p>
-                                <p><strong>First Priority Period:</strong> @application.FirstpriorityPeriod</p>
-                                <p><strong>Second Priority Week:</strong> @application.SecondpriorityWeek</p>
-                                <p><strong>Second Priority Period:</strong> @application.SecondpriorityPeriod</p>
-                            </td>
-            </div>
+                                <p><strong>Kræwnr:</strong>  @selectedApplication.Child.Volunteer.Kræwnr</p>
+                                <p><strong>Volunteer Name:</strong> @selectedApplication.Child.Volunteer.Name</p>
+                                <p><strong>Email:</strong> @selectedApplication.Child.Volunteer.Email</p>
+                                <p><strong>Child Name:</strong> @selectedApplication.Child.ChildName</p>
+                                <p><strong>Age:</strong> @selectedApplication.Child.ChildAge</p>
+                                <p><strong>Tøj størrelse:</strong> @selectedApplication.Child.ClothingSize</p>
+                                <p><strong>Comment:</strong> @selectedApplication.Child.Comment</p>
+                                <p><strong>Been Before:</strong> @selectedApplication.Child.Beenbefore</p>
+                                <p><strong>Interest:</strong> @selectedApplication.Child.Interest</p>
+                                <p><strong>Volunteer:</strong> @selectedApplication.IsVolunteer</p>
+                                <p><strong>First Priority Week:</strong> @selectedApplication.FirstpriorityWeek</p>
+                                <p><strong>First Priority Period:</strong> @selectedApplication.FirstpriorityPeriod</p>
+                                <p><strong>Second Priority Week:</strong> @selectedApplication.SecondpriorityWeek</p>
+                                <p><strong>Second Priority Period:</strong> @selectedApplication.SecondpriorityPeriod</p>
+                            </div>
                         }
-        </ModalDialog>
+                    </ModalDialog>
                 }
-    </tbody>
-    </table>
+            </tbody>
+        </table>
     }
 </div>
 
-
 <div>
-    <div>
-        <input type="text" placeholder="Enter name" @bind="Emailfilter" />
-
-        <InputSelect id="FirstPriorityWeek" @bind-Value="selectedWeek" class="form-control" @oninput="OnInputUge1">
-            @foreach (var anOption in optionsUge1)
-            {
-                <option value="@anOption">@anOption</option>
-            }
-        </InputSelect>
-        <button @onclick="FilterAndSort">Filter & Sort</button>
-    </div>
-
     <button class="btn btn-primary" @onclick="ShowQueuedApplications">Show All Applications</button>
 
-
-    @if (showApplications)
+    @if (showQueuedApplications)
     {
         <h1>Venteliste</h1>
 
         <table class="table">
             <tbody>
-                @foreach (var application in applications)
+                @foreach (var application in queuedApplications)
                 {
-
                     <tr>
-                        <td>
                         <td>
                             <p class="infotext"><strong>Volunteer Name:</strong> @application.Child.Volunteer.Name</p>
                         </td>
@@ -134,140 +100,131 @@
                         <td>
                             <button @onclick="() => ShowApplicationDetails(application)">Se detaljer</button>
                         </td>
-                        </td>
                     </tr>
                     <ModalDialog @ref="DetailsDialog" Title="application details">
                         @if (selectedApplication != null)
                         {
                             <div>
                                 <h5>Application details</h5>
-                            <td>
-                                <p><strong>Kræwnr:</strong>  @application.Child.Volunteer.Kræwnr</p>
-                                <p><strong>Volunteer Name:</strong> @application.Child.Volunteer.Name</p>
-                                <p><strong>Email:</strong> @application.Child.Volunteer.Email</p>
-                            </td>
-                            <td>
-                                <p><strong>Child Name:</strong> @application.Child.ChildName</p>
-                                <p><strong>Age:</strong> @application.Child.ChildAge</p>
-                                <p><strong>Tøj størrelse:</strong> @application.Child.ClothingSize</p>
-                                <p><strong>Comment:</strong> @application.Child.Comment</p>
-                                <p><strong>Been Before:</strong> @application.Child.Beenbefore</p>
-                                <p><strong>Interest:</strong> @application.Child.Interest</p>
-                                <p><strong>Volunteer:</strong> @application.IsVolunteer</p>
-                                <p><strong>First Priority Week:</strong> @application.FirstpriorityWeek</p>
-                                <p><strong>First Priority Period:</strong> @application.FirstpriorityPeriod</p>
-                                <p><strong>Second Priority Week:</strong> @application.SecondpriorityWeek</p>
-                                <p><strong>Second Priority Period:</strong> @application.SecondpriorityPeriod</p>
-                            </td>
-            </div>
-            <button @onclick="() => ShowEditModal(application)" class="btn btn-primary">Edit</button>
-
+                                <p><strong>Kræwnr:</strong>  @selectedApplication.Child.Volunteer.Kræwnr</p>
+                                <p><strong>Volunteer Name:</strong> @selectedApplication.Child.Volunteer.Name</p>
+                                <p><strong>Email:</strong> @selectedApplication.Child.Volunteer.Email</p>
+                                <p><strong>Child Name:</strong> @selectedApplication.Child.ChildName</p>
+                                <p><strong>Age:</strong> @selectedApplication.Child.ChildAge</p>
+                                <p><strong>Tøj størrelse:</strong> @selectedApplication.Child.ClothingSize</p>
+                                <p><strong>Comment:</strong> @selectedApplication.Child.Comment</p>
+                                <p><strong>Been Before:</strong> @selectedApplication.Child.Beenbefore</p>
+                                <p><strong>Interest:</strong> @selectedApplication.Child.Interest</p>
+                                <p><strong>Volunteer:</strong> @selectedApplication.IsVolunteer</p>
+                                <p><strong>First Priority Week:</strong> @selectedApplication.FirstpriorityWeek</p>
+                                <p><strong>First Priority Period:</strong> @selectedApplication.FirstpriorityPeriod</p>
+                                <p><strong>Second Priority Week:</strong> @selectedApplication.SecondpriorityWeek</p>
+                                <p><strong>Second Priority Period:</strong> @selectedApplication.SecondpriorityPeriod</p>
+                            </div>
+                            <button @onclick="() => ShowEditModal(application)" class="btn btn-primary">Edit</button>
                         }
-        </ModalDialog>
+                    </ModalDialog>
 
-        <ModalDialog @ref="EditDialog" Title="Edit Application">
+                    <ModalDialog @ref="EditDialog" Title="Edit Application">
                         @if (selectedApplication != null)
                         {
-                <EditForm Model="@selectedApplication" OnValidSubmit="HandleEditApplication">
-                    <DataAnnotationsValidator />
-                    <ValidationSummary />
+                            <EditForm Model="@selectedApplication" OnValidSubmit="HandleEditApplication">
+                                <DataAnnotationsValidator />
+                                <ValidationSummary />
 
-                    <div class="form-group row">
-                        <label for="Kræwnr" class="col-md-4 col-form-label">Kræwnr.</label>
-                        <div class="col-md-4">
-                            <InputNumber id="Kræwnr" @bind-Value="application.Child.Volunteer.Kræwnr" class="form-control" />
-                            <ValidationMessage For="@(() => application.Child.Volunteer.Kræwnr)" />
-                        </div>
-                    </div>
+                                <div class="form-group row">
+                                    <label for="Kræwnr" class="col-md-4 col-form-label">Kræwnr.</label>
+                                    <div class="col-md-4">
+                                        <InputNumber id="Kræwnr" @bind-Value="application.Child.Volunteer.Kræwnr" class="form-control" />
+                                        <ValidationMessage For="@(() => application.Child.Volunteer.Kræwnr)" />
+                                    </div>
+                                </div>
 
-                    <div class="form-group row">
-                        <label for="VolunteerNavn" class="col-md-4 col-form-label">Navn</label>
-                        <div class="col-md-4">
-                            <InputText id="VolunteerNavn" @bind-Value="application.Child.Volunteer.Name" class="form-control" />
-                            <ValidationMessage For="@(() => application.Child.Volunteer.Name)" />
-                        </div>
-                    </div>
+                                <div class="form-group row">
+                                    <label for="VolunteerNavn" class="col-md-4 col-form-label">Navn</label>
+                                    <div class="col-md-4">
+                                        <InputText id="VolunteerNavn" @bind-Value="application.Child.Volunteer.Name" class="form-control" />
+                                        <ValidationMessage For="@(() => application.Child.Volunteer.Name)" />
+                                    </div>
+                                </div>
 
-                    <div class="form-group row">
-                        <label for="VolunteerEmail" class="col-md-4 col-form-label">Email</label>
-                        <div class="col-md-4">
-                            <InputText id="VolunteerEmail" @bind-Value="application.Child.Volunteer.Email" class="form-control" />
-                            <ValidationMessage For="@(() => application.Child.Volunteer.Email)" />
-                        </div>
-                    </div>
+                                <div class="form-group row">
+                                    <label for="VolunteerEmail" class="col-md-4 col-form-label">Email</label>
+                                    <div class="col-md-4">
+                                        <InputText id="VolunteerEmail" @bind-Value="application.Child.Volunteer.Email" class="form-control" />
+                                        <ValidationMessage For="@(() => application.Child.Volunteer.Email)" />
+                                    </div>
+                                </div>
 
-                    <div class="form-group row">
-                        <label for="ChildName" class="col-md-4 col-form-label">Navn Barn</label>
-                        <div class="col-md-4">
-                            <InputText id="ChildName" @bind-Value="application.Child.ChildName" class="form-control" />
-                            <ValidationMessage For="@(() => application.Child.ChildName)" />
-                        </div>
-                    </div>
+                                <div class="form-group row">
+                                    <label for="ChildName" class="col-md-4 col-form-label">Navn Barn</label>
+                                    <div class="col-md-4">
+                                        <InputText id="ChildName" @bind-Value="application.Child.ChildName" class="form-control" />
+                                        <ValidationMessage For="@(() => application.Child.ChildName)" />
+                                    </div>
+                                </div>
 
-                    <div class="form-group row">
-                        <label for="ChildAge" class="col-md-4 col-form-label">Alder barn</label>
-                        <div class="col-md-4">
-                            <InputNumber id="ChildAge" @bind-Value="application.Child.ChildAge" class="form-control" />
-                            <ValidationMessage For="@(() => application.Child.ChildAge)" />
-                        </div>
-                    </div>
+                                <div class="form-group row">
+                                    <label for="ChildAge" class="col-md-4 col-form-label">Alder barn</label>
+                                    <div class="col-md-4">
+                                        <InputNumber id="ChildAge" @bind-Value="application.Child.ChildAge" class="form-control" />
+                                        <ValidationMessage For="@(() => application.Child.ChildAge)" />
+                                    </div>
+                                </div>
 
+                                <div class="form-group row">
+                                    <label for="Clothingsize" class="col-md-4 col-form-label">Tøj størrelse</label>
+                                    <div class="col-md-4">
+                                        <InputText id="Clothingsize" @bind-Value="application.Child.ClothingSize" class="form-control" />
+                                        <ValidationMessage For="@(() => application.Child.ClothingSize)" />
+                                    </div>
+                                </div>
 
-                    <div class="form-group row">
-                        <label for="Clothingsize" class="col-md-4 col-form-label">Tøj størrelse</label>
-                        <div class="col-md-4">
-                            <InputText id="Clothingsize" @bind-Value="application.Child.ClothingSize" class="form-control" />
-                            <ValidationMessage For="@(() => application.Child.ClothingSize)" />
-
-                        </div>
-                    </div>
-
-                    <div class="form-group row">
-                        <label for="FirstPriorityWeek" class="col-md-4 col-form-label">Føreste prioritet uge</label>
-                        <div class="col-md-4">
-                            <InputSelect id="FirstPriorityWeek" @bind-Value="application.FirstpriorityWeek" class="form-control" @oninput="OnInputUge1">
+                                <div class="form-group row">
+                                    <label for="FirstPriorityWeek" class="col-md-4 col-form-label">Føreste prioritet uge</label>
+                                    <div class="col-md-4">
+                                        <InputSelect id="FirstPriorityWeek" @bind-Value="application.FirstpriorityWeek" class="form-control" @oninput="OnInputUge1">
                                             @foreach (var anOption in optionsUge1)
                                             {
-                                    <option value="@anOption">@anOption</option>
+                                                <option value="@anOption">@anOption</option>
                                             }
-                            </InputSelect>
-                        </div>
-                    </div>
+                                        </InputSelect>
+                                    </div>
+                                </div>
 
-                    <div class="form-group row">
-                        <label for="FirstPriorityPeriod" class="col-md-4 col-form-label">Føreste periode</label>
-                        <div class="col-md-4">
-                            <InputSelect id="FirstPriorityPeriod" @bind-Value="application.FirstpriorityPeriod" class="form-control" @oninput="OnInputPeriode1">
+                                <div class="form-group row">
+                                    <label for="FirstPriorityPeriod" class="col-md-4 col-form-label">Føreste periode</label>
+                                    <div class="col-md-4">
+                                        <InputSelect id="FirstPriorityPeriod" @bind-Value="application.FirstpriorityPeriod" class="form-control" @oninput="OnInputPeriode1">
                                             @foreach (var anOption in optionsPeriode1)
                                             {
-                                    <option value="@anOption"> @anOption</option>
+                                                <option value="@anOption"> @anOption</option>
                                             }
-                            </InputSelect>
+                                        </InputSelect>
+                                    </div>
+                                </div>
 
-                        </div>
-                    </div>
-
-                    <button type="submit" class="btn btn-success">Save Changes</button>
-                    <button type="button" @onclick="ApproveApplication" class="btn btn-success">Approve Application</button>
-                </EditForm>
+                                <button type="submit" class="btn btn-success">Save Changes</button>
+                                <button type="button" @onclick="ApproveApplication" class="btn btn-success">Approve Application</button>
+                            </EditForm>
                         }
-        </ModalDialog>
+                    </ModalDialog>
                 }
-    </tbody>
-    </table>
+            </tbody>
+        </table>
     }
 </div>
 
-
 @code {
     private Core.Models.Admin admin = new Core.Models.Admin();
-    private Core.Models.Application[] applications = new Core.Models.Application[0];
+    private Core.Models.Application[] queuedApplications = new Core.Models.Application[0];
+    private Core.Models.Application[] approvedApplications = new Core.Models.Application[0];
 
     private Core.Models.Application? selectedApplication;
     private ModalDialog DetailsDialog;
     private ModalDialog EditDialog;
-    private bool showApplications = false;
-    private bool showApplicationsApproved = false;
+    private bool showQueuedApplications = false;
+    private bool showApprovedApplications = false;
 
     //options for dropdowns
     string[] optionsUge1 = { "Vælg", "Uge 27", "Uge 28", "Uge 30", "Uge 31" };
@@ -275,17 +232,12 @@
     string selectedOptionUge1 = "Vælg";
     string selectedOptionPeriode1 = "Vælg";
 
-    private Core.Models.Application[] Applicationlistcopy; // Copy of the original post list
-    private Core.Models.Application[] filteredAndSortedApplications = new Core.Models.Application[0];
-    private string Emailfilter = "";
-    private string selectedWeek = "";
-
     protected override async Task OnInitializedAsync()
     {
         await LoadAdminData();
     }
 
-    private async Task LoadAdminData()//showing the admin data on the page
+    private async Task LoadAdminData()
     {
         var admins = await AdminService.GetAllAdmin();
         if (admins.Length > 0)
@@ -294,24 +246,22 @@
         }
     }
 
-
-    private void Logout()//logging out
+    private void Logout()
     {
         NavigationManager.NavigateTo("/Admin", forceLoad: true);
     }
 
-    private void ShowApplicationDetails(Core.Models.Application application)//showing details of the application
+    private void ShowApplicationDetails(Core.Models.Application application)
     {
         selectedApplication = application;
         DetailsDialog.Open();
     }
 
-    private void ShowApprovedApplicationDetails(Core.Models.Application application)//showing details of the approved application
+    private void ShowApprovedApplicationDetails(Core.Models.Application application)
     {
         selectedApplication = application;
         DetailsDialog.Open();
     }
-
 
     private void ShowEditModal(Core.Models.Application application)
     {
@@ -334,7 +284,7 @@
         if (selectedApplication != null)
         {
             await applicationService.UpdateApplication(selectedApplication);
-            EditDialog.Close();  // Close the modal after submission
+            EditDialog.Close();
         }
     }
 
@@ -344,51 +294,27 @@
         {
             Console.WriteLine("Approving Application: " + selectedApplication.Id);
             selectedApplication.IsApproved = true;
-
             await applicationService.UpdateApplication(selectedApplication);
             Console.WriteLine("Application Updated");
 
             await ShowQueuedApplications();
             await ShowApplicationsApproved();
-
             EditDialog.Close();
         }
     }
-
 
     [Inject]
     private IApplicationService applicationService { get; set; }
 
     private async Task ShowQueuedApplications()
     {
-        applications = await applicationService.GetQueuedApplications();
-        showApplications = true;
+        queuedApplications = await applicationService.GetQueuedApplications();
+        showQueuedApplications = true;
     }
 
     private async Task ShowApplicationsApproved()
     {
-        applications = await applicationService.GetApprovedApplications();
-        showApplicationsApproved = true;
-        Console.WriteLine("Approved Applications Count: " + applications.Length);
-    }
-
-    private async Task ShowApplicationsApproved()//showing all the queued applications when clicked
-    {
         approvedApplications = await applicationService.GetApprovedApplications();
         showApprovedApplications = true;
-    private void FilterAndSort()
-    {
-        // Filter applications by email
-        var filteredApplications = Applicationlistcopy
-            .Where(application => string.IsNullOrWhiteSpace(Emailfilter) || application.Child.Volunteer.Email.Contains(Emailfilter, StringComparison.OrdinalIgnoreCase));
-
-        // Filter applications by selected week
-        if (!string.IsNullOrEmpty(selectedWeek) && selectedWeek != "Vælg")
-        {
-            filteredApplications = filteredApplications.Where(application => application.FirstpriorityWeek == selectedWeek);
-        }
-
-        // Sort filtered applications by volunteer name
-        filteredAndSortedApplications = filteredApplications.OrderBy(application => application.Child.Volunteer.Name).ToArray();
     }
 }

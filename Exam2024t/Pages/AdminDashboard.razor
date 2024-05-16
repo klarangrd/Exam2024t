@@ -79,6 +79,17 @@
     @if (showQueuedApplications)
     {
         <h1>Venteliste</h1>
+        <div>
+            <input type="text" placeholder="Enter name" @bind="Emailfilter" />
+
+            <InputSelect id="FirstPriorityWeek" @bind-Value="selectedWeek" class="form-control" @oninput="OnInputUge1">
+                @foreach (var anOption in optionsUge1)
+                {
+                    <option value="@anOption">@anOption</option>
+                }
+            </InputSelect>
+            <button @onclick="FilterAndSort">Filter & Sort</button>
+        </div>
 
         <table class="table">
             <tbody>
@@ -213,6 +224,8 @@
             </tbody>
         </table>
     }
+
+
 </div>
 
 @code {
@@ -225,6 +238,11 @@
     private ModalDialog EditDialog;
     private bool showQueuedApplications = false;
     private bool showApprovedApplications = false;
+
+    private Core.Models.Application[] Applicationlistcopy; // Copy of the original post list
+    private Core.Models.Application[] filteredAndSortedApplications = new Core.Models.Application[0];
+    private string Emailfilter = "";
+    private string selectedWeek = "";
 
     //options for dropdowns
     string[] optionsUge1 = { "Vælg", "Uge 27", "Uge 28", "Uge 30", "Uge 31" };
@@ -316,5 +334,24 @@
     {
         approvedApplications = await applicationService.GetApprovedApplications();
         showApprovedApplications = true;
+    }
+
+
+
+
+    private void FilterAndSort()
+    {
+        // Filter applications by email
+        var filteredApplications = Applicationlistcopy
+            .Where(application => string.IsNullOrWhiteSpace(Emailfilter) || application.Child.Volunteer.Email.Contains(Emailfilter, StringComparison.OrdinalIgnoreCase));
+
+        // Filter applications by selected week
+        if (!string.IsNullOrEmpty(selectedWeek) && selectedWeek != "Vælg")
+        {
+            filteredApplications = filteredApplications.Where(application => application.FirstpriorityWeek == selectedWeek);
+        }
+
+        // Sort filtered applications by volunteer name
+        filteredAndSortedApplications = filteredApplications.OrderBy(application => application.Child.Volunteer.Name).ToArray();
     }
 }

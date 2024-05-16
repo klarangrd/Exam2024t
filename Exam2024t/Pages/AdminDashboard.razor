@@ -13,9 +13,19 @@
 
 <h3>You are logged in as:</h3>
 <div>
+    <table>
+        <tr>
+            <td>
     <p>Username: @admin?.Username</p>
+            </td>
+            <td>
     <p>Name: @admin?.Name</p>
+            </td>
+    <td>
     <p>Email: @admin?.Email</p>
+            </td>
+        </tr>
+    </table>
 </div>
 <button class="btn btn-primary" @onclick="Logout">Logout</button>
 
@@ -272,13 +282,20 @@
 
     protected override async Task OnInitializedAsync()
     {
-        // Initialize data
-        applications = await applicationService.GetAllApplications();
-        Applicationlistcopy = applications;
-        filteredAndSortedApplications = applications;
+        await LoadAdminData();
     }
 
-    private void Logout()//logging out of the account
+    private async Task LoadAdminData()//showing the admin data on the page
+    {
+        var admins = await AdminService.GetAllAdmin();
+        if (admins.Length > 0)
+        {
+            admin = admins[0]; // Assuming there is only one admin in this example
+        }
+    }
+
+
+    private void Logout()//logging out
     {
         NavigationManager.NavigateTo("/Admin", forceLoad: true);
     }
@@ -355,6 +372,10 @@
         Console.WriteLine("Approved Applications Count: " + applications.Length);
     }
 
+    private async Task ShowApplicationsApproved()//showing all the queued applications when clicked
+    {
+        approvedApplications = await applicationService.GetApprovedApplications();
+        showApprovedApplications = true;
     private void FilterAndSort()
     {
         // Filter applications by email

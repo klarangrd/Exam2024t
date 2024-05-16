@@ -52,7 +52,7 @@
 
             <div class="form-group row">
                 <div class="col-md-12">
-                    <button type="submit" class="btn btn-primary btn-submit">Indsend signatur</button>
+                    <button type="submit" class="btn btn-primary btn-submit" @onclick="appInSignature">Indsend signatur</button>
                 </div>
             </div>
         </EditForm>
@@ -105,7 +105,41 @@
         selectedApplication = application;
         DetailsDialog.Open();
     }
-    
+
+    public void appInSignature()
+    {
+        if (selectedApplication != null)
+        {
+            signature.Application = new Core.Models.Application
+                {
+                    Child = new Core.Models.Child
+                    {
+                        ChildName = selectedApplication.Child.ChildName,
+                        ChildAge = selectedApplication.Child.ChildAge,
+                        ClothingSize = selectedApplication.Child.ClothingSize,
+                        Comment = selectedApplication.Child.Comment,
+                        Beenbefore = selectedApplication.Child.Beenbefore,
+                        Interest = selectedApplication.Child.Interest,
+                        Volunteer = new Core.Models.Volunteer
+                        {
+                            Name = selectedApplication.Child.Volunteer.Name,
+                            Email = selectedApplication.Child.Volunteer.Email,
+                            Kræwnr = selectedApplication.Child.Volunteer.Kræwnr
+
+                        }
+                    },
+                    IsVolunteer = selectedApplication.IsVolunteer,
+                    FirstpriorityWeek = selectedApplication.FirstpriorityWeek,
+                    FirstpriorityPeriod = selectedApplication.FirstpriorityPeriod,
+                    SecondpriorityWeek = selectedApplication.SecondpriorityWeek,
+                    SecondpriorityPeriod = selectedApplication.SecondpriorityPeriod,
+
+                };
+            signature = new Core.Models.Signature { Signed = true };
+        }
+    }
+
+
     private async Task OnClickAddDialog()
     {
         if (addDialog != null)
@@ -121,6 +155,7 @@
     {
         await sService.Add(signature);
         addDialog?.Close();
+        Console.WriteLine(signature.Signed);
     }
 
     private SignaturePadOptions _options = new SignaturePadOptions

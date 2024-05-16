@@ -35,6 +35,8 @@ namespace Core.Models
         [Required(ErrorMessage = "Andenprioritet Periode er påkrævet.")]
         public string SecondpriorityPeriod { get; set; }
 
+        public bool IsApproved { get; set; }
+
         public Child Child { get; set; }
         
     }

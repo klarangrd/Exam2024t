@@ -82,7 +82,7 @@
         <div>
             <input type="text" placeholder="Enter name" @bind="Emailfilter" />
 
-            <InputSelect id="FirstPriorityWeek" @bind-Value="selectedWeek" class="form-control" @oninput="OnInputUge1">
+            <InputSelect id="FirstPriorityWeek" @bind-Value="selectedWeek" class="form-control" @oninput="OnInputUge1" >
                 @foreach (var anOption in optionsUge1)
                 {
                     <option value="@anOption">@anOption</option>
@@ -93,7 +93,7 @@
 
         <table class="table">
             <tbody>
-                @foreach (var application in queuedApplications)
+                @foreach (var application in filteredAndSortedApplications ?? new Core.Models.Application[0])
                 {
                     <tr>
                         <td>
@@ -242,7 +242,7 @@
     private Core.Models.Application[] Applicationlistcopy; // Copy of the original post list
     private Core.Models.Application[] filteredAndSortedApplications = new Core.Models.Application[0];
     private string Emailfilter = "";
-    private string selectedWeek = "";
+    private string selectedWeek = "Vælg";
 
     //options for dropdowns
     string[] optionsUge1 = { "Vælg", "Uge 27", "Uge 28", "Uge 30", "Uge 31" };
@@ -327,7 +327,9 @@
     private async Task ShowQueuedApplications()
     {
         queuedApplications = await applicationService.GetQueuedApplications();
+        Applicationlistcopy = queuedApplications.ToArray();
         showQueuedApplications = true;
+        FilterAndSort();
     }
 
     private async Task ShowApplicationsApproved()
@@ -341,17 +343,21 @@
 
     private void FilterAndSort()
     {
-        // Filter applications by email
-        var filteredApplications = Applicationlistcopy
-            .Where(application => string.IsNullOrWhiteSpace(Emailfilter) || application.Child.Volunteer.Email.Contains(Emailfilter, StringComparison.OrdinalIgnoreCase));
-
-        // Filter applications by selected week
-        if (!string.IsNullOrEmpty(selectedWeek) && selectedWeek != "Vælg")
+        if (Applicationlistcopy != null)
         {
-            filteredApplications = filteredApplications.Where(application => application.FirstpriorityWeek == selectedWeek);
-        }
+            // Filter applications by email
+            var filteredApplications = Applicationlistcopy
+                .Where(application => string.IsNullOrWhiteSpace(Emailfilter) || application.Child.Volunteer.Email.Contains(Emailfilter, StringComparison.OrdinalIgnoreCase));
 
-        // Sort filtered applications by volunteer name
-        filteredAndSortedApplications = filteredApplications.OrderBy(application => application.Child.Volunteer.Name).ToArray();
+            // Filter applications by selected week
+            if (!string.IsNullOrEmpty(selectedWeek) && selectedWeek != "Vælg")
+            {
+                filteredApplications = filteredApplications.Where(application => application.FirstpriorityWeek == selectedWeek);
+            }
+
+            // Sort filtered applications by volunteer name
+            filteredAndSortedApplications = filteredApplications.OrderBy(application => application.Child.Volunteer.Name).ToArray();
+        }
+        else Console.WriteLine("error");
     }
 }

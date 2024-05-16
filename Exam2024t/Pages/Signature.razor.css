@@ -1,3 +1,8 @@
+body {
+    font-family: Arial, sans-serif;
+    font-size: 14px;
+    color: #333;
+}
 .signature {
     width: 100%;
     height: 100%;
@@ -10,4 +15,17 @@
 .infotext {
     font-size: 15px; /* Increased font size for better readability */
     color: #333; /* Dark color for better visibility */
+}
+.table {
+    width: 100%; /* Full-width table */
+    font-size: 12px; /* Smaller font size for table */
+}
+
+table td {
+    border-top: 1px solid #eee;
+    padding: 8px; /* Compact padding */
+}
+td > p {
+    margin: 2px 0; /* Reduce margin between paragraphs within cells */
+    padding-left: 10px; /* Further indentation inside table cells */
 }

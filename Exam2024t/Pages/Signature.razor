@@ -12,29 +12,30 @@
     @if (applicationliste != null)
     {
         
-<div>
-
-    @foreach (var item in applicationliste)
-    {
-        <tr>
-            <td>
-                <p class="infotext"><strong>Volunteer Name:</strong> @item.Child.Volunteer.Name</p>
-            </td>
-            <td>
-                <p class="infotext"><strong>Email:</strong> @item.Child.Volunteer.Email</p>
-            </td>
-            <td>
-                <p class="infotext"><strong>First Priority Week:</strong> @item.FirstpriorityWeek</p>
-            </td>
-            <td>
-                <p class="infotext"><strong>First Priority Period:</strong> @item.FirstpriorityPeriod</p>
-            </td>
-            <td>
-                <button @onclick="() => ShowApplicationDetails(item)">Se detaljer</button>
-            </td>
-        </tr>
-    }
-</div>
+        <table class="table">
+            <tbody>
+            @foreach (var item in applicationliste)
+            {
+                <tr>
+                    <td>
+                        <p class="infotext"><strong>Volunteer Name:</strong> @item.Child.Volunteer.Name</p>
+                    </td>
+                    <td>
+                        <p class="infotext"><strong>Email:</strong> @item.Child.Volunteer.Email</p>
+                    </td>
+                    <td>
+                        <p class="infotext"><strong>First Priority Week:</strong> @item.FirstpriorityWeek</p>
+                    </td>
+                    <td>
+                        <p class="infotext"><strong>First Priority Period:</strong> @item.FirstpriorityPeriod</p>
+                    </td>
+                    <td>
+                        <button @onclick="() => ShowApplicationDetails(item)">Se detaljer</button>
+                    </td>
+                </tr>
+            }
+            </tbody>
+        </table>
 }
 
     <ModalDialog @ref="addDialog" Title="Underskriv applikation">

@@ -12,9 +12,19 @@
 
 <h3>You are logged in as:</h3><!--admin info to show which is logged in-->
 <div>
+    <table>
+        <tr>
+            <td>
     <p>Username: @admin?.Username</p>
+            </td>
+            <td>
     <p>Name: @admin?.Name</p>
+            </td>
+    <td>
     <p>Email: @admin?.Email</p>
+            </td>
+        </tr>
+    </table>
 </div>
 <button class="btn btn-primary" @onclick="Logout">Logout</button><!--logout button-->
 
@@ -236,8 +246,18 @@
 
     protected override async Task OnInitializedAsync()
     {
-        // Initialize admin data or any other required data here
+        await LoadAdminData();
     }
+
+    private async Task LoadAdminData()//showing the admin data on the page
+    {
+        var admins = await AdminService.GetAllAdmin();
+        if (admins.Length > 0)
+        {
+            admin = admins[0]; // Assuming there is only one admin in this example
+        }
+    }
+
 
     private void Logout()//logging out
     {
@@ -305,7 +325,7 @@
         showQueuedApplications = true;
     }
 
-    private async Task ShowApplicationsApproved()//showing all the approved applications when clicked
+    private async Task ShowApplicationsApproved()//showing all the queued applications when clicked
     {
         approvedApplications = await applicationService.GetApprovedApplications();
         showApprovedApplications = true;

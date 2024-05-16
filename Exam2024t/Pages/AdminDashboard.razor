@@ -79,10 +79,28 @@
     @if (showQueuedApplications)
     {
         <h1>Venteliste</h1>
+        <div class="mb-3">
+            <input type="text" placeholder="Enter name" @bind="Emailfilter" />
+            <label for="FirstPriorityWeek">Prioritetsuge</label>
+            <InputSelect id="FirstPriorityWeek" @bind-Value="selectedWeek" @oninput="OnInputUge1" >
+                @foreach (var anOption in optionsUge1)
+                {
+                    <option value="@anOption">@anOption</option>
+                }
+            </InputSelect>
+            <label for="FirstPriorityPeriod">Prioritetperiode</label>
+            <InputSelect id="FirstPriorityPeriod" @bind-Value="selectedPeriod" @oninput="OnInputPeriode1">
+                @foreach (var anOption in optionsPeriode1)
+                {
+                    <option value="@anOption">@anOption</option>
+                }
+            </InputSelect>
+            <button @onclick="FilterAndSort">Filter & Sort</button>
+        </div>
 
         <table class="table">
             <tbody>
-                @foreach (var application in queuedApplications)
+                @foreach (var application in filteredAndSortedApplications ?? new Core.Models.Application[0])
                 {
                     <tr>
                         <td>
@@ -213,6 +231,8 @@
             </tbody>
         </table>
     }
+
+
 </div>
 
 @code {
@@ -225,6 +245,12 @@
     private ModalDialog EditDialog;
     private bool showQueuedApplications = false;
     private bool showApprovedApplications = false;
+
+    private Core.Models.Application[] Applicationlistcopy; // Copy of the original post list
+    private Core.Models.Application[] filteredAndSortedApplications = new Core.Models.Application[0];
+    private string Emailfilter = "";
+    private string selectedWeek = "Vælg";
+    private string selectedPeriod = "Vælg";
 
     //options for dropdowns
     string[] optionsUge1 = { "Vælg", "Uge 27", "Uge 28", "Uge 30", "Uge 31" };
@@ -309,12 +335,41 @@
     private async Task ShowQueuedApplications()
     {
         queuedApplications = await applicationService.GetQueuedApplications();
+        Applicationlistcopy = queuedApplications.ToArray();
         showQueuedApplications = true;
+        FilterAndSort();
     }
 
     private async Task ShowApplicationsApproved()
     {
         approvedApplications = await applicationService.GetApprovedApplications();
         showApprovedApplications = true;
+    }
+
+
+
+
+    private void FilterAndSort()
+    {
+        if (Applicationlistcopy != null)
+        {
+            // Filter applications by email
+            var filteredApplications = Applicationlistcopy
+                .Where(application => string.IsNullOrWhiteSpace(Emailfilter) || application.Child.Volunteer.Email.Contains(Emailfilter, StringComparison.OrdinalIgnoreCase));
+
+            // Filter applications by selected week
+            if (!string.IsNullOrEmpty(selectedWeek) && selectedWeek != "Vælg")
+            {
+                filteredApplications = filteredApplications.Where(application => application.FirstpriorityWeek == selectedWeek);
+            }
+            if (!string.IsNullOrEmpty(selectedPeriod) && selectedPeriod != "Vælg")
+            {
+                filteredApplications = filteredApplications.Where(application => application.FirstpriorityPeriod == selectedPeriod);
+            }
+
+
+            // Sort filtered applications by volunteer name
+            filteredAndSortedApplications = filteredApplications.OrderBy(application => application.Child.Volunteer.Name).ToArray();
+        }
     }
 }

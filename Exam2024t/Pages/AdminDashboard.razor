@@ -79,10 +79,10 @@
     @if (showQueuedApplications)
     {
         <h1>Venteliste</h1>
-        <div>
+        <div class="mb-3">
             <input type="text" placeholder="Enter name" @bind="Emailfilter" />
-
-            <InputSelect id="FirstPriorityWeek" @bind-Value="selectedWeek" class="form-control" @oninput="OnInputUge1" >
+            <label for="FirstPriorityWeek">Prioritetsuge</label>
+            <InputSelect id="FirstPriorityWeek" @bind-Value="selectedWeek" @oninput="OnInputUge1" >
                 @foreach (var anOption in optionsUge1)
                 {
                     <option value="@anOption">@anOption</option>

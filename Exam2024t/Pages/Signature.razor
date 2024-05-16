@@ -16,48 +16,71 @@
 
     @foreach (var item in applicationliste)
     {
-        <td> 
-            <p><strong>Kræwnr:</strong>  @item.Child.Volunteer.Kræwnr</p>
-            <p><strong>Volunteer Name:</strong> @item.Child.Volunteer.Name</p>
-            <p><strong>Email:</strong> @item.Child.Volunteer.Email</p>
-            <p><strong>Child Name:</strong> @item.Child.ChildName</p>
-            <p><strong>Age:</strong> @item.Child.ChildAge</p>
-            <p><strong>Tøj størrelse: </strong>@item.Child.ClothingSize</p>
-            <p><strong>Comment:</strong> @item.Child.Comment</p>
-            <p><strong>Been Before:</strong> @item.Child.Beenbefore</p>
-            <p><strong>Interest:</strong> @item.Child.Interest</p>
-            <p><strong>Volunteer:</strong> @item.IsVolunteer</p>
-            <p><strong>First Priority Week:</strong> @item.FirstpriorityWeek</p>
-            <p><strong>First Priority Period:</strong> @item.FirstpriorityPeriod</p>
-            <p><strong>Second Priority Week:</strong> @item.SecondpriorityWeek</p>
-            <p><strong>Second Priority Period:</strong> @item.SecondpriorityPeriod</p>
-        </td>
+        <tr>
+            <td>
+                <p class="infotext"><strong>Volunteer Name:</strong> @item.Child.Volunteer.Name</p>
+            </td>
+            <td>
+                <p class="infotext"><strong>Email:</strong> @item.Child.Volunteer.Email</p>
+            </td>
+            <td>
+                <p class="infotext"><strong>First Priority Week:</strong> @item.FirstpriorityWeek</p>
+            </td>
+            <td>
+                <p class="infotext"><strong>First Priority Period:</strong> @item.FirstpriorityPeriod</p>
+            </td>
+            <td>
+                <button @onclick="() => ShowApplicationDetails(item)">Se detaljer</button>
+            </td>
+        </tr>
     }
 </div>
 }
 
-<button class="btn btn-primary" @onclick="OnClickAddDialog">Underskriv applikation</button>
-
-<ModalDialog @ref="addDialog" Title="Underskriv applikation">
-    <EditForm EditContext="@aEditContext" class="application-form" OnValidSubmit="@HandleValidSubmit">
-        <DataAnnotationsValidator />
-        <ValidationSummary />
-        <div class="form-group row">
-            <div class="col-md-12">
-                @if (isModalVisible)
-                {
-                    <SignaturePad class="signature" @bind-Value="Core.Models.Signature.Sign" Options="_options" style="width: 100%; height: 200px"/>
-                }
+    <ModalDialog @ref="addDialog" Title="Underskriv applikation">
+        <EditForm EditContext="@aEditContext" class="application-form" OnValidSubmit="@HandleValidSubmit">
+            <DataAnnotationsValidator />
+            <ValidationSummary />
+            <div class="form-group row">
+                <div class="col-md-12">
+                    @if (isModalVisible)
+                    {
+                        <SignaturePad class="signature" @bind-Value="Core.Models.Signature.Sign" Options="_options" style="width: 100%; height: 200px"/>
+                    }
+                </div>
             </div>
-        </div>
 
-        <div class="form-group row">
-            <div class="col-md-12">
-                <button type="submit" class="btn btn-primary btn-submit">Indsend signatur</button>
+            <div class="form-group row">
+                <div class="col-md-12">
+                    <button type="submit" class="btn btn-primary btn-submit">Indsend signatur</button>
+                </div>
             </div>
+        </EditForm>
+    </ModalDialog>
+<ModalDialog @ref="DetailsDialog" Title="application details">
+    @if (selectedApplication != null)
+    {
+        <div>
+            <h5>Application details</h5>
+            <p><strong>Kræwnr:</strong>  @selectedApplication.Child.Volunteer.Kræwnr</p>
+            <p><strong>Volunteer Name:</strong> @selectedApplication.Child.Volunteer.Name</p>
+            <p><strong>Email:</strong> @selectedApplication.Child.Volunteer.Email</p>
+            <p><strong>Child Name:</strong> @selectedApplication.Child.ChildName</p>
+            <p><strong>Age:</strong> @selectedApplication.Child.ChildAge</p>
+            <p><strong>Tøj størrelse:</strong> @selectedApplication.Child.ClothingSize</p>
+            <p><strong>Comment:</strong> @selectedApplication.Child.Comment</p>
+            <p><strong>Been Before:</strong> @selectedApplication.Child.Beenbefore</p>
+            <p><strong>Interest:</strong> @selectedApplication.Child.Interest</p>
+            <p><strong>Volunteer:</strong> @selectedApplication.IsVolunteer</p>
+            <p><strong>First Priority Week:</strong> @selectedApplication.FirstpriorityWeek</p>
+            <p><strong>First Priority Period:</strong> @selectedApplication.FirstpriorityPeriod</p>
+            <p><strong>Second Priority Week:</strong> @selectedApplication.SecondpriorityWeek</p>
+            <p><strong>Second Priority Period:</strong> @selectedApplication.SecondpriorityPeriod</p>
         </div>
-    </EditForm>
+        <button class="btn btn-primary" @onclick="OnClickAddDialog">Underskriv applikation</button>
+    }
 </ModalDialog>
+
 
 
 @code {
@@ -67,6 +90,8 @@
     private ISignatureService sService { get; set; }
     private bool isModalVisible = false;
 
+    private Core.Models.Application? selectedApplication;
+    private ModalDialog DetailsDialog;
     private EditContext aEditContext;
     private ModalDialog? addDialog { get; set; }
 
@@ -75,6 +100,12 @@
         aEditContext = new EditContext(signature);
     }
 
+    private void ShowApplicationDetails(Core.Models.Application application)//showing application details in the queued ones
+    {
+        selectedApplication = application;
+        DetailsDialog.Open();
+    }
+    
     private async Task OnClickAddDialog()
     {
         if (addDialog != null)
@@ -82,6 +113,7 @@
             await addDialog.OpenAsync();
             isModalVisible = true;
             StateHasChanged();
+            DetailsDialog.Close();
         }
     }
 

@@ -7,3 +7,7 @@
     flex-direction: column;
     z-index: 100;
 }
+.infotext {
+    font-size: 15px; /* Increased font size for better readability */
+    color: #333; /* Dark color for better visibility */
+}

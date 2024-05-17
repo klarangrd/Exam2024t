@@ -46,7 +46,7 @@
                 <div class="col-md-12">
                     @if (isModalVisible)
                     {
-                        <SignaturePad class="signature" @bind-Value="application.Signature.Sign" Options="_options" style="width: 100%; height: 200px"/>
+                        <SignaturePad class="signature" @bind-Value="signature.Sign" Options="_options" style="width: 100%; height: 200px"/>
                     }
                 </div>
             </div>
@@ -86,6 +86,7 @@
 
 @code {
     private Core.Models.Application[] applications = new Core.Models.Application[0];
+    Core.Models.Signature signature = new Core.Models.Signature();
     Core.Models.Application application = new Core.Models.Application();
     [Inject]
     private IApplicationService mService { get; set; }
@@ -101,7 +102,7 @@
         aEditContext = new EditContext(application);
     }
 
-    private void ShowApplicationDetails(Core.Models.Application application)//showing application details in the queued ones
+    private void ShowApplicationDetails(Core.Models.Application application)//showing application details 
     {
         selectedApplication = application;
         DetailsDialog.Open();
@@ -115,6 +116,7 @@
                 {
                     Signature = new Core.Models.Signature 
                     { Signed = true,
+                        Sign = signature.Sign,
                       SignatureDate = DateTime.Now},
                     Child = new Core.Models.Child
                     {
@@ -161,6 +163,7 @@
         await mService.Add(application);
         addDialog?.Close();
         Console.WriteLine(application.Signature.Signed);
+       
     }
 
     private SignaturePadOptions _options = new SignaturePadOptions

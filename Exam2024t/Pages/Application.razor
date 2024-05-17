@@ -297,6 +297,11 @@
     {
         applicationList.Add(new Core.Models.Application
             {
+                Signature = new Core.Models.Signature
+                {
+                    Signed = false
+                                  
+                },
                 Child = new Child
                 {
                     ChildName = application.Child.ChildName,
@@ -323,7 +328,7 @@
 
         await localStore.SetItemAsync("applicationList", applicationList);
 
-        await mService.Add(application);
+
         addDialog?.Close();
         alertDialog?.Open();
 

@@ -12,13 +12,20 @@
 
 <h2>Admin Dashboard</h2>
 
-<h3>You are logged in as:</h3><!--admin info to show which is logged in-->
-<div>
-    <p>Username: @admin?.Username</p>
-    <p>Name: @admin?.Name</p>
-    <p>Email: @admin?.Email</p>
-</div>
-<button class="btn btn-primary" @onclick="Logout">Logout</button><!--logout button-->
+<h3>You are logged in as:</h3>
+@if (currentAdmin != null)
+{
+    <div>
+        <p>Username: @currentAdmin.Username</p>
+        <p>Name: @currentAdmin.Name</p>
+        <p>Email: @currentAdmin.Email</p>
+    </div>
+    <button class="btn btn-primary" @onclick="Logout">Logout</button>
+}
+else
+{
+    <p>Loading admin data...</p>
+}
 
 <div>
     <button class="btn btn-primary" @onclick="ShowApplicationsApproved">Applications approved</button><!--see all approved applications-->
@@ -218,6 +225,8 @@
 
 @code {
     private Core.Models.Admin admin = new Core.Models.Admin();
+    private Core.Models.Admin currentAdmin;
+
 
     private Core.Models.Application[] queuedApplications = new Core.Models.Application[0];
     private Core.Models.Application[] approvedApplications = new Core.Models.Application[0];
@@ -242,20 +251,21 @@
 
     protected override async Task OnInitializedAsync()
     {
-        await LoadAdminData();
+        await LoadCurrentAdmin();
     }
 
-    private async Task LoadAdminData()//needs to be updated to login to multiple users
+    private async Task LoadCurrentAdmin()
     {
-        var admins = await AdminService.GetAllAdmin();
-        if (admins.Length > 0)
+        currentAdmin = await AdminService.GetCurrentAdmin();
+        if (currentAdmin == null)
         {
-            admin = admins[0];
+            NavigationManager.NavigateTo("/Admin", forceLoad: true);
         }
     }
 
-    private void Logout()
+    private async Task Logout()
     {
+        await AdminService.LogoutAdmin();
         NavigationManager.NavigateTo("/Admin", forceLoad: true);
     }
 

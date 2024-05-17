@@ -18,16 +18,27 @@
             {
                 <tr>
                     <td>
-                        <p class="infotext"><strong>Volunteer Name:</strong> @item.Child.Volunteer.Name</p>
+                        <p class="infotext"><strong>Volunteer Name:</strong> <br /> @item.Child.Volunteer.Name</p>
                     </td>
                     <td>
-                        <p class="infotext"><strong>Email:</strong> @item.Child.Volunteer.Email</p>
+                        <p class="infotext"><strong>Email:</strong> <br />@item.Child.Volunteer.Email</p>
                     </td>
                     <td>
-                        <p class="infotext"><strong>First Priority Week:</strong> @item.FirstpriorityWeek</p>
+                        <p class="infotext"><strong>First Priority Week:</strong><br /> @item.FirstpriorityWeek</p>
                     </td>
                     <td>
-                        <p class="infotext"><strong>First Priority Period:</strong> @item.FirstpriorityPeriod</p>
+                        <p class="infotext"><strong>First Priority Period:</strong><br /> @item.FirstpriorityPeriod</p>
+                    </td>
+                    <td>
+                        @if (@item.Signature.Signed == false)
+                        {
+                            <p class="infotext"><strong>Signatur status:</strong><br /> Ikke underskrevet </p>
+                        }
+                        else
+                        {
+                            <p class="infotext"><strong>Signatur status:</strong><br /> Underskrevet </p>
+                        }
+
                     </td>
                     <td>
                         <button @onclick="() => ShowApplicationDetails(item)">Se detaljer</button>
@@ -78,7 +89,10 @@
             <p><strong>Second Priority Week:</strong> @selectedApplication.SecondpriorityWeek</p>
             <p><strong>Second Priority Period:</strong> @selectedApplication.SecondpriorityPeriod</p>
         </div>
-        <button class="btn btn-primary" @onclick="OnClickAddDialog">Underskriv applikation</button>
+        @if (!selectedApplication.Signature.Signed) // Show the button only if Signature is not signed
+        {
+            <button class="btn btn-primary" @onclick="OnClickAddDialog">Underskriv applikation</button>
+        }
     }
 </ModalDialog>
 
@@ -141,9 +155,11 @@
                     SecondpriorityPeriod = selectedApplication.SecondpriorityPeriod,
 
                 };
-                
-            
+
+
+
         }
+        UpdateApplicationListItem();
     }
 
 
@@ -163,7 +179,8 @@
         await mService.Add(application);
         addDialog?.Close();
         Console.WriteLine(application.Signature.Signed);
-       
+        StateHasChanged();
+
     }
 
     private SignaturePadOptions _options = new SignaturePadOptions
@@ -179,6 +196,22 @@
     {
         applicationliste = await localStore.GetItemAsync<Core.Models.Application[]>("applicationList") ?? new Core.Models.Application[0];
     }
+
+    public void UpdateApplicationListItem()
+    {
+        if (applicationliste != null && applicationliste.Length > 0)
+        {
+
+            var firstItem = applicationliste[0];
+
+            // Update the signed property
+            firstItem.Signature.Signed = true; 
+
+            //  save the change in local storage, you need to save the entire array again
+            localStore.SetItemAsync("applicationList", applicationliste);
+        }
+    }
+
 
 }
 

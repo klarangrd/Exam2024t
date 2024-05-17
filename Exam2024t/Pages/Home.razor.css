@@ -44,4 +44,59 @@ h1 {
     border-radius: 5px;
 }
 
+.top-left-image {
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 200px;
+    height: 100px;
+}
 
+.regler {
+    margin: 20px auto;
+    padding: 20px;
+    width: 60%;
+}
+
+/*button funktionalitet*/
+*, *::after, *::before {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+.main {
+    width: 350px;
+    height: 100px;
+    display: grid;
+    grid-template-columns: 1fr;
+    place-items: center;
+    margin: 20px auto;
+    padding: 20px;
+}
+
+.btn {
+    color: #0ebac5;
+    text-decoration: none;
+    font-size: 1.5em;
+    text-transform: uppercase;
+    font-family: calibri;
+    border-radius: 3px;
+    border: 2px solid #0ebac5;
+    padding: 1rem 2rem;
+    box-shadow: .9px 1px 0 0 #0ebac5, 1.5px 2px 0 0 #0ebac5, 2.5px 3px 0 0 #0ebac5, 3.5px 4px 0 0 #0ebac5, 4.5px 5px 0 0 #0ebac5, 5.5px 6px 0 0 #0ebac5, 6.5px 7px 0 0 #0ebac5, 7.5px 8px 0 0 #0ebac5, 8.5px 9px 0 0 #0ebac5, 9.5px 10px 0 0 #0ebac5;
+    position: relative;
+    inset: 0;
+    cursor: pointer;
+    transform: rotateX(0), rotateY(0) rotateZ(0);
+    display: inline-block;
+    outline: 2px dashed transparent;
+    transition: all 600ms ease;
+}
+
+    .btn:hover {
+        inset: 6px 0 5.5px 0;
+        transform: rotateX(5deg) rotateY(3deg) rotateZ(.25deg);
+        box-shadow: none;
+    }
+/*button funktionalitet*/

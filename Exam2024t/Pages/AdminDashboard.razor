@@ -50,6 +50,9 @@ else
                             <p class="infotext"><strong>First Priority Period:</strong> @application.FirstpriorityPeriod</p>
                         </td>
                         <td>
+                            <p class="infotext"><strong>Signature Status:</strong> @(application.Signature?.Signed == true ? "Signed" : "Not Signed")</p>
+                        </td>
+                        <td>
                             <button @onclick="() => ShowApprovedApplicationDetails(application)">Se detaljer</button>
                         </td>
                     </tr>
@@ -100,6 +103,9 @@ else
                         </td>
                         <td>
                             <p class="infotext"><strong>First Priority Period:</strong> @application.FirstpriorityPeriod</p>
+                        </td>
+                        <td>
+                            <p class="infotext"><strong>Signature Status:</strong> @(application.Signature?.Signed == true ? "Signed" : "Not Signed")</p>
                         </td>
                         <td>
                             <button @onclick="() => ShowQueuedApplicationDetails(application)">Se detaljer</button>

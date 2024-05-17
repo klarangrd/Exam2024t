@@ -39,7 +39,7 @@ namespace Core.Models
 
         public Child Child { get; set; }
 
-        public  Signature signature { get; set; }
+        public  Signature Signature { get; set; }
         
     }
 }

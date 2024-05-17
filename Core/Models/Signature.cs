@@ -9,5 +9,5 @@ public class Signature
     
     public DateTime SignatureDate { get; set; }
     
-    public static byte[] Sign { get; set; }
+    public byte[] Sign { get; set; }
 }

@@ -38,6 +38,8 @@ namespace Core.Models
         public bool IsApproved { get; set; }
 
         public Child Child { get; set; }
+
+        public  Signature signature { get; set; }
         
     }
 }

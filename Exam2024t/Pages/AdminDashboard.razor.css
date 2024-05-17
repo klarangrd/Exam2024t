@@ -27,8 +27,8 @@ div > p {
     border: 1px solid #ccc;
     padding: 10px;
     background-color: #f9f9f9;
-   
 }
+
     .applications h1 {
         font-size: 18px;
         color: #555;
@@ -59,3 +59,52 @@ td > p {
 strong {
     color: #333; /* Darker color for labels to add emphasis */
 }
+
+/* Modal dialog styling */
+.modal-dialog {
+    background-color: #fff;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    padding: 20px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+}
+
+    .modal-dialog h5 {
+        font-size: 16px;
+        color: #444;
+        margin-bottom: 20px;
+    }
+
+    .modal-dialog .form-group {
+        margin-bottom: 15px;
+    }
+
+        .modal-dialog .form-group label {
+            font-size: 14px;
+            color: #333;
+            margin-bottom: 5px;
+        }
+
+        .modal-dialog .form-group .form-control {
+            font-size: 14px;
+            padding: 8px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            width: 100%;
+        }
+
+            .modal-dialog .form-group .form-control:focus {
+                border-color: #80bdff;
+                outline: 0;
+                box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+            }
+
+    .modal-dialog .btn-success {
+        font-size: 14px;
+        padding: 8px 12px;
+        margin-right: 10px;
+    }
+
+        .modal-dialog .btn-success:last-child {
+            margin-right: 0;
+        }

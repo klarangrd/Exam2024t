@@ -9,6 +9,9 @@ namespace Exam2024t.Services
        
         Task<Admin[]> GetAllAdmin();
 
+        Task<Admin> GetCurrentAdmin();
+
+        Task LogoutAdmin();
 
 
     }

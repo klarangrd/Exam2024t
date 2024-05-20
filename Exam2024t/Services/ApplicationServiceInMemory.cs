@@ -1,4 +1,5 @@
 ﻿using Core.Models;
+using MongoDB.Bson;
 using System.Diagnostics.Metrics;
 
 namespace Exam2024t.Services
@@ -75,6 +76,21 @@ namespace Exam2024t.Services
             var approvedApps = Applications.Where(a => a.IsApproved).ToArray();
             Console.WriteLine($"Fetched {approvedApps.Length} Approved Applications");
             return Task.FromResult(approvedApps);
+        }
+
+        public Task DeleteApplication(ObjectId applicationId)
+        {
+            var application = Applications.FirstOrDefault(a => a.Id == applicationId);
+            if (application != null)
+            {
+                Applications.Remove(application);
+                Console.WriteLine($"Application with Id {applicationId} deleted.");
+            }
+            else
+            {
+                Console.WriteLine("No application found to delete.");
+            }
+            return Task.CompletedTask;
         }
 
     }

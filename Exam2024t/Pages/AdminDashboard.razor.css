@@ -34,9 +34,11 @@ div > p {
         color: #555;
     }
 
+/* Table styling */
 .table {
     width: 100%; /* Full-width table */
     font-size: 12px; /* Smaller font size for table */
+    margin-bottom: 20px; /* Space between tables */
 }
 
 table td {
@@ -108,3 +110,76 @@ strong {
         .modal-dialog .btn-success:last-child {
             margin-right: 0;
         }
+
+/* Grid layout for weeks and periods */
+.week-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr; /* Two columns */
+    grid-template-rows: auto auto; /* Two rows */
+    gap: 20px; /* Space between boxes */
+    margin-top: 20px;
+}
+
+.week-column {
+    background-color: #f1f1f1;
+    border: 1px solid #ccc;
+    padding: 10px;
+    border-radius: 8px;
+    box-sizing: border-box; /* Ensures padding and border are included in the element's total width and height */
+    overflow: hidden; /* Prevents content from overflowing */
+}
+
+    .week-column.green {
+        background-color: #d4edda;
+        border-color: #c3e6cb;
+    }
+
+    .week-column.yellow {
+        background-color: #fff3cd;
+        border-color: #ffeeba;
+    }
+
+    .week-column.red {
+        background-color: #f8d7da;
+        border-color: #f5c6cb;
+    }
+
+    .week-column h3 {
+        font-size: 18px;
+        color: #333;
+        margin-bottom: 10px;
+    }
+
+    .week-column h4 {
+        font-size: 16px;
+        color: #555;
+        margin-bottom: 10px;
+    }
+
+    .week-column table {
+        width: 100%;
+        border-collapse: collapse;
+        table-layout: fixed; /* Ensures table fits within the column */
+    }
+
+    .week-column th,
+    .week-column td {
+        border: 1px solid #ddd;
+        padding: 8px;
+        word-wrap: break-word; /* Ensures long words break and wrap to the next line */
+        overflow-wrap: break-word; /* Ensures long words break and wrap to the next line */
+        text-overflow: ellipsis; /* Adds ellipsis for overflowing text */
+        white-space: nowrap; /* Prevents wrapping of text */
+        overflow: hidden; /* Ensures text does not overflow */
+    }
+
+    .week-column th {
+        background-color: #f2f2f2;
+        font-size: 14px;
+        color: #333;
+    }
+
+    .week-column td {
+        font-size: 13px;
+        color: #666;
+    }

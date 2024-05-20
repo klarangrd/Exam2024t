@@ -1,4 +1,5 @@
 ﻿using Core.Models;
+using MongoDB.Bson;
 
 namespace Exam2024t.Services
 {
@@ -13,6 +14,10 @@ namespace Exam2024t.Services
         Task<Application[]> GetApprovedApplications();
 
         Task<Application[]> GetQueuedApplications();
+
+        Task DeleteApplication(ObjectId applicationId);
+
+
     }
 }
 

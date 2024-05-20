@@ -7,20 +7,19 @@
 @inject IAdminService AdminService
 @inject ISignatureService SignatureService
 
-
 <PageTitle>Admin Dashboard</PageTitle>
 
 <h2>Admin Dashboard</h2>
 
-<h3>You are logged in as:</h3>
+<h3>Du er logget ind som:</h3><!--showing info about the admin logged in -->
 @if (currentAdmin != null)
 {
     <div>
-        <p>Username: @currentAdmin.Username</p>
-        <p>Name: @currentAdmin.Name</p>
+        <p>Brugernavn: @currentAdmin.Username</p>
+        <p>Navn: @currentAdmin.Name</p>
         <p>Email: @currentAdmin.Email</p>
     </div>
-    <button class="btn btn-primary" @onclick="Logout">Logout</button>
+    <button class="btn btn-primary" @onclick="Logout">Log ud</button><!--logout button-->
 }
 else
 {
@@ -28,47 +27,63 @@ else
 }
 
 <div>
-    <button class="btn btn-primary" @onclick="ShowApplicationsApproved">Applications approved</button><!--see all approved applications-->
+    <button class="btn btn-primary" @onclick="ShowApplicationsApproved">Godkendte tilmeldinger</button><!--see all approved applications-->
     @if (showApprovedApplications)
     {
-        <h1>Godkendte</h1>
-        <table class="table">
-            <tbody>
-                @foreach (var application in approvedApplications)
-                {
-                    <tr>
-                        <td>
-                            <p class="infotext"><strong>Volunteer Name:</strong> @application.Child.Volunteer.Name</p>
-                        </td>
-                        <td>
-                            <p class="infotext"><strong>Email:</strong> @application.Child.Volunteer.Email</p>
-                        </td>
-                        <td>
-                            <p class="infotext"><strong>First Priority Week:</strong> @application.FirstpriorityWeek</p>
-                        </td>
-                        <td>
-                            <p class="infotext"><strong>First Priority Period:</strong> @application.FirstpriorityPeriod</p>
-                        </td>
-                        <td>
-                            <p class="infotext"><strong>Signature Status:</strong> @(application.Signature?.Signed == true ? "Signed" : "Not Signed")</p>
-                        </td>
-                        <td>
-                            <button @onclick="() => ShowApprovedApplicationDetails(application)">Se detaljer</button>
-                        </td>
-                    </tr>
-                }
-            </tbody>
-        </table>
+        <h1>Godkendte tilmeldinger</h1>
+        <div class="week-grid">
+            @foreach (var week in predefinedWeeks)
+            {
+                var applicationCount = GetApplicationCountForWeek(week);<!--the amount of applications in the week-->
+                <div class="week-column @(GetWeekColumnClass(applicationCount))">
+                    <h3>Week: @week (Total: @applicationCount)</h3>
+                    @foreach (var period in predefinedPeriods)//adding applicatin detail titles
+                    {
+                        <h4>Period: @period</h4>
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Frivillig navn</th>
+                                    <th>Email</th>
+                                    <th>Underskrift Status</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var application in approvedApplications.Where(a => a.FirstpriorityWeek == week && a.FirstpriorityPeriod == period))//setting up what week and period should be and include
+                                {
+                                    <tr>
+                                        <td>
+                                            <p class="infotext">@application.Child.Volunteer.Name</p>
+                                        </td>
+                                        <td>
+                                            <p class="infotext">@application.Child.Volunteer.Email</p>
+                                        </td>
+                                        <td>
+                                            <p class="infotext">@(application.Signature?.Signed == true ? "Signed" : "Not Signed")</p>
+                                        </td>
+                                        <td>
+                                            <button @onclick="() => ShowApprovedApplicationDetails(application)">Se detaljer</button><!--showing details for approved application button-->
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    }
+                    <button>send email</button><!--button to send email to all applications within a week-->
+
+                </div>
+            }
+        </div>
     }
 </div>
 
 <div>
-    <button class="btn btn-primary" @onclick="ShowQueuedApplications">Show All Applications</button>
+    <button class="btn btn-primary" @onclick="ShowQueuedApplications">Ventelistede tilmeldinger</button><!--button to show all queued applications-->
 
     @if (showQueuedApplications)
     {
         <h1>Venteliste</h1>
-        <div class="mb-3">
+        <div class="mb-3"><!--filtering system-->
             <input type="text" placeholder="Enter name" @bind="Emailfilter" />
             <label for="FirstPriorityWeek">Prioritetsuge</label>
             <InputSelect id="FirstPriorityWeek" @bind-Value="selectedWeek" @oninput="OnInputUge1">
@@ -87,28 +102,31 @@ else
             <button @onclick="FilterAndSort">Filter & Sort</button>
         </div>
 
-        <table class="table">
+        <table class="table"><!--adding applicatin detail titles and what they need to include-->
             <tbody>
-                @foreach (var application in filteredAndSortedApplications ?? new Core.Models.Application[0])
+                @foreach (var application in filteredAndSortedApplications ?? new Core.Models.Application[0])//seeing the filtered applications
                 {
                     <tr>
                         <td>
-                            <p class="infotext"><strong>Volunteer Name:</strong> @application.Child.Volunteer.Name</p>
+                            <p class="infotext"><strong>Frivillig navn:</strong> @application.Child.Volunteer.Name</p>
                         </td>
                         <td>
                             <p class="infotext"><strong>Email:</strong> @application.Child.Volunteer.Email</p>
                         </td>
                         <td>
-                            <p class="infotext"><strong>First Priority Week:</strong> @application.FirstpriorityWeek</p>
+                            <p class="infotext"><strong>Første prioritets uge:</strong> @application.FirstpriorityWeek</p>
                         </td>
                         <td>
-                            <p class="infotext"><strong>First Priority Period:</strong> @application.FirstpriorityPeriod</p>
+                            <p class="infotext"><strong>Første prioritets periode:</strong> @application.FirstpriorityPeriod</p>
                         </td>
                         <td>
-                            <p class="infotext"><strong>Signature Status:</strong> @(application.Signature?.Signed == true ? "Signed" : "Not Signed")</p>
+                            <p class="infotext"><strong>Underskrift Status:</strong> @(application.Signature?.Signed == true ? "Signed" : "Not Signed")</p>
                         </td>
                         <td>
-                            <button @onclick="() => ShowQueuedApplicationDetails(application)">Se detaljer</button>
+                            <button @onclick="() => ShowQueuedApplicationDetails(application)">Se detaljer</button><!--button to see queued application details-->
+                        </td>
+                        <td>
+                            <button @onclick="() => DeleteApplication(application.Id)" class="btn btn-danger">🗑️</button><!--button to delete queued application-->
                         </td>
                     </tr>
                 }
@@ -117,21 +135,21 @@ else
     }
 </div>
 
-<ModalDialog @ref="DetailsDialog" Title="Application Details">
+<ModalDialog @ref="DetailsDialog" Title="Application Details"><!--modal to show all application details-->
     @if (selectedApplication != null)
     {
         <div>
             <h5>Application details</h5>
             <p><strong>Kræwnr:</strong> @selectedApplication.Child.Volunteer.Kræwnr</p>
-            <p><strong>Volunteer Name:</strong> @selectedApplication.Child.Volunteer.Name</p>
+            <p><strong>Frivillig navn:</strong> @selectedApplication.Child.Volunteer.Name</p>
             <p><strong>Email:</strong> @selectedApplication.Child.Volunteer.Email</p>
-            <p><strong>Child Name:</strong> @selectedApplication.Child.ChildName</p>
-            <p><strong>Age:</strong> @selectedApplication.Child.ChildAge</p>
+            <p><strong>Barn Name:</strong> @selectedApplication.Child.ChildName</p>
+            <p><strong> Barn alder:</strong> @selectedApplication.Child.ChildAge</p>
             <p><strong>Tøj størrelse:</strong> @selectedApplication.Child.ClothingSize</p>
-            <p><strong>Comment:</strong> @selectedApplication.Child.Comment</p>
-            <p><strong>Been Before:</strong> @selectedApplication.Child.Beenbefore</p>
-            <p><strong>Interest:</strong> @selectedApplication.Child.Interest</p>
-            <p><strong>Volunteer:</strong> @selectedApplication.IsVolunteer</p>
+            <p><strong>Kommetar:</strong> @selectedApplication.Child.Comment</p>
+            <p><strong>Været her før?:</strong> @selectedApplication.Child.Beenbefore</p>
+            <p><strong>Interesse:</strong> @selectedApplication.Child.Interest</p>
+            <p><strong>Frivillig?:</strong> @selectedApplication.IsVolunteer</p>
             <p><strong>First Priority Week:</strong> @selectedApplication.FirstpriorityWeek</p>
             <p><strong>First Priority Period:</strong> @selectedApplication.FirstpriorityPeriod</p>
             <p><strong>Second Priority Week:</strong> @selectedApplication.SecondpriorityWeek</p>
@@ -139,12 +157,12 @@ else
         </div>
         @if (!selectedApplication.IsApproved)
         {
-            <button @onclick="() => ShowEditModal(selectedApplication)" class="btn btn-primary">Edit</button>
+            <button @onclick="() => ShowEditModal(selectedApplication)" class="btn btn-primary">Rediger</button><!--button to edit selected queued application-->
         }
     }
 </ModalDialog>
 
-<ModalDialog @ref="EditDialog" Title="Edit Application">
+<ModalDialog @ref="EditDialog" Title="Edit Application"><!--modal to edit the actual details in case of errors etc-->
     @if (selectedApplication != null)
     {
         <EditForm Model="@selectedApplication" OnValidSubmit="HandleEditApplication">
@@ -200,7 +218,8 @@ else
             </div>
 
             <div class="form-group row">
-                <label for="FirstPriorityWeek" class="col-md-4 col-form-label">Føreste prioritet uge</label>
+                <label for="FirstPriorityWeek" class="col-md-4 col-form-label">Første prioritet uge<br />
+                Selected second priority week: @selectedApplication.SecondpriorityWeek</label>
                 <div class="col-md-4">
                     <InputSelect id="FirstPriorityWeek" @bind-Value="selectedApplication.FirstpriorityWeek" class="form-control" @oninput="OnInputUge1">
                         @foreach (var anOption in optionsUge1)
@@ -212,7 +231,9 @@ else
             </div>
 
             <div class="form-group row">
-                <label for="FirstPriorityPeriod" class="col-md-4 col-form-label">Føreste periode</label>
+                <label for="FirstPriorityPeriod" class="col-md-4 col-form-label">Første periode <br />
+                Selected second priority period: @selectedApplication.SecondpriorityPeriod</label>
+
                 <div class="col-md-4">
                     <InputSelect id="FirstPriorityPeriod" @bind-Value="selectedApplication.FirstpriorityPeriod" class="form-control" @oninput="OnInputPeriode1">
                         @foreach (var anOption in optionsPeriode1)
@@ -223,33 +244,42 @@ else
                 </div>
             </div>
 
-            <button type="submit" class="btn btn-success">Save Changes</button>
-            <button type="button" @onclick="ApproveApplication" class="btn btn-success">Approve Application</button>
+            <button type="submit" class="btn btn-success">Save Changes</button><!--button to save changes and leave it-->
+            <button type="button" @onclick="ApproveApplication" class="btn btn-success">Godkend tilmeldling</button><!--button to approve application and move it into the approved box-->
         </EditForm>
     }
 </ModalDialog>
 
 @code {
+    //setting up admin 
     private Core.Models.Admin admin = new Core.Models.Admin();
     private Core.Models.Admin currentAdmin;
 
-
+    //setting up application
     private Core.Models.Application[] queuedApplications = new Core.Models.Application[0];
     private Core.Models.Application[] approvedApplications = new Core.Models.Application[0];
-
     private Core.Models.Application? selectedApplication;
+    
+    //setting up the modals
     private ModalDialog DetailsDialog;
     private ModalDialog EditDialog;
+
+
     private bool showQueuedApplications = false;
     private bool showApprovedApplications = false;
 
+    //setting up the filter and sort system
     private Core.Models.Application[] Applicationlistcopy; // Copy of the original post list
     private Core.Models.Application[] filteredAndSortedApplications = new Core.Models.Application[0];
     private string Emailfilter = "";
     private string selectedWeek = "Vælg";
     private string selectedPeriod = "Vælg";
 
-    //options for dropdowns
+    // predefined weeks and periods
+    private readonly string[] predefinedWeeks = { "Uge 27", "Uge 28", "Uge 30", "Uge 31" };
+    private readonly string[] predefinedPeriods = { "Onsdag-Søndag", "Onsdag-Fredag", "Fredag-Søndag" };
+
+    // options for dropdowns in the edit modal
     string[] optionsUge1 = { "Vælg", "Uge 27", "Uge 28", "Uge 30", "Uge 31" };
     string[] optionsPeriode1 = { "Vælg", "Onsdag-Søndag", "Onsdag-Fredag", "Fredag-Søndag" };
     string selectedOptionUge1 = "Vælg";
@@ -260,7 +290,7 @@ else
         await LoadCurrentAdmin();
     }
 
-    private async Task LoadCurrentAdmin()
+    private async Task LoadCurrentAdmin()//showing who is currently logged in
     {
         currentAdmin = await AdminService.GetCurrentAdmin();
         if (currentAdmin == null)
@@ -269,38 +299,46 @@ else
         }
     }
 
-    private async Task Logout()
+    private async Task Logout()//logout method
     {
         await AdminService.LogoutAdmin();
         NavigationManager.NavigateTo("/Admin", forceLoad: true);
     }
 
-    private void ShowQueuedApplicationDetails(Core.Models.Application application)
+    private void ShowQueuedApplicationDetails(Core.Models.Application application)//showing queued application details
     {
         selectedApplication = application;
         DetailsDialog.Open();
     }
 
-    private void ShowApprovedApplicationDetails(Core.Models.Application application)
+    private void ShowApprovedApplicationDetails(Core.Models.Application application)//showing approved application details
     {
         selectedApplication = application;
         DetailsDialog.Open();
     }
 
-    private void ShowEditModal(Core.Models.Application application)
+    private void ShowEditModal(Core.Models.Application application)//modal to edit application
     {
         selectedApplication = application;
         EditDialog.Open();
     }
 
-    void OnInputUge1(ChangeEventArgs e)
+    void OnInputUge1(ChangeEventArgs e)//dropdown in the edit modal
     {
         selectedOptionUge1 = e.Value?.ToString() ?? "null";
     }
 
-    void OnInputPeriode1(ChangeEventArgs e)
+    void OnInputPeriode1(ChangeEventArgs e)//dropdown in the edit modal
     {
         selectedOptionPeriode1 = e.Value?.ToString() ?? "null";
+    }
+
+    private async Task DeleteApplication(ObjectId applicationId)//method to delete an application
+    {
+        await applicationService.DeleteApplication(applicationId);
+        queuedApplications = await applicationService.GetQueuedApplications();
+        Applicationlistcopy = queuedApplications.ToArray();
+        FilterAndSort();
     }
 
     private async Task HandleEditApplication()
@@ -312,14 +350,14 @@ else
         }
     }
 
-    private async Task ApproveApplication()
+    private async Task ApproveApplication()//approving the application and sending it to the approved box
     {
         if (selectedApplication != null)
         {
             selectedApplication.IsApproved = true;
             await applicationService.UpdateApplication(selectedApplication);
 
-            // Refresh the application lists after approval
+            //refreshing the application lists after approval
             queuedApplications = await applicationService.GetQueuedApplications();
             approvedApplications = await applicationService.GetApprovedApplications();
 
@@ -330,15 +368,15 @@ else
         }
     }
 
-    private void FilterAndSort()
+    private void FilterAndSort()//filtering and sorting the applications by certain things 
     {
         if (Applicationlistcopy != null)
         {
-            // Filter applications by email
+            //filter applications by email
             var filteredApplications = Applicationlistcopy
                 .Where(application => string.IsNullOrWhiteSpace(Emailfilter) || application.Child.Volunteer.Email.Contains(Emailfilter, StringComparison.OrdinalIgnoreCase));
 
-            // Filter applications by selected week
+            //filter applications by selected week
             if (!string.IsNullOrEmpty(selectedWeek) && selectedWeek != "Vælg")
             {
                 filteredApplications = filteredApplications.Where(application => application.FirstpriorityWeek == selectedWeek);
@@ -348,7 +386,7 @@ else
                 filteredApplications = filteredApplications.Where(application => application.FirstpriorityPeriod == selectedPeriod);
             }
 
-            // Sort filtered applications by volunteer name
+            //sort filtered applications by volunteer name
             filteredAndSortedApplications = filteredApplications.OrderBy(application => application.Child.Volunteer.Name).ToArray();
         }
     }
@@ -356,7 +394,7 @@ else
     [Inject]
     private IApplicationService applicationService { get; set; }
 
-    private async Task ShowQueuedApplications()
+    private async Task ShowQueuedApplications()//showing the queued applications 
     {
         queuedApplications = await applicationService.GetQueuedApplications();
         Applicationlistcopy = queuedApplications.ToArray();
@@ -364,9 +402,30 @@ else
         FilterAndSort();
     }
 
-    private async Task ShowApplicationsApproved()
+    private async Task ShowApplicationsApproved()//showing the approved applications
     {
         approvedApplications = await applicationService.GetApprovedApplications();
         showApprovedApplications = true;
+    }
+
+    private int GetApplicationCountForWeek(string week)//counting how many applications are in each week total
+    {
+        return approvedApplications.Count(a => a.FirstpriorityWeek == week);
+    }
+
+    private string GetWeekColumnClass(int applicationCount)//making it so that the colour changes based on how many spots are left in the week
+    {
+        if (applicationCount < 5)
+        {
+            return "green";
+        }
+        else if (applicationCount <= 15)
+        {
+            return "yellow";
+        }
+        else
+        {
+            return "red";
+        }
     }
 }

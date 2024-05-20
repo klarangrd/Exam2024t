@@ -125,6 +125,9 @@ else
                         <td>
                             <button @onclick="() => ShowQueuedApplicationDetails(application)">Se detaljer</button><!--button to see queued application details-->
                         </td>
+                        <td>
+                            <button @onclick="() => DeleteApplication(application.Id)" class="btn btn-danger">🗑️</button><!--button to delete queued application-->
+                        </td>
                     </tr>
                 }
             </tbody>
@@ -328,6 +331,14 @@ else
     void OnInputPeriode1(ChangeEventArgs e)//dropdown in the edit modal
     {
         selectedOptionPeriode1 = e.Value?.ToString() ?? "null";
+    }
+
+    private async Task DeleteApplication(ObjectId applicationId)//method to delete an application
+    {
+        await applicationService.DeleteApplication(applicationId);
+        queuedApplications = await applicationService.GetQueuedApplications();
+        Applicationlistcopy = queuedApplications.ToArray();
+        FilterAndSort();
     }
 
     private async Task HandleEditApplication()

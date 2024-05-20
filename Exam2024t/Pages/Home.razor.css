@@ -1,17 +1,26 @@
 /* General body styles */
 body {
     font-family: Arial, sans-serif;
-    background-color: #f4f4f9;
     margin: 0;
     padding: 0;
+}
+
+
+.parallax {
+    background-image: url('summarumbaggrund.jpg');
+    background-size: cover; 
+    background-repeat: no-repeat; 
+    background-position: center; 
+    background-attachment: fixed;
 }
 
 /* Header styles */
 h1 {
     color: #333;
     text-align: center;
-    padding-top: 20px;
+    padding-top: 50px;
     font-size: 32px;
+    margin-bottom: 200px;
 }
 
 /* Information box styling */
@@ -19,16 +28,15 @@ h1 {
     margin: 20px auto;
     padding: 20px;
     width: 60%;
-    background-color: #ffffff;
-    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-    border-radius: 8px;
 }
 
-.information p {
-    color: #666;
-    font-size: 18px;
-    line-height: 1.6;
+.informationbaggrund {
+    background-color: papayawhip;
+    border: 10px solid transparent;
+    border-image: url(border.png) 25% round;
+    margin-bottom: 200px;
 }
+
 
 /* Styling for images, centering the image */
 .picture {
@@ -48,10 +56,28 @@ h1 {
     width 50%
 }
 
+.reglerbaggrund {
+    background-color: papayawhip;
+    border: 10px solid transparent;
+    border-image: url(border.png) 25% round;
+    margin-bottom: 200px;
+}
+
 .regler {
     margin: 20px auto;
     padding: 20px;
     width: 60%;
+}
+
+.titelhjem{
+    color: white;
+   
+}
+
+.forventningerbaggrund {
+    background-color: papayawhip;
+    border: 10px solid transparent;
+    border-image: url(border.png) 25% round;
 }
 
 .forventninger {
@@ -59,6 +85,7 @@ h1 {
     padding: 20px;
     width: 60%;
 }
+
 
 
 /*button funktionalitet*/
@@ -76,18 +103,20 @@ h1 {
     place-items: center;
     margin: 20px auto;
     padding: 20px;
+    margin-bottom: 280px;
 }
 
 .btn {
-    color: #0ebac5;
+    color: darkcyan;
     text-decoration: none;
+    background-color: white;
     font-size: 1.5em;
     text-transform: uppercase;
     font-family: calibri;
     border-radius: 3px;
-    border: 2px solid #0ebac5;
+    border: 2px solid deeppink;
     padding: 1rem 2rem;
-    box-shadow: .9px 1px 0 0 #0ebac5, 1.5px 2px 0 0 #0ebac5, 2.5px 3px 0 0 #0ebac5, 3.5px 4px 0 0 #0ebac5, 4.5px 5px 0 0 #0ebac5, 5.5px 6px 0 0 #0ebac5, 6.5px 7px 0 0 #0ebac5, 7.5px 8px 0 0 #0ebac5, 8.5px 9px 0 0 #0ebac5, 9.5px 10px 0 0 #0ebac5;
+    box-shadow: .9px 1px 0 0 deeppink, 1.5px 2px 0 0 deeppink, 2.5px 3px 0 0 deeppink, 3.5px 4px 0 0 deeppink, 4.5px 5px 0 0 deeppink, 5.5px 6px 0 0 deeppink, 6.5px 7px 0 0 deeppink, 7.5px 8px 0 0 deeppink, 8.5px 9px 0 0 deeppink, 9.5px 10px 0 0 deeppink;
     position: relative;
     inset: 0;
     cursor: pointer;
@@ -95,6 +124,7 @@ h1 {
     display: inline-block;
     outline: 2px dashed transparent;
     transition: all 600ms ease;
+   
 }
 
     .btn:hover {
@@ -114,7 +144,7 @@ h1 {
     z-index: 1;
     padding: 0;
     pointer-events: none;
-    width: 84%;
+    width: 82%;
 }
 
     .lightrope li {

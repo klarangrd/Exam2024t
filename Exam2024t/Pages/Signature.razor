@@ -11,7 +11,6 @@
 
     @if (applicationliste != null)
     {
-        
         <table class="table">
             <tbody>
             @foreach (var item in applicationliste)
@@ -43,6 +42,12 @@
                     <td>
                         <button @onclick="() => ShowApplicationDetails(item)">Se detaljer</button>
                     </td>
+                    <td>
+                        @if (@item.Signature.Signed)
+                        {
+                            <button @onclick="() => ShowSignature(item.Signature.Sign)">Se underskrift</button>
+                        }
+                    </td>
                 </tr>
             }
             </tbody>
@@ -57,7 +62,7 @@
                 <div class="col-md-12">
                     @if (isModalVisible)
                     {
-                        <SignaturePad class="signature" @bind-Value="signature.Sign" Options="_options" style="width: 100%; height: 200px"/>
+                        <SignaturePad class="signature" @bind-Value="applicationliste[0].Signature.Sign" Options="_options" style="width: 100%; height: 200px"/>
                     }
                 </div>
             </div>
@@ -69,50 +74,62 @@
             </div>
         </EditForm>
     </ModalDialog>
-<ModalDialog @ref="DetailsDialog" Title="application details">
-    @if (selectedApplication != null)
-    {
-        <div>
-            <h5>Application details</h5>
-            <p><strong>Kræwnr:</strong>  @selectedApplication.Child.Volunteer.Kræwnr</p>
-            <p><strong>Volunteer Name:</strong> @selectedApplication.Child.Volunteer.Name</p>
-            <p><strong>Email:</strong> @selectedApplication.Child.Volunteer.Email</p>
-            <p><strong>Child Name:</strong> @selectedApplication.Child.ChildName</p>
-            <p><strong>Age:</strong> @selectedApplication.Child.ChildAge</p>
-            <p><strong>Tøj størrelse:</strong> @selectedApplication.Child.ClothingSize</p>
-            <p><strong>Comment:</strong> @selectedApplication.Child.Comment</p>
-            <p><strong>Been Before:</strong> @selectedApplication.Child.Beenbefore</p>
-            <p><strong>Interest:</strong> @selectedApplication.Child.Interest</p>
-            <p><strong>Volunteer:</strong> @selectedApplication.IsVolunteer</p>
-            <p><strong>First Priority Week:</strong> @selectedApplication.FirstpriorityWeek</p>
-            <p><strong>First Priority Period:</strong> @selectedApplication.FirstpriorityPeriod</p>
-            <p><strong>Second Priority Week:</strong> @selectedApplication.SecondpriorityWeek</p>
-            <p><strong>Second Priority Period:</strong> @selectedApplication.SecondpriorityPeriod</p>
-        </div>
-        @if (!selectedApplication.Signature.Signed) // Show the button only if Signature is not signed
+    <ModalDialog @ref="DetailsDialog" Title="application details">
+        @if (selectedApplication != null)
         {
-            <button class="btn btn-primary" @onclick="OnClickAddDialog">Underskriv applikation</button>
+            <div>
+                <h5>Application details</h5>
+                <p><strong>Kræwnr:</strong>  @selectedApplication.Child.Volunteer.Kræwnr</p>
+                <p><strong>Volunteer Name:</strong> @selectedApplication.Child.Volunteer.Name</p>
+                <p><strong>Email:</strong> @selectedApplication.Child.Volunteer.Email</p>
+                <p><strong>Child Name:</strong> @selectedApplication.Child.ChildName</p>
+                <p><strong>Age:</strong> @selectedApplication.Child.ChildAge</p>
+                <p><strong>Tøj størrelse:</strong> @selectedApplication.Child.ClothingSize</p>
+                <p><strong>Comment:</strong> @selectedApplication.Child.Comment</p>
+                <p><strong>Been Before:</strong> @selectedApplication.Child.Beenbefore</p>
+                <p><strong>Interest:</strong> @selectedApplication.Child.Interest</p>
+                <p><strong>Volunteer:</strong> @selectedApplication.IsVolunteer</p>
+                <p><strong>First Priority Week:</strong> @selectedApplication.FirstpriorityWeek</p>
+                <p><strong>First Priority Period:</strong> @selectedApplication.FirstpriorityPeriod</p>
+                <p><strong>Second Priority Week:</strong> @selectedApplication.SecondpriorityWeek</p>
+                <p><strong>Second Priority Period:</strong> @selectedApplication.SecondpriorityPeriod</p>
+            </div>
+            @if (!selectedApplication.Signature.Signed) // Show the button only if Signature is not signed
+            {
+                <button class="btn btn-primary" @onclick="OnClickAddDialog">Underskriv applikation</button>
+            }
         }
+    </ModalDialog>
+    
+<ModalDialog @ref="SignatureDialog" Title="Signature">
+    @if (signatureImageUrl != null)
+    {
+    <img src="@signatureImageUrl" alt="Signature" style="width: 100%; height: auto;" />
     }
 </ModalDialog>
 
 
-
 @code {
-    private Core.Models.Application[] applications = new Core.Models.Application[0];
-    Core.Models.Signature signature = new Core.Models.Signature();
     Core.Models.Application application = new Core.Models.Application();
     [Inject]
     private IApplicationService mService { get; set; }
     private bool isModalVisible = false;
-
+    private string? signatureImageUrl;
+ 
     private Core.Models.Application? selectedApplication;
     private ModalDialog DetailsDialog;
+    private ModalDialog SignatureDialog;
     private EditContext aEditContext;
     private ModalDialog? addDialog { get; set; }
 
+     
+
     protected override void OnInitialized()
     {
+        if (application.Signature == null)
+        {
+            application.Signature = new Core.Models.Signature();
+        }
         aEditContext = new EditContext(application);
     }
 
@@ -121,6 +138,22 @@
         selectedApplication = application;
         DetailsDialog.Open();
     }
+    
+    public void ShowSignature(byte[] signature)
+    {
+        if (signature != null && signature.Length > 0)
+        {
+            string base64String = Convert.ToBase64String(signature);
+            signatureImageUrl = $"data:image/png;base64,{base64String}";
+            SignatureDialog.Open();
+            Console.WriteLine("Signature displayed successfully.");
+        }
+        else
+        {
+            Console.WriteLine("Signature is null or empty.");
+        }
+    }
+
 
     public void appInSignature()
     {
@@ -130,7 +163,7 @@
                 {
                     Signature = new Core.Models.Signature 
                     { Signed = true,
-                        Sign = signature.Sign,
+                        Sign = application.Signature.Sign,
                       SignatureDate = DateTime.Now},
                     Child = new Core.Models.Child
                     {
@@ -156,8 +189,6 @@
 
                 };
 
-
-
         }
         UpdateApplicationListItem();
     }
@@ -176,12 +207,20 @@
 
     public async Task HandleValidSubmit()
     {
+        if (application.Signature.Sign != null && application.Signature.Sign.Length > 0)
+        {
+            Console.WriteLine($"Submitting Application with Signature: {Convert.ToBase64String(application.Signature.Sign)}");
+        }
+        else
+        {
+            Console.WriteLine("No signature captured.");
+        }
+    
         await mService.Add(application);
         addDialog?.Close();
-        Console.WriteLine(application.Signature.Signed);
         StateHasChanged();
-
     }
+
 
     private SignaturePadOptions _options = new SignaturePadOptions
     {

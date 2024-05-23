@@ -13,6 +13,9 @@
     <ExternalConsole>true</ExternalConsole>
   </PropertyGroup>
   <ItemGroup>
+    <None Remove="Pages\Politkker\" />
+  </ItemGroup>
+  <ItemGroup>
     <None Include="Layout\MainLayout.razor" />
     <None Include="Layout\NavMenu.razor" />
     <None Include="Pages\Home.razor" />
@@ -34,4 +37,7 @@
     <ProjectReference Include="..\Core\Core.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Pages\Politkker\" />
+  </ItemGroup>
 </Project>

@@ -1,61 +1,83 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Core;
-using MongoDB;
-using Serverapi.repositories;
 using Serverapi.Repositories;
+using System.Threading.Tasks;
 using Core.Models;
+using MongoDB.Bson;
+using Microsoft.AspNetCore.Cors;
 
-namespace API.Controllers
+namespace Serverapi.Controllers
 {
-
-
     [ApiController]
-    [Route("api/applications")]
-    public class Applicationcontroller : ControllerBase
+    [Route("api/application")]
+    [EnableCors("AllowSpecificOrigin")]
+    public class ApplicationController : ControllerBase
     {
-        private Iapplycationrepository mRepo;
+        private readonly Iapplicationrepository _appRepository;
 
-        public Applicationcontroller(Iapplycationrepository repo)
+        public ApplicationController(Iapplicationrepository applicationRepository)
         {
-            mRepo = repo;
+            _appRepository = applicationRepository;
         }
 
         [HttpGet]
         [Route("getall")]
-        public IEnumerable<Application> GetAll()
+        public async Task<IActionResult> GetAllApplications()
         {
-            return mRepo.GetAll();
+            var applications = await _appRepository.GetAllApplications();
+            return Ok(applications);
         }
 
         [HttpPost]
         [Route("add")]
-        public void AddItem(Application item)
+        public async Task<IActionResult> AddApplication([FromBody] Application application)
         {
-            mRepo.AddItem(item);
+            if (application == null)
+            {
+                return BadRequest("Application cannot be null.");
+            }
+
+            await _appRepository.Add(application);
+            return CreatedAtAction(nameof(GetAllApplications), new { id = application.Id }, application);
+        }
+
+        [HttpPut]
+        [Route("update")]
+        public async Task<IActionResult> UpdateApplication([FromBody] Application application)
+        {
+            if (application == null)
+            {
+                return BadRequest("Application cannot be null.");
+            }
+
+            await _appRepository.UpdateApplication(application);
+            return NoContent();
+        }
+
+        [HttpGet("approved")]
+        public async Task<IActionResult> GetApprovedApplications()
+        {
+            var applications = await _appRepository.GetApprovedApplications();
+            return Ok(applications);
+        }
+
+        [HttpGet("queued")]
+        public async Task<IActionResult> GetQueuedApplications()
+        {
+            var applications = await _appRepository.GetQueuedApplications();
+            return Ok(applications);
         }
 
         [HttpDelete]
-        [Route("delete/{id:int}")]
-        public void DeleteItem(int id)
+        [Route("delete/{id}")]
+        public async Task<IActionResult> DeleteApplication(string id)
         {
-            mRepo.DeleteById(id);
+            if (!ObjectId.TryParse(id, out var objectId))
+            {
+                return BadRequest("Invalid Id format.");
+            }
+
+            await _appRepository.DeleteApplication(objectId);
+            return NoContent();
         }
-
-
-
-        /*
-        [HttpPut]
-        [Route("update")]
-        public void UpdateItem(Application product)
-        {
-            mRepo.UpdateItem(product);
-        }
-        */
-
     }
 }
-
-
-
-
-

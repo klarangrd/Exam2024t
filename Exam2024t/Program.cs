@@ -15,9 +15,11 @@ namespace Exam2024t
 
             builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri(builder.HostEnvironment.BaseAddress) });
 
-            builder.Services.AddSingleton<ISignatureService, SignatureServiceInMemory>();
-            
-            builder.Services.AddSingleton<IApplicationService, ApplicationServiceInMemory>();
+
+            // builder.Services.AddSingleton<IApplicationService, ApplicationServiceInMemory>();
+
+            builder.Services.AddScoped<IApplicationService, ApplicationService>();
+
 
             builder.Services.AddSingleton<IAdminService, AdminServiceInMemory>();
 

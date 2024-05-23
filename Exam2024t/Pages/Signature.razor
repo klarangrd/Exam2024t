@@ -1,4 +1,5 @@
 ﻿@page "/Signature"
+@using System.Text
 @using Exam2024t.Services
 @inject Blazored.LocalStorage.ILocalStorageService localStore
 
@@ -45,7 +46,7 @@
                     <td>
                         @if (@item.Signature.Signed)
                         {
-                            <button @onclick="() => ShowSignature(item.Signature.Sign)">Se underskrift</button>
+                            <button @onclick="() => ShowSignature(application.Signature.Sign)">Se underskrift</button>
                         }
                     </td>
                 </tr>
@@ -138,13 +139,20 @@
         selectedApplication = application;
         DetailsDialog.Open();
     }
-    
-    public void ShowSignature(byte[] signature)
+
+    private async Task ShowSignature(byte[] signatureBytes)
     {
-        if (signature != null && signature.Length > 0)
+        if (signatureBytes != null && signatureBytes.Length > 0)
         {
-            string base64String = Convert.ToBase64String(signature);
-            signatureImageUrl = $"data:image/png;base64,{base64String}";
+            // Convert the byte array to a base64 string
+            string base64String = Convert.ToBase64String(signatureBytes);
+
+            var bytes = Convert.FromBase64String(base64String);
+            
+            var stringBytes = Encoding.UTF8.GetString(bytes);
+            
+            // Use the base64 string as an image source with the correct MIME type
+            signatureImageUrl = $"{stringBytes}";
             SignatureDialog.Open();
             Console.WriteLine("Signature displayed successfully.");
         }
@@ -163,7 +171,7 @@
                 {
                     Signature = new Core.Models.Signature 
                     { Signed = true,
-                        Sign = application.Signature.Sign,
+                        Sign = selectedApplication.Signature.Sign,
                       SignatureDate = DateTime.Now},
                     Child = new Core.Models.Child
                     {
@@ -207,7 +215,7 @@
 
     public async Task HandleValidSubmit()
     {
-        if (application.Signature.Sign != null && application.Signature.Sign.Length > 0)
+        if (applicationliste[0].Signature.Sign != null && applicationliste[0].Signature.Sign.Length > 0)
         {
             Console.WriteLine($"Submitting Application with Signature: {Convert.ToBase64String(application.Signature.Sign)}");
         }

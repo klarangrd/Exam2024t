@@ -10,6 +10,7 @@ namespace Core.Models
     public class Admin
     {
         public ObjectId Id { get; set; }
+        public int adminid { get; set; }
         public string Name { get; set; }
         public string Email { get; set; }
         public string Username { get; set; }

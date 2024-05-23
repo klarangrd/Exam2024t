@@ -43,15 +43,6 @@ namespace API.Controllers
 
 
 
-        /*
-        [HttpPut]
-        [Route("update")]
-        public void UpdateItem(Application product)
-        {
-            mRepo.UpdateItem(product);
-        }
-        */
-
     }
 }
 

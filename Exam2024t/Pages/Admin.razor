@@ -3,8 +3,9 @@
 @using Core.Models
 @using Exam2024t.Services
 @inject HttpClient Http
-@inject IAdminService AdminService
 @inject NavigationManager NavigationManager
+@using System.Net.Http.Json;
+
 
 
 <PageTitle>Admin</PageTitle>
@@ -29,17 +30,74 @@
 @code {
     private Core.Models.Admin adminLogin = new Core.Models.Admin();
 
+    /*
     private async Task HandleLogin()
-    {
+        {
+
         var result = await AdminService.LoginAdmin(adminLogin.Username, adminLogin.Password);
         if (result)
+            {
+            NavigationManager.NavigateTo("/AdminDashboard");
+            Console.WriteLine("login succesful!");
+        }
+            else
+            {
+            Console.WriteLine("login failed");
+    }
+    }
+    */
+    // ny kode slet herfra hvis det ikke virker 
+    private EditContext aEditContext;
+
+  
+
+    public bool erLoggetInd = false;
+
+    bool popUp = false;
+
+    private string serverUrl = "https://localhost:7010";
+
+
+    private bool login;
+
+    public async Task HandleLogin()
+    {
+
+        string username = adminLogin.Username;
+        string password = adminLogin.Password;
+
+        erLoggetInd = await Http.GetFromJsonAsync<bool>($"{serverUrl}/api/admins/checklogin?username={username}&password={password}");
+
+        Console.WriteLine("erlogget ind:" + erLoggetInd);
+        Console.WriteLine(erLoggetInd);
+
+        if (erLoggetInd == false)
+        {
+            Console.WriteLine("login failed");
+        }
+        else
         {
             NavigationManager.NavigateTo("/AdminDashboard");
             Console.WriteLine("login succesful!");
         }
-        else
-        {
-            Console.WriteLine("login failed");
-        }
+
     }
+    /*
+    private async void Save(string key, string item)
+        {
+        await localstore.SetItemAsStringAsync(key, item);
+    }
+
+    private async void saveloggedind()
+        {
+        await localstore.SetItemAsync<bool>("login", erLoggetInd);
+    }
+
+    protected async Task ClearStorage()
+        {
+        await localstore.ClearAsync();
+        navManager.NavigateTo("login", true);
+    }
+    */
 }
+

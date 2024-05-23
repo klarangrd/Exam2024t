@@ -4,8 +4,7 @@ using Serverapi.repositories;
 using Serverapi.Repositories;
 
 namespace API
-{//hello :3 from klara
-    // hej klara
+{
     public class Program
     {
         public static void Main(string[] args)
@@ -19,21 +18,25 @@ namespace API
             builder.Services.AddSingleton<Iapplycationrepository, Applicationrepository>();
             builder.Services.AddSingleton<IadminRepository, AdminRepository>();
 
+      
+
             builder.Services.AddCors(options =>
             {
-                options.AddPolicy("policy",
-                                  policy =>
-                                  {
-                                      policy.AllowAnyOrigin();
-                                      policy.AllowAnyMethod();
-                                      policy.AllowAnyHeader();
-                                  });
+                options.AddPolicy("AllowSpecificOrigin",
+                    builder => builder.WithOrigins("https://localhost:7263")
+                                      .AllowAnyHeader()
+                                      .AllowAnyMethod());
             });
+
 
 
             var app = builder.Build();
 
+
+
             // Configure the HTTP request pipeline.
+
+            app.UseCors("AllowSpecificOrigin");
 
             app.UseHttpsRedirection();
 

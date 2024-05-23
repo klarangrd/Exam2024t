@@ -1,6 +1,7 @@
 ﻿using Core.Models;
 using MongoDB.Bson;
 using System.Diagnostics.Metrics;
+using System.Net.Http;
 
 namespace Exam2024t.Services
 {
@@ -91,6 +92,10 @@ namespace Exam2024t.Services
                 Console.WriteLine("No application found to delete.");
             }
             return Task.CompletedTask;
+        }
+        public async Task DeleteApplication(int Id)
+        {
+         
         }
 
     }

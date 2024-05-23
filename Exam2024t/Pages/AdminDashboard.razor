@@ -3,12 +3,10 @@
 @using Exam2024t.Services
 @using MongoDB.Bson
 @using Microsoft.AspNetCore.Authorization
+@using System.Text
 @inject NavigationManager NavigationManager
 @inject IAdminService AdminService
 @inject ISignatureService SignatureService
-
-
-
 
 <PageTitle>Admin Dashboard</PageTitle>
 
@@ -38,7 +36,6 @@ else
             @foreach (var week in predefinedWeeks)
             {
                 var applicationCount = GetApplicationCountForWeek(week);
-                <!--the amount of applications in the week-->
                 <div class="week-column @(GetWeekColumnClass(applicationCount))">
                     <h3>@week (Total: @applicationCount)</h3>
                     @foreach (var period in predefinedPeriods)//adding application detail titles
@@ -105,7 +102,6 @@ else
     {
         <h1>Venteliste</h1>
         <div class="mb-3">
-            <!--filtering system-->
             <input type="text" placeholder="Indtast navn" @bind="Emailfilter" />
             <label for="FirstPriorityWeek">Prioritetsuge</label>
             <InputSelect id="FirstPriorityWeek" @bind-Value="selectedWeek" @oninput="OnInputUge1">
@@ -176,6 +172,10 @@ else
             <p><strong>Første prioritets periode:</strong> @selectedApplication.FirstpriorityPeriod</p>
             <p><strong>Anden prioritets uge:</strong> @selectedApplication.SecondpriorityWeek</p>
             <p><strong>Anden prioritets periode:</strong> @selectedApplication.SecondpriorityPeriod</p>
+            @if (selectedApplication.Signature?.Signed == true && selectedApplication.Signature?.Sign != null)
+            {
+                <img src="@($"{Encoding.UTF8.GetString(selectedApplication.Signature.Sign)}")" alt="Signature" style="max-width: 100%; height: auto;" />
+            }
         </div>
         @if (!selectedApplication.IsApproved)
         {
@@ -466,4 +466,5 @@ else
         }
     }
 }
+
 

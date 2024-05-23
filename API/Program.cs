@@ -1,6 +1,5 @@
 using Core.Models;
 using Microsoft.Extensions.Hosting;
-using Serverapi.repositories;
 using Serverapi.Repositories;
 
 namespace API
@@ -15,7 +14,7 @@ namespace API
 
             builder.Services.AddControllers();
 
-            builder.Services.AddSingleton<Iapplycationrepository, Applicationrepository>();
+            builder.Services.AddSingleton<Iapplicationrepository, ApplicationRepository>();
             builder.Services.AddSingleton<IadminRepository, AdminRepository>();
 
       

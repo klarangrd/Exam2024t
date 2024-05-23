@@ -14,6 +14,7 @@ namespace Serverapi.Repositories
         private readonly IMongoDatabase _database;
         private readonly IMongoCollection<Admin> _collection;
         private Admin _currentAdmin;
+        private Admin admin;
 
         public AdminRepository()
         {
@@ -66,18 +67,21 @@ namespace Serverapi.Repositories
             Console.WriteLine(admin);
             if (admin != null && admin.Username == username && admin.Password == password)
             {
-                return true;
                 _currentAdmin = admin;
+                return true;
+                
             }
             else
             {
                 return false;
 
             }
+
         }
 
         public Task<Admin> GetCurrentAdmin()
         {
+
             return Task.FromResult(_currentAdmin);
         }
 

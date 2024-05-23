@@ -21,9 +21,8 @@ namespace Exam2024t
 
             builder.Services.AddScoped<IApplicationService, ApplicationService>();
 
-            builder.Services.AddSingleton<IApplicationService, ApplicationServiceInMemory>();
-
             builder.Services.AddScoped<IAdminService, AdminService>();
+
 
 
             builder.Services.AddBlazoredLocalStorage();

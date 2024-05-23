@@ -7,6 +7,9 @@
 @inject IAdminService AdminService
 @inject ISignatureService SignatureService
 
+
+
+
 <PageTitle>Admin Dashboard</PageTitle>
 
 <h2>Admin Dashboard</h2>
@@ -23,7 +26,7 @@
 }
 else
 {
-    <p>Loading admin data...</p>
+    <p>Indlæser admin data...</p>
 }
 
 <div>
@@ -34,18 +37,22 @@ else
         <div class="week-grid">
             @foreach (var week in predefinedWeeks)
             {
-                var applicationCount = GetApplicationCountForWeek(week);<!--the amount of applications in the week-->
+                var applicationCount = GetApplicationCountForWeek(week);
+                <!--the amount of applications in the week-->
                 <div class="week-column @(GetWeekColumnClass(applicationCount))">
-                    <h3>Week: @week (Total: @applicationCount)</h3>
-                    @foreach (var period in predefinedPeriods)//adding applicatin detail titles
+                    <h3>@week (Total: @applicationCount)</h3>
+                    @foreach (var period in predefinedPeriods)//adding application detail titles
                     {
-                        <h4>Period: @period</h4>
+                        var periodCount = GetApplicationCountForWeekAndPeriod(week, period);
+                        <h4>Periode: @period (Total: @periodCount)</h4>
                         <table>
                             <thead>
                                 <tr>
                                     <th>Frivillig navn</th>
                                     <th>Email</th>
                                     <th>Underskrift Status</th>
+                                    <th>Uge</th>
+                                    <th>Periode</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -59,7 +66,23 @@ else
                                             <p class="infotext">@application.Child.Volunteer.Email</p>
                                         </td>
                                         <td>
-                                            <p class="infotext">@(application.Signature?.Signed == true ? "Signed" : "Not Signed")</p>
+                                            <p class="infotext">@(application.Signature?.Signed == true ? "Underskrevet" : "Ikke underskrevet")</p>
+                                        </td>
+                                        <td>
+                                            <InputSelect @bind-Value="application.FirstpriorityWeek" @onchange="() => UpdateApplication(application)">
+                                                @foreach (var anOption in optionsUge1)
+                                                {
+                                                    <option value="@anOption">@anOption</option>
+                                                }
+                                            </InputSelect>
+                                        </td>
+                                        <td>
+                                            <InputSelect @bind-Value="application.FirstpriorityPeriod" @onchange="() => UpdateApplication(application)">
+                                                @foreach (var anOption in optionsPeriode1)
+                                                {
+                                                    <option value="@anOption">@anOption</option>
+                                                }
+                                            </InputSelect>
                                         </td>
                                         <td>
                                             <button @onclick="() => ShowApprovedApplicationDetails(application)">Se detaljer</button><!--showing details for approved application button-->
@@ -69,8 +92,7 @@ else
                             </tbody>
                         </table>
                     }
-                    <button>send email</button><!--button to send email to all applications within a week-->
-
+                    <button>Send email</button><!--button to send email to all applications within a week-->
                 </div>
             }
         </div>
@@ -79,12 +101,12 @@ else
 
 <div>
     <button class="btn btn-primary" @onclick="ShowQueuedApplications">Ventelistede tilmeldinger</button><!--button to show all queued applications-->
-
     @if (showQueuedApplications)
     {
         <h1>Venteliste</h1>
-        <div class="mb-3"><!--filtering system-->
-            <input type="text" placeholder="Enter name" @bind="Emailfilter" />
+        <div class="mb-3">
+            <!--filtering system-->
+            <input type="text" placeholder="Indtast navn" @bind="Emailfilter" />
             <label for="FirstPriorityWeek">Prioritetsuge</label>
             <InputSelect id="FirstPriorityWeek" @bind-Value="selectedWeek" @oninput="OnInputUge1">
                 @foreach (var anOption in optionsUge1)
@@ -92,14 +114,14 @@ else
                     <option value="@anOption">@anOption</option>
                 }
             </InputSelect>
-            <label for="FirstPriorityPeriod">Prioritetperiode</label>
+            <label for="FirstPriorityPeriod">Prioritetsperiode</label>
             <InputSelect id="FirstPriorityPeriod" @bind-Value="selectedPeriod" @oninput="OnInputPeriode1">
                 @foreach (var anOption in optionsPeriode1)
                 {
                     <option value="@anOption">@anOption</option>
                 }
             </InputSelect>
-            <button @onclick="FilterAndSort">Filter & Sort</button>
+            <button @onclick="FilterAndSort">Filtrer & Sorter</button>
         </div>
 
         <table class="table"><!--adding applicatin detail titles and what they need to include-->
@@ -120,7 +142,7 @@ else
                             <p class="infotext"><strong>Første prioritets periode:</strong> @application.FirstpriorityPeriod</p>
                         </td>
                         <td>
-                            <p class="infotext"><strong>Underskrift Status:</strong> @(application.Signature?.Signed == true ? "Signed" : "Not Signed")</p>
+                            <p class="infotext"><strong>Underskrift Status:</strong> @(application.Signature?.Signed == true ? "Underskrevet" : "Ikke underskrevet")</p>
                         </td>
                         <td>
                             <button @onclick="() => ShowQueuedApplicationDetails(application)">Se detaljer</button><!--button to see queued application details-->
@@ -139,21 +161,21 @@ else
     @if (selectedApplication != null)
     {
         <div>
-            <h5>Application details</h5>
+            <h5>Ansøgningsdetaljer</h5>
             <p><strong>Kræwnr:</strong> @selectedApplication.Child.Volunteer.Kræwnr</p>
             <p><strong>Frivillig navn:</strong> @selectedApplication.Child.Volunteer.Name</p>
             <p><strong>Email:</strong> @selectedApplication.Child.Volunteer.Email</p>
-            <p><strong>Barn Name:</strong> @selectedApplication.Child.ChildName</p>
-            <p><strong> Barn alder:</strong> @selectedApplication.Child.ChildAge</p>
+            <p><strong>Barn navn:</strong> @selectedApplication.Child.ChildName</p>
+            <p><strong>Barn alder:</strong> @selectedApplication.Child.ChildAge</p>
             <p><strong>Tøj størrelse:</strong> @selectedApplication.Child.ClothingSize</p>
-            <p><strong>Kommetar:</strong> @selectedApplication.Child.Comment</p>
+            <p><strong>Kommentar:</strong> @selectedApplication.Child.Comment</p>
             <p><strong>Været her før?:</strong> @selectedApplication.Child.Beenbefore</p>
             <p><strong>Interesse:</strong> @selectedApplication.Child.Interest</p>
             <p><strong>Frivillig?:</strong> @selectedApplication.IsVolunteer</p>
-            <p><strong>First Priority Week:</strong> @selectedApplication.FirstpriorityWeek</p>
-            <p><strong>First Priority Period:</strong> @selectedApplication.FirstpriorityPeriod</p>
-            <p><strong>Second Priority Week:</strong> @selectedApplication.SecondpriorityWeek</p>
-            <p><strong>Second Priority Period:</strong> @selectedApplication.SecondpriorityPeriod</p>
+            <p><strong>Første prioritets uge:</strong> @selectedApplication.FirstpriorityWeek</p>
+            <p><strong>Første prioritets periode:</strong> @selectedApplication.FirstpriorityPeriod</p>
+            <p><strong>Anden prioritets uge:</strong> @selectedApplication.SecondpriorityWeek</p>
+            <p><strong>Anden prioritets periode:</strong> @selectedApplication.SecondpriorityPeriod</p>
         </div>
         @if (!selectedApplication.IsApproved)
         {
@@ -218,8 +240,10 @@ else
             </div>
 
             <div class="form-group row">
-                <label for="FirstPriorityWeek" class="col-md-4 col-form-label">Første prioritet uge<br />
-                Selected second priority week: @selectedApplication.SecondpriorityWeek</label>
+                <label for="FirstPriorityWeek" class="col-md-4 col-form-label">
+                    Første prioritets uge<br />
+                    Valgt anden prioritets uge: @selectedApplication.SecondpriorityWeek
+                </label>
                 <div class="col-md-4">
                     <InputSelect id="FirstPriorityWeek" @bind-Value="selectedApplication.FirstpriorityWeek" class="form-control" @oninput="OnInputUge1">
                         @foreach (var anOption in optionsUge1)
@@ -231,8 +255,10 @@ else
             </div>
 
             <div class="form-group row">
-                <label for="FirstPriorityPeriod" class="col-md-4 col-form-label">Første periode <br />
-                Selected second priority period: @selectedApplication.SecondpriorityPeriod</label>
+                <label for="FirstPriorityPeriod" class="col-md-4 col-form-label">
+                    Første periode <br />
+                    Valgt anden prioritets periode: @selectedApplication.SecondpriorityPeriod
+                </label>
 
                 <div class="col-md-4">
                     <InputSelect id="FirstPriorityPeriod" @bind-Value="selectedApplication.FirstpriorityPeriod" class="form-control" @oninput="OnInputPeriode1">
@@ -244,14 +270,14 @@ else
                 </div>
             </div>
 
-            <button type="submit" class="btn btn-success">Save Changes</button><!--button to save changes and leave it-->
-            <button type="button" @onclick="ApproveApplication" class="btn btn-success">Godkend tilmeldling</button><!--button to approve application and move it into the approved box-->
+            <button type="submit" class="btn btn-success">Gem ændringer</button><!--button to save changes and leave it-->
+            <button type="button" @onclick="ApproveApplication" class="btn btn-success">Godkend tilmelding</button><!--button to approve application and move it into the approved box-->
         </EditForm>
     }
 </ModalDialog>
 
 @code {
-    //setting up admin 
+    //setting up admin
     private Core.Models.Admin admin = new Core.Models.Admin();
     private Core.Models.Admin currentAdmin;
 
@@ -259,7 +285,7 @@ else
     private Core.Models.Application[] queuedApplications = new Core.Models.Application[0];
     private Core.Models.Application[] approvedApplications = new Core.Models.Application[0];
     private Core.Models.Application? selectedApplication;
-    
+
     //setting up the modals
     private ModalDialog DetailsDialog;
     private ModalDialog EditDialog;
@@ -368,7 +394,13 @@ else
         }
     }
 
-    private void FilterAndSort()//filtering and sorting the applications by certain things 
+    private async Task UpdateApplication(Core.Models.Application application)
+    {
+        await applicationService.UpdateApplication(application);
+        approvedApplications = await applicationService.GetApprovedApplications(); // Refresh the approved applications list
+    }
+
+    private void FilterAndSort()//filtering and sorting the applications by certain things
     {
         if (Applicationlistcopy != null)
         {
@@ -394,7 +426,7 @@ else
     [Inject]
     private IApplicationService applicationService { get; set; }
 
-    private async Task ShowQueuedApplications()//showing the queued applications 
+    private async Task ShowQueuedApplications()//showing the queued applications
     {
         queuedApplications = await applicationService.GetQueuedApplications();
         Applicationlistcopy = queuedApplications.ToArray();
@@ -413,6 +445,11 @@ else
         return approvedApplications.Count(a => a.FirstpriorityWeek == week);
     }
 
+    private int GetApplicationCountForWeekAndPeriod(string week, string period)
+    {
+        return approvedApplications.Count(a => a.FirstpriorityWeek == week && a.FirstpriorityPeriod == period);
+    }
+
     private string GetWeekColumnClass(int applicationCount)//making it so that the colour changes based on how many spots are left in the week
     {
         if (applicationCount < 5)
@@ -429,3 +466,4 @@ else
         }
     }
 }
+

@@ -11,12 +11,11 @@ namespace Exam2024t.Services
 
         Task UpdateApplication(Application application);
 
-        Task<Application[]> GetApprovedApplications();
+        public Task<Application[]> GetApprovedApplications();
 
         Task<Application[]> GetQueuedApplications();
 
         Task DeleteApplication(ObjectId applicationId);
-
 
     }
 }

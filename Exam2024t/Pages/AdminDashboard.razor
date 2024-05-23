@@ -126,7 +126,7 @@ else
                             <button @onclick="() => ShowQueuedApplicationDetails(application)">Se detaljer</button><!--button to see queued application details-->
                         </td>
                         <td>
-                            <button @onclick="() => DeleteApplication(application.Id)" class="btn btn-danger">🗑️</button><!--button to delete queued application-->
+                            <button @onclick="() => DeleteApplication(application.appId)" class="btn btn-danger">🗑️</button><!--button to delete queued application-->
                         </td>
                     </tr>
                 }
@@ -251,6 +251,9 @@ else
 </ModalDialog>
 
 @code {
+    [Inject]
+    private IApplicationService applicationService { get; set; }
+
     //setting up admin 
     private Core.Models.Admin admin = new Core.Models.Admin();
     private Core.Models.Admin currentAdmin;
@@ -259,7 +262,7 @@ else
     private Core.Models.Application[] queuedApplications = new Core.Models.Application[0];
     private Core.Models.Application[] approvedApplications = new Core.Models.Application[0];
     private Core.Models.Application? selectedApplication;
-    
+
     //setting up the modals
     private ModalDialog DetailsDialog;
     private ModalDialog EditDialog;
@@ -333,14 +336,18 @@ else
         selectedOptionPeriode1 = e.Value?.ToString() ?? "null";
     }
 
-    private async Task DeleteApplication(ObjectId applicationId)//method to delete an application
+    private async Task DeleteApplication(int appId)
     {
-        await applicationService.DeleteApplication(applicationId);
-        queuedApplications = await applicationService.GetQueuedApplications();
-        Applicationlistcopy = queuedApplications.ToArray();
-        FilterAndSort();
+   
+            await applicationService.DeleteApplication(appId);
+            queuedApplications = await applicationService.GetQueuedApplications();
+            Applicationlistcopy = queuedApplications.ToArray();
+            FilterAndSort();
+        
+        {
+            Console.WriteLine("Invalid objectId");
+        }
     }
-
     private async Task HandleEditApplication()
     {
         if (selectedApplication != null)
@@ -391,8 +398,7 @@ else
         }
     }
 
-    [Inject]
-    private IApplicationService applicationService { get; set; }
+   
 
     private async Task ShowQueuedApplications()//showing the queued applications 
     {

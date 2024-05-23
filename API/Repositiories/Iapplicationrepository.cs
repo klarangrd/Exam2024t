@@ -16,7 +16,7 @@ namespace Serverapi.Repositories
 
         Task<Application[]> GetQueuedApplications();
 
-        Task DeleteApplication(ObjectId applicationId);
+        void DeleteApplication(int Id);
 
     }
 }

@@ -15,6 +15,8 @@ namespace Core.Models
         [BsonRepresentation(BsonType.ObjectId)]
         public ObjectId Id { get; set; }
 
+        public int appId {  get; set; }
+
 
         public bool IsVolunteer { get; set; }
 

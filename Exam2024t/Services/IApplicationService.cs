@@ -15,7 +15,7 @@ namespace Exam2024t.Services
 
         Task<Application[]> GetQueuedApplications();
 
-        Task DeleteApplication(ObjectId applicationId);
+        Task DeleteApplication(int Id);
 
 
     }

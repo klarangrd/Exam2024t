@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using Core.Models;
 using MongoDB.Bson;
 using Microsoft.AspNetCore.Cors;
+using MongoDB.Bson.IO;
 
 namespace Serverapi.Controllers
 {
@@ -69,15 +70,10 @@ namespace Serverapi.Controllers
 
         [HttpDelete]
         [Route("delete/{id}")]
-        public async Task<IActionResult> DeleteApplication(string id)
-        {
-            if (!ObjectId.TryParse(id, out var objectId))
-            {
-                return BadRequest("Invalid Id format.");
-            }
-
-            await _appRepository.DeleteApplication(objectId);
-            return NoContent();
+        public void DeleteApplication(int id)
+         {
+           _appRepository.DeleteApplication(id);
         }
+
     }
 }

@@ -24,6 +24,12 @@ namespace Serverapi.Repositories
         public async Task Add(Application application)
         {
             await _collection.InsertOneAsync(application);
+            var max = 0;
+            if (_collection.Count(Builders<Application>.Filter.Empty) > 0)
+            {
+                max = _collection.Find(Builders<Application>.Filter.Empty).SortByDescending(r => r.appId).Limit(1).ToList()[0].appId;
+            }
+            application.appId = max + 1;
         }
 
         public async Task<Application[]> GetAllApplications()
@@ -62,18 +68,10 @@ namespace Serverapi.Repositories
             return applications.ToArray();
         }
 
-        public async Task DeleteApplication(ObjectId applicationId)
+        public void DeleteApplication(int Id)
         {
-            var filter = Builders<Application>.Filter.Eq(a => a.Id, applicationId);
-            var result = await _collection.DeleteOneAsync(filter);
-            if (result.IsAcknowledged && result.DeletedCount > 0)
-            {
-                Console.WriteLine($"Application with Id {applicationId} deleted successfully.");
-            }
-            else
-            {
-                Console.WriteLine("No application found to delete.");
-            }
+            var filter = Builders<Application>.Filter.Eq(a => a.appId, Id);
+            _collection.DeleteOne(filter);
         }
     }
 }

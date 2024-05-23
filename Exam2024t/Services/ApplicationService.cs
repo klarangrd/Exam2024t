@@ -1,5 +1,6 @@
 ﻿using Core.Models;
 using MongoDB.Bson;
+using System.Net.Http;
 using System.Net.Http.Json;
 
 namespace Exam2024t.Services
@@ -40,9 +41,9 @@ namespace Exam2024t.Services
             return await http.GetFromJsonAsync<Application[]>($"{serverUrl}/queued");
         }
 
-        public async Task DeleteApplication(ObjectId applicationId)
+        public async Task DeleteApplication(int Id)
         {
-            await http.DeleteAsync($"{serverUrl}/delete/{applicationId}");
+            await http.DeleteAsync($"{serverUrl}/delete/{Id}");
         }
 
 

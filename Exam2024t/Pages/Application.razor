@@ -7,6 +7,7 @@
 @using System.Text.Json
 @using Blazored.LocalStorage
 @inject Blazored.LocalStorage.ILocalStorageService localStore
+@inject IApplicationService ApplicationService
 
 <PageTitle>Application</PageTitle>
 
@@ -22,42 +23,23 @@
         </tr>
     </thead>
     <tbody>
-        <tr>
-            <th>Uge 27</th>
-            <td>3. juli - 5.juli</td>
-            <td>6. juli - 7 juli</td>
-            <td>3.juli - 7. juli</td>
-        </tr>
-        <tr>
-            <th>Uge 28</th>
-            <td>10. juli - 12. juli</td>
-            <td>13. juli - 14. juli</td>
-            <td>10. juli - 14. juli</td>
-            
-        </tr>
-        <tr>
-            <th>Uge 30</th>
-            <td>24. juli - 26. juli</td>
-            <td>27. juli - 28. juli</td>
-            <td>24. juli - 28. juli</td>
-            
-        </tr>
-        <tr>
-            <th>Uge 31</th>
-            <td>31. juli - 2. august</td>
-            <td>3. august - 4. august</td>
-            <td>31. juli - 4. august</td>
-            
-        </tr>
+        @foreach (var week in predefinedWeeks)//colour coordintion logic
+        {
+            var applicationCount = weekApplicationCounts.ContainsKey(week) ? weekApplicationCounts[week] : 0;
+            <tr class="@(GetWeekColumnClass(applicationCount))">
+                <th>@week</th>
+                <td>3. juli - 5.juli</td>
+                <td>6. juli - 7 juli</td>
+                <td>3.juli - 7. juli</td>
+            </tr>
+        }
     </tbody>
 </table>
 
-
 <button class="btn btn-primary" @onclick="OnClickAddDialog">Tilmeld børneklub</button>
 
-
 <ModalDialog @ref="addDialog" Title="Tilmeld børneklub">
-    <EditForm EditContext="@aEditContext" class="application-form" OnValidSubmit="@HandleValidSubmit"> 
+    <EditForm EditContext="@aEditContext" class="application-form" OnValidSubmit="@HandleValidSubmit">
         <DataAnnotationsValidator />
         <ValidationSummary />
 
@@ -91,7 +73,7 @@
                 <InputCheckbox id="BeenBefore" @bind-Value="application.Child.Beenbefore" />
             </div>
         </div>
-        
+
         <div class="form-group row">
             <label for="FirstPriorityWeek" class="col-md-4 col-form-label">Førsteprioritet uge</label>
             <div class="col-md-4">
@@ -104,8 +86,6 @@
                 <ValidationMessage For="@(() => application.FirstpriorityWeek)" />
             </div>
         </div>
-
-
 
         <div class="form-group row">
             <label for="FirstPriorityPeriod" class="col-md-4 col-form-label">Førsteprioritet periode</label>
@@ -202,19 +182,17 @@
         </div>
     </EditForm>
 </ModalDialog>
-    
+
 <ModalDialog @ref="alertDialog" Title="">
-   <div class="alertdiv"> 
-       <h3 class="h3">Tilmelding indsent!</h3>
-       <p>Husk at du skal underskrive for at dine børns tilmelding er gyldig!</p>
-    <h3 class="h3">Vil du underskrive nu?</h3>
+    <div class="alertdiv">
+        <h3 class="h3">Tilmelding indsent!</h3>
+        <p>Husk at du skal underskrive for at dine børns tilmelding er gyldig!</p>
+        <h3 class="h3">Vil du underskrive nu?</h3>
     </div>
-    <div class="btn-container"> 
+    <div class="btn-container">
         <button @onclick="CloseDialog">Nej</button>
         <NavLink href="/Signature"> <button @onclick="CloseDialog">Ja</button> </NavLink>
-        
     </div>
-
 </ModalDialog>
 
 @code {
@@ -224,24 +202,29 @@
     string[] optionsPeriode2 = { "Vælg", "Onsdag-Søndag", "Onsdag-Fredag", "Fredag-Søndag" };
     string selectedOptionUge1 = "Vælg";
     string selectedOptionUge2 = "Vælg";
-    string selectedOptionPeriode1 = "Vælg"; 
+    string selectedOptionPeriode1 = "Vælg";
     string selectedOptionPeriode2 = "Vælg";
 
     Core.Models.Application application = new Core.Models.Application();
-    List<Core.Models.Application> applicationList = new List<Core.Models.Application>();
+    List<Core.Models.Application> applicationList = new List<Core.Models.Application>();//list to hold the application counts for each week and period
+
 
     private EditContext aEditContext;
     private ModalDialog? addDialog { get; set; }
     private ModalDialog? alertDialog { get; set; }
 
+    // Predefined weeks and periods
+    private readonly string[] predefinedWeeks = { "Uge 27", "Uge 28", "Uge 30", "Uge 31" };
+    private readonly string[] predefinedPeriods = { "Onsdag-Søndag", "Onsdag-Fredag", "Fredag-Søndag" };
+
+    // Dictionary to hold application counts per week
+    private Dictionary<string, int> weekApplicationCounts = new Dictionary<string, int>();
 
     [Inject]
     private IApplicationService mService { get; set; }
 
-    protected override void OnInitialized()
+    protected override async Task OnInitializedAsync()
     {
-      
-
         application = new Core.Models.Application
             {
                 Child = new Child
@@ -250,12 +233,22 @@
                 }
             };
         aEditContext = new EditContext(application);
-       
+
+        // Initialize the week application counts
+        await InitializeWeekApplicationCounts();
     }
 
-   
+    private async Task InitializeWeekApplicationCounts()
+    {
+        var approvedApplications = await mService.GetApprovedApplications();
 
-    // Uge select
+        foreach (var week in predefinedWeeks)
+        {
+            weekApplicationCounts[week] = approvedApplications.Count(a => a.FirstpriorityWeek == week);
+        }
+    }
+
+    // Methods for dropdown inputs
     void OnInputUge1(ChangeEventArgs e)
     {
         selectedOptionUge1 = e.Value?.ToString() ?? "null";
@@ -263,8 +256,7 @@
     void OnInputUge2(ChangeEventArgs e)
     {
         selectedOptionUge2 = e.Value?.ToString() ?? "null";
-    } 
-    // Periode select
+    }
     void OnInputPeriode1(ChangeEventArgs e)
     {
         selectedOptionPeriode1 = e.Value?.ToString() ?? "null";
@@ -272,15 +264,12 @@
     void OnInputPeriode2(ChangeEventArgs e)
     {
         selectedOptionPeriode2 = e.Value?.ToString() ?? "null";
-
     }
 
-
-
+    // Dialog handling methods
     private void OnClickAddDialog()
-    {     
+    {
         addDialog?.Open();
-
     }
     private void CloseDialog()
     {
@@ -288,11 +277,10 @@
     }
     private void GoToSignPage()
     {
-
         alertDialog?.Open();
-
     }
 
+    // Method to handle form submission
     public async Task HandleValidSubmit()
     {
         applicationList.Add(new Core.Models.Application
@@ -300,7 +288,6 @@
                 Signature = new Core.Models.Signature
                 {
                     Signed = false
-                                  
                 },
                 Child = new Child
                 {
@@ -310,7 +297,6 @@
                     Beenbefore = application.Child.Beenbefore,
                     Comment = application.Child.Comment,
                     Interest = application.Child.Interest,
-
                     Volunteer = new Volunteer
                     {
                         Name = application.Child.Volunteer.Name,
@@ -325,14 +311,26 @@
                 IsVolunteer = application.IsVolunteer
             });
 
-
         await localStore.SetItemAsync("applicationList", applicationList);
-
 
         addDialog?.Close();
         alertDialog?.Open();
-
     }
 
-    
+    //method to get CSS class based on application count
+    private string GetWeekColumnClass(int applicationCount)
+    {
+        if (applicationCount < 5)
+        {
+            return "green";
+        }
+        else if (applicationCount <= 15)
+        {
+            return "yellow";
+        }
+        else
+        {
+            return "red";
+        }
+    }
 }

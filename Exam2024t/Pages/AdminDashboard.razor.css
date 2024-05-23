@@ -116,7 +116,7 @@ strong {
     display: grid;
     grid-template-columns: 1fr 1fr; /* Two columns */
     grid-template-rows: auto auto; /* Two rows */
-    gap: 20px; /* Space between boxes */
+    gap: 10px; /* Space between boxes */
     margin-top: 20px;
 }
 

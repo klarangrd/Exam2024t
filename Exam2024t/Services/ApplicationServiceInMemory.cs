@@ -50,19 +50,16 @@ namespace Exam2024t.Services
 
         public Task UpdateApplication(Application application)
         {
-            var existingApplication = Applications.FirstOrDefault(a => a.Child.Volunteer.Kræwnr == application.Child.Volunteer.Kræwnr);
+            var existingApplication = Applications.FirstOrDefault(a => a.Id == application.Id);
             if (existingApplication != null)
             {
+                existingApplication.FirstpriorityWeek = application.FirstpriorityWeek;
+                existingApplication.FirstpriorityPeriod = application.FirstpriorityPeriod;
                 existingApplication.IsApproved = application.IsApproved;
-                Console.WriteLine($"Application for {existingApplication.Child.Volunteer.Name} updated to Approved: {existingApplication.IsApproved}");
-            }
-            else
-            {
-                Console.WriteLine("No application found to update.");
+                // Other fields to update if necessary
             }
             return Task.CompletedTask;
         }
-
 
         public Task<Application[]> GetQueuedApplications()
         {
@@ -78,6 +75,7 @@ namespace Exam2024t.Services
             return Task.FromResult(approvedApps);
         }
 
+
         public Task DeleteApplication(ObjectId applicationId)
         {
             var application = Applications.FirstOrDefault(a => a.Id == applicationId);
@@ -92,6 +90,9 @@ namespace Exam2024t.Services
             }
             return Task.CompletedTask;
         }
+
+       
+
 
     }
 }

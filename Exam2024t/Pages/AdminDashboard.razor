@@ -15,6 +15,7 @@
 {
     <div>
         <p>Brugernavn: @currentAdmin.Username</p>
+
     </div>
     <button class="btn btn-primary" @onclick="Logout">Log ud</button><!--logout button-->
 }
@@ -256,7 +257,7 @@ else
     private Core.Models.Application[] queuedApplications = new Core.Models.Application[0];
     private Core.Models.Application[] approvedApplications = new Core.Models.Application[0];
     private Core.Models.Application? selectedApplication;
-    
+
     //setting up the modals
     private ModalDialog DetailsDialog;
     private ModalDialog EditDialog;
@@ -342,28 +343,42 @@ else
     {
         if (selectedApplication != null)
         {
-            await applicationService.UpdateApplication(selectedApplication);
+            await applicationService.UpdateApplication(selectedApplication.appId, selectedApplication);
             EditDialog.Close();
         }
     }
 
-    private async Task ApproveApplication()//approving the application and sending it to the approved box
+    private async Task ApproveApplication()
     {
-        if (selectedApplication != null)
+        try
         {
-            selectedApplication.IsApproved = true;
-            await applicationService.UpdateApplication(selectedApplication);
+            if (selectedApplication != null)
+            {
+                selectedApplication.IsApproved = true;
+                await applicationService.UpdateApplication(selectedApplication.appId, selectedApplication);
 
-            //refreshing the application lists after approval
-            queuedApplications = await applicationService.GetQueuedApplications();
-            approvedApplications = await applicationService.GetApprovedApplications();
+                // Refreshing the application lists after approval
+                queuedApplications = await applicationService.GetQueuedApplications();
+                approvedApplications = await applicationService.GetApprovedApplications();
 
-            Applicationlistcopy = queuedApplications.ToArray();
-            FilterAndSort();
+                // Update the local copy of applications
+                Applicationlistcopy = queuedApplications.ToArray();
 
-            EditDialog.Close();
+                // Apply filtering and sorting
+                FilterAndSort();
+
+                // Close the edit dialog
+                EditDialog.Close();
+            }
+        }
+        catch (Exception ex)
+        {
+            // Handle any potential exceptions here
+            Console.WriteLine($"Error approving application: {ex.Message}");
+            // Optionally, you can show an error message to the user
         }
     }
+
 
     private void FilterAndSort()//filtering and sorting the applications by certain things 
     {

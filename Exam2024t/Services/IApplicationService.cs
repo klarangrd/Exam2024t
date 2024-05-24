@@ -9,7 +9,7 @@ namespace Exam2024t.Services
 
         Task Add(Application application);
 
-        Task UpdateApplication(Application application);
+        Task UpdateApplication(int id, Application application);
 
         Task<Application[]> GetApprovedApplications();
 

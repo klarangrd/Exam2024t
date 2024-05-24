@@ -42,17 +42,26 @@ namespace Serverapi.Controllers
         }
 
         [HttpPut]
-        [Route("update")]
-        public async Task<IActionResult> UpdateApplication([FromBody] Application application)
+        [Route("update/{appId}")]
+        public async Task<IActionResult> UpdateApplication(int appId, [FromBody] Application application)
         {
             if (application == null)
             {
                 return BadRequest("Application cannot be null.");
             }
 
-            await _appRepository.UpdateApplication(application);
-            return NoContent();
+            try
+            {
+                await _appRepository.UpdateApplication(appId, application);
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Internal server error: {ex.Message}");
+            }
         }
+
+
 
         [HttpGet("approved")]
         public async Task<IActionResult> GetApprovedApplications()

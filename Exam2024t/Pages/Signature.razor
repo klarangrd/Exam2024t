@@ -18,16 +18,16 @@
             {
                 <tr>
                     <td>
-                        <p class="infotext"><strong>Volunteer Name:</strong> <br /> @item.Child.Volunteer.Name</p>
+                        <p class="infotext"><strong>Frivilliges navn:</strong> <br /> @item.Child.Volunteer.Name</p>
                     </td>
                     <td>
                         <p class="infotext"><strong>Email:</strong> <br />@item.Child.Volunteer.Email</p>
                     </td>
                     <td>
-                        <p class="infotext"><strong>First Priority Week:</strong><br /> @item.FirstpriorityWeek</p>
+                        <p class="infotext"><strong>Førsteprioritets uge:</strong><br /> @item.FirstpriorityWeek</p>
                     </td>
                     <td>
-                        <p class="infotext"><strong>First Priority Period:</strong><br /> @item.FirstpriorityPeriod</p>
+                        <p class="infotext"><strong>Førsteprioritets periode:</strong><br /> @item.FirstpriorityPeriod</p>
                     </td>
                     <td>
                         @if (@item.Signature.Signed == false)
@@ -75,25 +75,39 @@
             </div>
         </EditForm>
     </ModalDialog>
-    <ModalDialog @ref="DetailsDialog" Title="application details">
+    <ModalDialog @ref="DetailsDialog" Title="Applikationsdetaljer">
         @if (selectedApplication != null)
         {
             <div>
-                <h5>Application details</h5>
                 <p><strong>Kræwnr:</strong>  @selectedApplication.Child.Volunteer.Kræwnr</p>
-                <p><strong>Volunteer Name:</strong> @selectedApplication.Child.Volunteer.Name</p>
+                <p><strong>Frivilliges navn:</strong> @selectedApplication.Child.Volunteer.Name</p>
                 <p><strong>Email:</strong> @selectedApplication.Child.Volunteer.Email</p>
-                <p><strong>Child Name:</strong> @selectedApplication.Child.ChildName</p>
-                <p><strong>Age:</strong> @selectedApplication.Child.ChildAge</p>
+                <p><strong>Barnets navn:</strong> @selectedApplication.Child.ChildName</p>
+                <p><strong>Alder:</strong> @selectedApplication.Child.ChildAge</p>
                 <p><strong>Tøj størrelse:</strong> @selectedApplication.Child.ClothingSize</p>
-                <p><strong>Comment:</strong> @selectedApplication.Child.Comment</p>
-                <p><strong>Been Before:</strong> @selectedApplication.Child.Beenbefore</p>
-                <p><strong>Interest:</strong> @selectedApplication.Child.Interest</p>
-                <p><strong>Volunteer:</strong> @selectedApplication.IsVolunteer</p>
-                <p><strong>First Priority Week:</strong> @selectedApplication.FirstpriorityWeek</p>
-                <p><strong>First Priority Period:</strong> @selectedApplication.FirstpriorityPeriod</p>
-                <p><strong>Second Priority Week:</strong> @selectedApplication.SecondpriorityWeek</p>
-                <p><strong>Second Priority Period:</strong> @selectedApplication.SecondpriorityPeriod</p>
+                <p><strong>Kommentar:</strong> @selectedApplication.Child.Comment</p>
+                @if (selectedApplication.Child.Beenbefore)
+                {
+                    <p><strong>Været her før?:</strong> Ja</p>
+                }
+                else
+                {
+                    <p><strong>Været her før?:</strong> Nej</p>
+                }
+                <p><strong>Interesse:</strong> @selectedApplication.Child.Interest</p>
+                @if (selectedApplication.IsVolunteer)
+                {
+                    <p><strong>Frivillig?:</strong> Ja</p>
+                }
+                else
+                {
+                    <p><strong>Frivillig?:</strong> Nej</p>
+                }
+              
+                <p><strong>Førsteprioritets uge:</strong> @selectedApplication.FirstpriorityWeek</p>
+                <p><strong>Førsteprioritets periode:</strong> @selectedApplication.FirstpriorityPeriod</p>
+                <p><strong>Andenprioritets uge:</strong> @selectedApplication.SecondpriorityWeek</p>
+                <p><strong>Andenprioritets periode:</strong> @selectedApplication.SecondpriorityPeriod</p>
             </div>
             @if (!selectedApplication.Signature.Signed) // Show the button only if Signature is not signed
             {
@@ -102,7 +116,7 @@
         }
     </ModalDialog>
     
-<ModalDialog @ref="SignatureDialog" Title="Signature">
+<ModalDialog @ref="SignatureDialog" Title="Din underskrift">
     @if (signatureImageUrl != null)
     {
     <img src="@signatureImageUrl" alt="Signature" style="width: 100%; height: auto;" />
@@ -142,8 +156,6 @@
 
     private async Task ShowSignature(byte[] signatureBytes)
     {
-        if (signatureBytes != null && signatureBytes.Length > 0)
-        {
             // Convert the byte array to a base64 string
             string base64String = Convert.ToBase64String(signatureBytes);
 
@@ -154,12 +166,6 @@
             // Use the base64 string as an image source with the correct MIME type
             signatureImageUrl = $"{stringBytes}";
             SignatureDialog.Open();
-            Console.WriteLine("Signature displayed successfully.");
-        }
-        else
-        {
-            Console.WriteLine("Signature is null or empty.");
-        }
     }
 
 

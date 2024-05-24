@@ -57,26 +57,20 @@ namespace Serverapi.Repositories
         }
         */
 
-        public bool CheckLogin(string username, string password)
+        public async Task<bool> CheckLoginAsync(string username, string password)
         {
-            Admin admin = new();
-            var filter1 = Builders<Admin>.Filter.Eq("Username", username);
-            var filter2 = Builders<Admin>.Filter.Eq("Password", password);
+            var filter = Builders<Admin>.Filter.And(
+                Builders<Admin>.Filter.Eq("Username", username),
+                Builders<Admin>.Filter.Eq("Password", password)
+            );
 
-            admin = _collection.Aggregate().Match(filter1).Match(filter2).FirstOrDefault();
-            Console.WriteLine(admin);
-            if (admin != null && admin.Username == username && admin.Password == password)
+            var admin = await _collection.Find(filter).FirstOrDefaultAsync();
+            if (admin != null)
             {
                 _currentAdmin = admin;
                 return true;
-                
             }
-            else
-            {
-                return false;
-
-            }
-
+            return false;
         }
 
         public Task<Admin> GetCurrentAdmin()

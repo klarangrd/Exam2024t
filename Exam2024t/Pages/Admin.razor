@@ -60,20 +60,12 @@
 
     private bool login;
 
-    public async Task HandleLogin()
+    private async Task HandleLogin()
     {
-
-        string username = adminLogin.Username;
-        string password = adminLogin.Password;
-
-        erLoggetInd = await Http.GetFromJsonAsync<bool>($"{serverUrl}/api/admins/checklogin?username={username}&password={password}");
-
-        Console.WriteLine("erlogget ind:" + erLoggetInd);
-        Console.WriteLine(erLoggetInd);
-
-        if (erLoggetInd == false)
+        var result = await AdminService.CheckLoginAsync(adminLogin.Username, adminLogin.Password);
+        if (result)
         {
-            Console.WriteLine("login failed");
+            NavigationManager.NavigateTo("/AdminDashboard");
         }
         else
         {

@@ -14,8 +14,6 @@ namespace Serverapi.Repositories
         Task LogoutAdmin();
         Task<Admin[]> GetAllAdmin();
 
-
-
-        bool CheckLogin(string username, string password);
+        Task<bool> CheckLoginAsync(string username, string password);
     }
 }

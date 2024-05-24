@@ -20,11 +20,15 @@ namespace API.Controllers
 
 
         //test til userlofin fra genbrugsmarkedsprojekt
-        [HttpGet]
-        [Route("checklogin")]
-        public bool CheckLogin([FromQuery] string username, [FromQuery] string password)
+        [HttpGet("checklogin")]
+        public async Task<IActionResult> CheckLogin([FromQuery] string username, [FromQuery] string password)
         {
-            return mrepo.CheckLogin(username, password);
+            var result = await mrepo.CheckLoginAsync(username, password);
+            if (result)
+            {
+                return Ok(true);
+            }
+            return Unauthorized();
         }
 
 

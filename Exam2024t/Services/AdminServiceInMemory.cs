@@ -19,16 +19,7 @@ namespace Exam2024t.Services
 
         private Core.Models.Admin _currentAdmin;
 
-        public Task<bool> LoginAdmin(string username, string password)
-        {
-            var admin = Admins.FirstOrDefault(a => a.Username == username && a.Password == password);
-            if (admin != null)
-            {
-                _currentAdmin = admin;
-                return Task.FromResult(true);
-            }
-            return Task.FromResult(false);
-        }
+        
 
         public Task<Core.Models.Admin> GetCurrentAdmin()
         {
@@ -47,7 +38,7 @@ namespace Exam2024t.Services
         }
 
 
-        public async Task<bool> CheckLogin(string username, string password)
+        public async Task<bool> CheckLoginAsync(string username, string password)
         {
             return true;
         }

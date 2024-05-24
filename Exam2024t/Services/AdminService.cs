@@ -15,25 +15,11 @@ namespace Exam2024t.Services
             _httpClient = httpClient;
         }
 
-        public async Task<bool> LoginAdmin(string username, string password)
-        {
-            var response = await _httpClient.PostAsJsonAsync("/api/admins/login", new { Username = username, Password = password });
-            if (response.IsSuccessStatusCode)
-            {
-                _currentAdmin = await response.Content.ReadFromJsonAsync<Admin>();
-                return true;
-            }
-            return false;
-        }
 
-        public async Task<bool> CheckLogin(string username, string password)
+        public async Task<bool> CheckLoginAsync(string username, string password)
         {
             var response = await _httpClient.GetAsync($"/api/admins/checklogin?username={username}&password={password}");
             return response.IsSuccessStatusCode;
-
-
-
-            
         }
 
         public Task<Admin> GetCurrentAdmin()

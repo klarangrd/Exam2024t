@@ -40,11 +40,11 @@ namespace Serverapi.Repositories
 
         public async Task UpdateApplication(Application application)
         {
-            var filter = Builders<Application>.Filter.Eq(a => a.Id, application.Id);
+            var filter = Builders<Application>.Filter.Eq(a => a.appId, application.appId);
             var result = await _collection.ReplaceOneAsync(filter, application);
             if (result.IsAcknowledged && result.ModifiedCount > 0)
             {
-                Console.WriteLine($"Application with Id {application.Id} updated successfully.");
+                Console.WriteLine($"Application with Id {application.appId} updated successfully.");
             }
             else
             {

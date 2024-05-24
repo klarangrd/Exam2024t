@@ -36,7 +36,7 @@ p {
     color:black;
     text-decoration: none;
     padding: 5px;
-    transition: color 0.3s; /* Tilføjer en overgangseffekt for farveændring */
+    transition: color 0.3s; 
 }
 
 /*  Hover over links */

@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Core.Models;
 using Serverapi.Repositories;
+using Microsoft.Extensions.Hosting;
 
 namespace Serverapi.Repositories
 {
@@ -38,18 +39,22 @@ namespace Serverapi.Repositories
             return applications.ToArray();
         }
 
-        public async Task UpdateApplication(Application application)
-        {
-            var filter = Builders<Application>.Filter.Eq(a => a.appId, application.appId);
-            var result = await _collection.ReplaceOneAsync(filter, application);
-            if (result.IsAcknowledged && result.ModifiedCount > 0)
-            {
-                Console.WriteLine($"Application with Id {application.appId} updated successfully.");
-            }
-            else
-            {
-                Console.WriteLine("No application found to update.");
-            }
+        public async Task UpdateApplication(int id, Application application) 
+        { 
+        
+            var filter = Builders<Application>.Filter.Eq(a => a.appId, id);
+            var update = Builders<Application>.Update
+
+                        .Set(a => a.IsApproved, application.IsApproved)
+                        .Set(a => a.FirstpriorityWeek, application.FirstpriorityWeek)
+                        .Set(a => a.FirstpriorityPeriod, application.FirstpriorityPeriod)
+                        .Set(a => a.Child.ChildName, application.Child.ChildName)
+                        .Set(a => a.Child.ChildAge, application.Child.ChildAge)
+                        .Set(a => a.Child.ClothingSize, application.Child.ClothingSize)
+                        .Set(a => a.Child.Volunteer.Name, application.Child.Volunteer.Name)
+                        .Set(a => a.Child.Volunteer.Kræwnr, application.Child.Volunteer.Kræwnr)
+                        .Set(a => a.Child.Volunteer.Email, application.Child.Volunteer.Email);
+            _collection.UpdateOne(filter, update);
         }
 
         public async Task<Application[]> GetQueuedApplications()

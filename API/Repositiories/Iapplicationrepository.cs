@@ -10,7 +10,7 @@ namespace Serverapi.Repositories
 
         Task Add(Application application);
 
-        Task UpdateApplication(Application application);
+        Task UpdateApplication(int id, Application application);
 
         Task<Application[]> GetApprovedApplications();
 

@@ -26,9 +26,9 @@ namespace Exam2024t.Services
             await http.PostAsJsonAsync($"{serverUrl}/add", application);
         }
 
-        public async Task UpdateApplication(Application application)
+        public async Task UpdateApplication(int id, Application application)
         {
-            await http.PutAsJsonAsync($"{serverUrl}/update", application);
+            await http.PutAsJsonAsync($"{serverUrl}/update/{id}", application);
         }
 
         public async Task<Application[]> GetApprovedApplications()

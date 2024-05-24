@@ -19,8 +19,18 @@ namespace Exam2024t.Services
         public async Task<bool> CheckLoginAsync(string username, string password)
         {
             var response = await _httpClient.GetAsync($"/api/admins/checklogin?username={username}&password={password}");
-            return response.IsSuccessStatusCode;
+            if (response.IsSuccessStatusCode)
+            {
+                _currentAdmin = new Admin
+                {
+                    Username = username
+                    // Populate other fields if necessary. This depends on what your API returns.
+                };
+                return true;
+            }
+            return false;
         }
+
 
         public Task<Admin> GetCurrentAdmin()
         {

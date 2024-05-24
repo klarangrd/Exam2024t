@@ -9,7 +9,7 @@ namespace Exam2024t.Services
     {
         private static List<Admin> Admins = new List<Admin>()
         {
-            new Admin { Name="Klara N", Email="klara@example.dk", Username="klara1", Password="banan1" },
+            new Admin { Name="Klara N", Email="klar0905@gmail.com", Username="klara1", Password="banan1" },
             new Admin { Name="Magnus", Email="mag@example.dk", Username="magnus1", Password="magnus1" },
         };
 

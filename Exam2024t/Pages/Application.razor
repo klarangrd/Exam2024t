@@ -23,13 +23,13 @@
         </tr>
     </thead>
     <tbody>
-        @foreach (var week in predefinedWeeks)//colour coordintion logic
+        @foreach (var week in predefinedWeeks)
         {
             var applicationCount = weekApplicationCounts.ContainsKey(week) ? weekApplicationCounts[week] : 0;
             <tr class="@(GetWeekColumnClass(applicationCount))">
                 <th>@week</th>
                 <td>3. juli - 5.juli</td>
-                <td>6. juli - 7 juli</td>
+                <td>6. juli - 7. juli</td>
                 <td>3.juli - 7. juli</td>
             </tr>
         }
@@ -317,20 +317,20 @@
         alertDialog?.Open();
     }
 
-    //method to get CSS class based on application count
-    private string GetWeekColumnClass(int applicationCount)
-    {
-        if (applicationCount < 5)
+        //method to get CSS class based on application count
+        private string GetWeekColumnClass(int applicationCount)
         {
-            return "green";
+            if (applicationCount < 20)
+            {
+                return "green";
+            }
+            else if (applicationCount <= 45)
+            {
+                return "yellow";
+            }
+            else
+            {
+                return "red";
+            }
         }
-        else if (applicationCount <= 15)
-        {
-            return "yellow";
-        }
-        else
-        {
-            return "red";
-        }
-    }
 }

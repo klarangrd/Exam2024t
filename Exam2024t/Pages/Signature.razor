@@ -54,6 +54,8 @@
             </tbody>
         </table>
 }
+<NavLink href="/application"> <button>Tilmeld et barn mere</button> </NavLink>
+
 
     <ModalDialog @ref="addDialog" Title="Underskriv applikation">
         <EditForm EditContext="@aEditContext" class="application-form" OnValidSubmit="@HandleValidSubmit">
@@ -235,6 +237,8 @@
         StateHasChanged();
     }
 
+
+    }
 
     private SignaturePadOptions _options = new SignaturePadOptions
     {

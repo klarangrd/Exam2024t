@@ -6,7 +6,6 @@
 @using System.Text
 @inject NavigationManager NavigationManager
 @inject IAdminService AdminService
-@inject ISignatureService SignatureService
 
 <PageTitle>Admin Dashboard</PageTitle>
 
@@ -17,8 +16,7 @@
 {
     <div>
         <p>Brugernavn: @currentAdmin.Username</p>
-        <p>Navn: @currentAdmin.Name</p>
-        <p>Email: @currentAdmin.Email</p>
+
     </div>
     <button class="btn btn-primary" @onclick="Logout">Log ud</button>     <!--logout button-->
 }
@@ -163,7 +161,7 @@ else
                             <button @onclick="() => ShowQueuedApplicationDetails(application)">Se detaljer</button><!--button to see queued application details-->
                         </td>
                         <td>
-                            <button @onclick="() => DeleteApplication(application.Id)" class="btn btn-danger">🗑️</button><!--button to delete queued application-->
+                            <button @onclick="() => DeleteApplication(application.appId)" class="btn btn-danger">🗑️</button><!--button to delete queued application-->
                         </td>
                     </tr>
                 }
@@ -394,9 +392,9 @@ else
         selectedOptionPeriode1 = e.Value?.ToString() ?? "null";
     }
 
-    private async Task DeleteApplication(ObjectId applicationId)//method to delete an application
+    private async Task DeleteApplication(int appId)//method to delete an application
     {
-        await applicationService.DeleteApplication(applicationId);
+        await applicationService.DeleteApplication(appId);
         queuedApplications = await applicationService.GetQueuedApplications();
         Applicationlistcopy = queuedApplications.ToArray();
         FilterAndSort();
@@ -406,36 +404,44 @@ else
     {
         if (selectedApplication != null)
         {
-            await applicationService.UpdateApplication(selectedApplication);
+            await applicationService.UpdateApplication(selectedApplication.appId, selectedApplication);
             EditDialog.Close();
         }
     }
 
-    private async Task ApproveApplication()//approving the application and sending it to the approved box
+    private async Task ApproveApplication()
     {
-        if (selectedApplication != null)
+        try
         {
-            selectedApplication.IsApproved = true;
-            await applicationService.UpdateApplication(selectedApplication);
+            if (selectedApplication != null)
+            {
+                selectedApplication.IsApproved = true;
+                await applicationService.UpdateApplication(selectedApplication.appId, selectedApplication);
 
-            //refreshing the application lists after approval
-            queuedApplications = await applicationService.GetQueuedApplications();
-            approvedApplications = await applicationService.GetApprovedApplications();
+                // Refreshing the application lists after approval
+                queuedApplications = await applicationService.GetQueuedApplications();
+                approvedApplications = await applicationService.GetApprovedApplications();
 
-            Applicationlistcopy = queuedApplications.ToArray();
-            FilterAndSort();
+                // Update the local copy of applications
+                Applicationlistcopy = queuedApplications.ToArray();
 
-            EditDialog.Close();
+                // Apply filtering and sorting
+                FilterAndSort();
+
+                // Close the edit dialog
+                EditDialog.Close();
+            }
+        }
+        catch (Exception ex)
+        {
+            // Handle any potential exceptions here
+            Console.WriteLine($"Error approving application: {ex.Message}");
+            // Optionally, you can show an error message to the user
         }
     }
 
-    private async Task UpdateApplication(Core.Models.Application application)
-    {
-        await applicationService.UpdateApplication(application);
-        approvedApplications = await applicationService.GetApprovedApplications(); //refresh the approved applications list
-    }
 
-    private void FilterAndSort()//filtering and sorting the applications by certain things
+    private void FilterAndSort()//filtering and sorting the applications by certain things 
     {
         if (Applicationlistcopy != null)
         {

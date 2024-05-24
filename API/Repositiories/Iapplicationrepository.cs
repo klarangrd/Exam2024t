@@ -1,9 +1,10 @@
-﻿using Core.Models;
+﻿using Core;
+using Core.Models;
 using MongoDB.Bson;
 
-namespace Exam2024t.Services
+namespace Serverapi.Repositories
 {
-    public interface IApplicationService
+    public interface Iapplicationrepository
     {
         Task<Application[]> GetAllApplications();
 
@@ -11,12 +12,11 @@ namespace Exam2024t.Services
 
         Task UpdateApplication(int id, Application application);
 
-        public Task<Application[]> GetApprovedApplications();
+        Task<Application[]> GetApprovedApplications();
 
         Task<Application[]> GetQueuedApplications();
 
-        Task DeleteApplication(int Id);
+        void DeleteApplication(int Id);
 
     }
 }
-

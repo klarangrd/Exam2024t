@@ -1,32 +1,26 @@
 ﻿using Core.Models;
+using Exam2024t.Pages;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Http;
 using System.Threading.Tasks;
 
 namespace Exam2024t.Services
 {
     public class AdminServiceInMemory : IAdminService
     {
-        private static List<Admin> Admins = new List<Admin>()
+        private static List<Core.Models.Admin> Admins = new List<Core.Models.Admin>()
         {
             new Admin { Name="Klara N", Email="klar0905@gmail.com", Username="klara1", Password="banan1" },
             new Admin { Name="Magnus", Email="mag@example.dk", Username="magnus1", Password="magnus1" },
+            */
         };
 
-        private Admin _currentAdmin;
+        private Core.Models.Admin _currentAdmin;
 
-        public Task<bool> LoginAdmin(string username, string password)
-        {
-            var admin = Admins.FirstOrDefault(a => a.Username == username && a.Password == password);
-            if (admin != null)
-            {
-                _currentAdmin = admin;
-                return Task.FromResult(true);
-            }
-            return Task.FromResult(false);
-        }
+        
 
-        public Task<Admin> GetCurrentAdmin()
+        public Task<Core.Models.Admin> GetCurrentAdmin()
         {
             return Task.FromResult(_currentAdmin);
         }
@@ -37,9 +31,15 @@ namespace Exam2024t.Services
             return Task.CompletedTask;
         }
 
-        public Task<Admin[]> GetAllAdmin()
+        public Task<Core.Models.Admin[]> GetAllAdmin()
         {
             return Task.FromResult(Admins.ToArray());
+        }
+
+
+        public async Task<bool> CheckLoginAsync(string username, string password)
+        {
+            return true;
         }
     }
 }

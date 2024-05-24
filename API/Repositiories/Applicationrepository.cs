@@ -1,80 +1,82 @@
-﻿using MongoDB.Driver;
-using MongoDB.Bson;
-using MongoDB.Driver.Core.Configuration;
-using System.Net.NetworkInformation;
-using Core;
-using Serverapi.Repositories;
+﻿using MongoDB.Bson;
+using MongoDB.Driver;
+using System.Linq;
+using System.Threading.Tasks;
 using Core.Models;
+using Serverapi.Repositories;
+using Microsoft.Extensions.Hosting;
 
-namespace Serverapi.repositories
+namespace Serverapi.Repositories
 {
-
-    public class Applicationrepository : Iapplycationrepository
+    public class ApplicationRepository : Iapplicationrepository
     {
+        private const string connectionString = "mongodb+srv://magnusbbb:eksamenmagnus@eksamensprojekt.rpap7va.mongodb.net/";
+        private readonly IMongoClient _mongoClient;
+        private readonly IMongoDatabase _database;
+        private readonly IMongoCollection<Application> _collection;
 
-        const string connectionstring = "mongodb+srv://magnusbbb:eksamenmagnus@eksamensprojekt.rpap7va.mongodb.net/";
-
-        //MongoClientSettings settings = MongoClientSettings.FromConnectionString(connectionUri);
-
-        IMongoClient mongoClient;
-
-        IMongoDatabase database;
-
-        IMongoCollection<Application> collection;
-
-
-
-        public Applicationrepository()
+        public ApplicationRepository()
         {
-
-            mongoClient = new MongoClient(connectionstring);
-
-            database = mongoClient.GetDatabase("Circussummarum");
-
-            collection = database.GetCollection<Application>("Applications");
-
+            _mongoClient = new MongoClient(connectionString);
+            _database = _mongoClient.GetDatabase("Circussummarum");
+            _collection = _database.GetCollection<Application>("Applications");
         }
 
-        public void AddItem(Application item)
+        public async Task Add(Application application)
         {
+            await _collection.InsertOneAsync(application);
             var max = 0;
-            if (collection.Count(Builders<Application>.Filter.Empty) > 0)
+            if (_collection.Count(Builders<Application>.Filter.Empty) > 0)
             {
-                max = collection.Find(Builders<Application>.Filter.Empty).SortByDescending(r => r.Child.ChildId).Limit(1).ToList()[0].Child.ChildId;
+                max = _collection.Find(Builders<Application>.Filter.Empty).SortByDescending(r => r.appId).Limit(1).ToList()[0].appId;
             }
-            item.Child.ChildId = max + 1;
-
-            collection.InsertOne(item);
+            application.appId = max + 1;
         }
 
-        public void DeleteById(int id)
+        public async Task<Application[]> GetAllApplications()
         {
-
+            var applications = await _collection.Find(new BsonDocument()).ToListAsync();
+            return applications.ToArray();
         }
 
-        public List<Application> GetAll()
+        public async Task UpdateApplication(int id, Application application) 
+        { 
+        
+            var filter = Builders<Application>.Filter.Eq(a => a.appId, id);
+            var update = Builders<Application>.Update
+
+                        .Set(a => a.IsApproved, application.IsApproved)
+                        .Set(a => a.FirstpriorityWeek, application.FirstpriorityWeek)
+                        .Set(a => a.FirstpriorityPeriod, application.FirstpriorityPeriod)
+                        .Set(a => a.Child.ChildName, application.Child.ChildName)
+                        .Set(a => a.Child.ChildAge, application.Child.ChildAge)
+                        .Set(a => a.Child.ClothingSize, application.Child.ClothingSize)
+                        .Set(a => a.Child.Volunteer.Name, application.Child.Volunteer.Name)
+                        .Set(a => a.Child.Volunteer.Kræwnr, application.Child.Volunteer.Kræwnr)
+                        .Set(a => a.Child.Volunteer.Email, application.Child.Volunteer.Email);
+            _collection.UpdateOne(filter, update);
+        }
+
+        public async Task<Application[]> GetQueuedApplications()
         {
-            return collection.Find(Builders<Application>.Filter.Empty).ToList();
+            var filter = Builders<Application>.Filter.Eq(a => a.IsApproved, false);
+            var applications = await _collection.Find(filter).ToListAsync();
+            Console.WriteLine($"Fetched {applications.Count} Queued Applications");
+            return applications.ToArray();
         }
 
-        /*
-        public void UpdateItem(Application item)
+        public async Task<Application[]> GetApprovedApplications()
         {
-
+            var filter = Builders<Application>.Filter.Eq(a => a.IsApproved, true);
+            var applications = await _collection.Find(filter).ToListAsync();
+            Console.WriteLine($"Fetched {applications.Count} Approved Applications");
+            return applications.ToArray();
         }
-        */
-        /*
 
-        public void AddApplication(Application newapplication)
+        public void DeleteApplication(int Id)
         {
-            collection.InsertOne(newapplication);
+            var filter = Builders<Application>.Filter.Eq(a => a.appId, Id);
+            _collection.DeleteOne(filter);
         }
-        */
     }
 }
-
-
-
-
-
-

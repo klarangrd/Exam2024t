@@ -46,7 +46,7 @@
         <div class="form-group row">
             <label for="ChildName" class="col-md-4 col-form-label">Navn Barn</label>
             <div class="col-md-4">
-                <InputText id="ChildName" @bind-Value="application.Child.ChildName" class="form-control" placeholder="navn" />
+                <InputText id="ChildName" @bind-Value="application.Child.ChildName" class="form-control" placeholder="navn" required />
                 <ValidationMessage For="@(() => application.Child.ChildName)" />
             </div>
         </div>
@@ -60,10 +60,15 @@
         </div>
 
         <div class="form-group row">
-            <label for="Clothingsize" class="col-md-4 col-form-label">Tøj størrelse</label>
+            <label for="SecondPriorityWeek" class="col-md-4 col-form-label">Tøj størrelse</label>
             <div class="col-md-4">
-                <InputText id="Clothingsize" @bind-Value="application.Child.ClothingSize" class="form-control" placeholder="fx M" />
-                <ValidationMessage For="@(() => application.Child.ClothingSize)" />
+                <InputSelect id="SecondPriorityWeek" @bind-Value="application.Child.ClothingSize" class="form-control" >
+                    @foreach (var anOption in clohtingsize)
+                    {
+                        <option value="@anOption"> @anOption</option>
+                    }
+                </InputSelect>
+                <ValidationMessage For="@(() => application.SecondpriorityWeek)" />
             </div>
         </div>
 
@@ -129,14 +134,14 @@
         <div class="form-group row">
             <label for="Interests" class="col-md-4 col-form-label">Interesser</label>
             <div class="col-md-4">
-                <InputText id="Interests" @bind-Value="application.Child.Interest" class="form-control" placeholder="fx sportsgrene, lege " />
+                <InputText id="Interests" @bind-Value="application.Child.Interest" class="form-control" placeholder="fx sportsgrene, lege" required />
             </div>
         </div>
 
         <div class="form-group row">
             <label for="Comment" class="col-md-4 col-form-label">Kommentarer</label>
             <div class="col-md-4">
-                <InputText id="Comment" @bind-Value="application.Child.Comment" class="form-control" placeholder="fx sygdomme, allergier" />
+                <InputText id="Comment" @bind-Value="application.Child.Comment" class="form-control" placeholder="fx sygdomme, allergier" required />
             </div>
         </div>
 
@@ -154,7 +159,7 @@
         <div class="form-group row">
             <label for="VolunteerNavn" class="col-md-4 col-form-label">Navn</label>
             <div class="col-md-4">
-                <InputText id="VolunteerNavn" @bind-Value="application.Child.Volunteer.Name" class="form-control" placeholder="navn" />
+                <InputText id="VolunteerNavn" @bind-Value="application.Child.Volunteer.Name" class="form-control" placeholder="navn" required />
                 <ValidationMessage For="@(() => application.Child.Volunteer.Name)" />
             </div>
         </div>
@@ -162,7 +167,7 @@
         <div class="form-group row">
             <label for="VolunteerEmail" class="col-md-4 col-form-label">Email</label>
             <div class="col-md-4">
-                <InputText id="VolunteerEmail" @bind-Value="application.Child.Volunteer.Email" class="form-control" placeholder="email" />
+                <InputText id="VolunteerEmail" @bind-Value="application.Child.Volunteer.Email" class="form-control" placeholder="email" required />
                 <ValidationMessage For="@(() => application.Child.Volunteer.Email)" />
             </div>
         </div>
@@ -172,6 +177,13 @@
             <div class="col-md-4">
                 <InputNumber id="Kræwnr" @bind-Value="application.Child.Volunteer.Kræwnr" class="form-control" placeholder="krævnr" />
                 <ValidationMessage For="@(() => application.Child.Volunteer.Kræwnr)" />
+            </div>
+        </div>
+        <div class="form-group row">
+            <label for="vilkårogbetingelser" class="col-md-4 col-form-label">Jeg accepterer vilkår og betingelser</label>
+            <div class="col-md-4">
+                <input type="checkbox" id="vilkårogbetingelser" required />
+                <div class="invalid-feedback">Please accept the terms and conditions.</div>
             </div>
         </div>
 
@@ -204,6 +216,7 @@
     string selectedOptionUge2 = "Vælg";
     string selectedOptionPeriode1 = "Vælg";
     string selectedOptionPeriode2 = "Vælg";
+    string[] clohtingsize = { "Vælg", "98", "104", "110", "116", "122", "128", "134", "134", "146", "152", "158", "164", "170", "176", "188" };
 
     Core.Models.Application application = new Core.Models.Application();
     List<Core.Models.Application> applicationList = new List<Core.Models.Application>();//list to hold the application counts for each week and period
@@ -265,6 +278,7 @@
     {
         selectedOptionPeriode2 = e.Value?.ToString() ?? "null";
     }
+   
 
     // Dialog handling methods
     private void OnClickAddDialog()

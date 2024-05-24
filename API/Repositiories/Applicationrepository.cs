@@ -24,13 +24,14 @@ namespace Serverapi.Repositories
 
         public async Task Add(Application application)
         {
-            await _collection.InsertOneAsync(application);
             var max = 0;
-            if (_collection.Count(Builders<Application>.Filter.Empty) > 0)
+            if (_collection.CountDocuments(Builders<Application>.Filter.Empty) > 0)
             {
                 max = _collection.Find(Builders<Application>.Filter.Empty).SortByDescending(r => r.appId).Limit(1).ToList()[0].appId;
             }
             application.appId = max + 1;
+
+            await _collection.InsertOneAsync(application);
         }
 
         public async Task<Application[]> GetAllApplications()
@@ -39,12 +40,10 @@ namespace Serverapi.Repositories
             return applications.ToArray();
         }
 
-        public async Task UpdateApplication(int id, Application application) 
-        { 
-        
+        public async Task UpdateApplication(int id, Application application)
+        {
             var filter = Builders<Application>.Filter.Eq(a => a.appId, id);
             var update = Builders<Application>.Update
-
                         .Set(a => a.IsApproved, application.IsApproved)
                         .Set(a => a.FirstpriorityWeek, application.FirstpriorityWeek)
                         .Set(a => a.FirstpriorityPeriod, application.FirstpriorityPeriod)
@@ -54,8 +53,10 @@ namespace Serverapi.Repositories
                         .Set(a => a.Child.Volunteer.Name, application.Child.Volunteer.Name)
                         .Set(a => a.Child.Volunteer.Kræwnr, application.Child.Volunteer.Kræwnr)
                         .Set(a => a.Child.Volunteer.Email, application.Child.Volunteer.Email);
-            _collection.UpdateOne(filter, update);
+
+            await _collection.UpdateOneAsync(filter, update);
         }
+
 
         public async Task<Application[]> GetQueuedApplications()
         {

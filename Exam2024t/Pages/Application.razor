@@ -179,8 +179,21 @@
                 <ValidationMessage For="@(() => application.Child.Volunteer.Kræwnr)" />
             </div>
         </div>
+
         <div class="form-group row">
-            <label for="vilkårogbetingelser" class="col-md-4 col-form-label">Jeg accepterer vilkår og betingelser</label>
+            <label for="ParentInformation" class="col-md-4 col-form-label">Tilmeld dig nyhedsbrev!</label>
+        </div>
+
+        <div class="form-group row">
+            <label for="nyhedsbrev" class="col-md-4 col-form-label">Jeg vil gerne tilmelde mig nyhedsbrevet</label>
+            <div class="col-md-4">
+                <InputCheckbox id="nyhedsbrev" @bind-Value="application.Issignedupfornewsletter"  />
+            </div>
+        </div>
+
+
+        <div class="form-group row">
+            <label for="vilkårogbetingelser" class="col-md-4 col-form-label"> Jeg accepterer <a href="/Police">vilkår og betingelser</a></label>
             <div class="col-md-4">
                 <input type="checkbox" id="vilkårogbetingelser" required />
                 <div class="invalid-feedback">Please accept the terms and conditions.</div>
@@ -322,7 +335,8 @@
                 FirstpriorityPeriod = application.FirstpriorityPeriod,
                 SecondpriorityWeek = application.SecondpriorityWeek,
                 SecondpriorityPeriod = application.SecondpriorityPeriod,
-                IsVolunteer = application.IsVolunteer
+                IsVolunteer = application.IsVolunteer,
+                Issignedupfornewsletter = application.Issignedupfornewsletter
             });
 
         await localStore.SetItemAsync("applicationList", applicationList);
@@ -347,4 +361,8 @@
                 return "red";
             }
         }
+
+    
 }
+
+

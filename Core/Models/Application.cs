@@ -39,6 +39,8 @@ namespace Core.Models
 
         public bool IsApproved { get; set; }
 
+        public bool Issignedupfornewsletter { get; set; }
+
         public Child Child { get; set; }
 
         public  Signature Signature { get; set; }

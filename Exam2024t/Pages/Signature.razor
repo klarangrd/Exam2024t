@@ -105,6 +105,15 @@
                 {
                     <p><strong>Frivillig?:</strong> Nej</p>
                 }
+
+            @if (selectedApplication.Issignedupfornewsletter)
+            {
+                <p><strong>Tilmeldt nyhedsbrev?:</strong> Ja</p>
+            }
+            else
+            {
+                <p><strong>Tilmeldt nyhedsbrev?:</strong> Nej</p>
+            }
               
                 <p><strong>Førsteprioritets uge:</strong> @selectedApplication.FirstpriorityWeek</p>
                 <p><strong>Førsteprioritets periode:</strong> @selectedApplication.FirstpriorityPeriod</p>
@@ -202,6 +211,7 @@
                     FirstpriorityPeriod = selectedApplication.FirstpriorityPeriod,
                     SecondpriorityWeek = selectedApplication.SecondpriorityWeek,
                     SecondpriorityPeriod = selectedApplication.SecondpriorityPeriod,
+                    Issignedupfornewsletter = application.Issignedupfornewsletter
 
                 };
 

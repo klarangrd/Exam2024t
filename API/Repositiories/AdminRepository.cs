@@ -39,24 +39,6 @@ namespace Serverapi.Repositories
             return _collection.Find(Builders<Admin>.Filter.Empty).ToList();
         }
 
-        /*
-        public async Task<bool> LoginAdmin(string username, string password)
-        {
-            var filter = Builders<Admin>.Filter.And(
-                Builders<Admin>.Filter.Eq(a => a.Username, username),
-                Builders<Admin>.Filter.Eq(a => a.Password, password)
-            );
-
-            var admin = await _collection.Find(filter).FirstOrDefaultAsync();
-            if (admin != null)
-            {
-                _currentAdmin = admin;
-                return true;
-            }
-            return false;
-        }
-        */
-
         public async Task<bool> CheckLoginAsync(string username, string password)
         {
             var filter = Builders<Admin>.Filter.And(

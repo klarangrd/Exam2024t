@@ -416,13 +416,19 @@ else
             if (selectedApplication != null)
             {
                 selectedApplication.IsApproved = true;
+
+                // Update the application in the database
                 await applicationService.UpdateApplication(selectedApplication.appId, selectedApplication);
 
-                // Refreshing the application lists after approval
-                queuedApplications = await applicationService.GetQueuedApplications();
-                approvedApplications = await applicationService.GetApprovedApplications();
+                // Remove the approved application from the queued applications list
+                queuedApplications = queuedApplications.Where(a => a.appId != selectedApplication.appId).ToArray();
 
-                // Update the local copy of applications
+                // Append the approved application to the approved applications list
+                var approvedApplicationsList = approvedApplications.ToList();
+                approvedApplicationsList.Add(selectedApplication);
+                approvedApplications = approvedApplicationsList.ToArray();
+
+                // Update the local copy of applications for filtering and sorting
                 Applicationlistcopy = queuedApplications.ToArray();
 
                 // Apply filtering and sorting
@@ -440,13 +446,16 @@ else
         }
     }
 
+
+
+
     private async Task UpdateApplication(int id, Core.Models.Application application)
     {
         await applicationService.UpdateApplication(id, application);
-        approvedApplications = await applicationService.GetApprovedApplications(); // Refresh the approved applications list
+        approvedApplications = await applicationService.GetApprovedApplications(); //refresh the approved applications list
     }
 
-    private void FilterAndSort()//filtering and sorting the applications by certain things 
+    private void FilterAndSort()//filtering and sorting the applications by certain things
     {
         if (Applicationlistcopy != null)
         {
@@ -512,4 +521,5 @@ else
         }
     }
 }
+
 

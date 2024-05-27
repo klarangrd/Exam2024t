@@ -86,8 +86,8 @@ else
                                 }
                             </tbody>
                         </table>
-                        <button @onclick="() => ShowEmailModal(week, period)" class="btn btn-primary">Get emails</button>
                     }
+                    <button @onclick="() => ShowEmailModal(week)" class="btn btn-primary">Get emails</button>
 
                 </div>
             }
@@ -99,7 +99,7 @@ else
     @if (emailApplications != null)
     {
         <div>
-            <h5>Emails for @selectedWeek and @selectedPeriod</h5>
+            <h5>Emails for @selectedWeek</h5>
             <ul>
                 @foreach (var application in emailApplications)
                 {
@@ -372,11 +372,10 @@ else
         EditDialog.Open();
     }
 
-    private void ShowEmailModal(string week, string period)
+    private void ShowEmailModal(string week)
     {
         selectedWeek = week;
-        selectedPeriod = period;
-        emailApplications = approvedApplications.Where(a => a.FirstpriorityWeek == week && a.FirstpriorityPeriod == period).ToArray();
+        emailApplications = approvedApplications.Where(a => a.FirstpriorityWeek == week).ToArray();
         EmailDialog.Open();
     }
 

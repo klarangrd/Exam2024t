@@ -18,5 +18,7 @@ namespace Serverapi.Repositories
 
         void DeleteApplication(int Id);
 
+        Task<List<string>> GetVolunteerEmails();
+
     }
 }

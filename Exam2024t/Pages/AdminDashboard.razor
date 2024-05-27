@@ -300,7 +300,22 @@ else
     }
 </ModalDialog>
 
+<button @onclick="shownewsletterdialog" class="btn btn-primary">vis folk der er tilmedt nyhedsbrevet</button>
 
+<ModalDialog @ref="newsletterdialog" Title="Emails List">
+    @if (emailsnewsletter != null)
+    {
+        <div>
+            <ul>
+                @foreach (var email in emailsnewsletter)
+                {
+                    <li>@email</li>
+                }
+            </ul>
+            <button @onclick="() => newsletterdialog.Close()" class="btn btn-secondary">Luk</button>
+        </div>
+    }
+</ModalDialog>
 
 @code {
     //setting up admin
@@ -316,6 +331,11 @@ else
     private ModalDialog DetailsDialog;
     private ModalDialog EditDialog;
     private ModalDialog EmailDialog;
+
+    //newsletteridalog og newsletter
+    private List<string> emailsnewsletter;
+
+    private ModalDialog newsletterdialog;
 
     private bool showQueuedApplications = false;
     private bool showApprovedApplications = false;
@@ -523,6 +543,18 @@ else
         {
             return "red";
         }
+    }
+
+
+    public async void shownewsletterdialog()
+    {
+        await LoadEmails();
+        newsletterdialog.Open();
+    }
+
+    private async Task LoadEmails()
+    {
+        emailsnewsletter = await applicationService.GetVolunteerEmails();
     }
 }
 

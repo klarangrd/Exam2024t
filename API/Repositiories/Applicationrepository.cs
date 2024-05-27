@@ -79,5 +79,25 @@ namespace Serverapi.Repositories
             var filter = Builders<Application>.Filter.Eq(a => a.appId, Id);
             _collection.DeleteOne(filter);
         }
+
+
+
+        //mails til alle der har issignedupfornewsletter = true
+        public async Task<List<string>> GetVolunteerEmails()
+        {
+            var filter = Builders<Application>.Filter.And(
+                Builders<Application>.Filter.Eq(app => app.Issignedupfornewsletter, true)
+            );
+
+            var applications = await _collection.Find(filter).ToListAsync();
+
+            var emails = applications
+                .Select(app => app.Child?.Volunteer?.Email)
+                .Where(email => !string.IsNullOrEmpty(email))
+                .ToList();
+
+            return emails;
+        }
+
     }
 }

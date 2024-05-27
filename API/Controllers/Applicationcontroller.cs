@@ -84,5 +84,12 @@ namespace Serverapi.Controllers
            _appRepository.DeleteApplication(id);
         }
 
+        [HttpGet("newsletter")]
+        public async Task<IActionResult> GetVolunteerEmails()
+        {
+            var emails = await _appRepository.GetVolunteerEmails();
+            return Ok(emails);
+        }
+
     }
 }

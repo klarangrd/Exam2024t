@@ -508,6 +508,11 @@ else
             {
                 filteredApplications = filteredApplications.Where(application => application.IsVolunteer);
             }
+
+            if (!showOnlyVolunteers)
+            {
+                filteredApplications = filteredApplications.Where(application => !application.IsVolunteer);
+            }
             
             
 

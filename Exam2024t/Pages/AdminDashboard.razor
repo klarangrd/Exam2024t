@@ -133,6 +133,7 @@ else
                     <option value="@anOption">@anOption</option>
                 }
             </InputSelect>
+            <InputCheckbox></InputCheckbox>
             <button @onclick="FilterAndSort">Filtrer & Sorter</button>
         </div>
 
@@ -168,6 +169,8 @@ else
             </tbody>
         </table>
     }
+
+
 </div>
 
 <ModalDialog @ref="DetailsDialog" Title="Application Details">
@@ -296,6 +299,8 @@ else
         </EditForm>
     }
 </ModalDialog>
+
+
 
 @code {
     //setting up admin

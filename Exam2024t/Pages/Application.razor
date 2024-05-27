@@ -178,9 +178,20 @@
         <div class="form-group row">
             <label for="IsVolunteer" class="col-md-4 col-form-label">Vil du være frivillig? kun for 15-18 årige</label>
             <div class="col-md-4">
-                <InputCheckbox id="IsVolunteer" @bind-Value="application.IsVolunteer" />
+                <InputCheckbox id="IsVolunteer" @bind-Value="application.IsVolunteer" @onchange= "OnIsVolunteerChanged"  />
             </div>
         </div>
+
+        @if (showIsParent)
+        {
+            <div class="form-group row">
+                <label for="IsParent" class="col-md-4 col-form-label">Er den den frivillige barnets forældre?</label>
+                <div class="col-md-4">
+                    <InputCheckbox id="IsParent" @bind-Value="application.IsParent" class="form-control"  />
+              
+                </div>
+            </div>
+        }
 
         <div class="form-group row">
             <label for="ParentInformation" class="col-md-4 col-form-label">Forælder info</label>
@@ -326,7 +337,7 @@
     {
         selectedOptionPeriode2 = e.Value?.ToString() ?? "null";
     }
-   
+
 
     // Dialog handling methods
     private void OnClickAddDialog()
@@ -340,6 +351,15 @@
     private void GoToSignPage()
     {
         alertDialog?.Open();
+    }
+
+    private bool showIsParent = false;
+
+    // Method to handle IsVolunteer checkbox change
+    private void OnIsVolunteerChanged()
+    {
+        showIsParent = application.IsVolunteer;
+        StateHasChanged();
     }
 
     // Method to handle form submission

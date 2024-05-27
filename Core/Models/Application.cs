@@ -41,8 +41,7 @@ namespace Core.Models
 
         public bool Issignedupfornewsletter { get; set; }
 
-        public bool IsParent { get; set; }
-
+        
         public Child Child { get; set; }
 
         public  Signature Signature { get; set; }

@@ -17,6 +17,9 @@ namespace Exam2024t.Services
 
         Task DeleteApplication(int Id);
 
+        Task<List<string>> GetVolunteerEmails();
+
+
     }
 }
 

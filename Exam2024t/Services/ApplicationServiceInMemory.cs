@@ -1,11 +1,13 @@
 ﻿using Core.Models;
 using MongoDB.Bson;
+using MongoDB.Driver;
 using System.Diagnostics.Metrics;
 using System.Net.Http;
+using static System.Net.WebRequestMethods;
 
 namespace Exam2024t.Services
 {
-    public class ApplicationServiceInMemory : IApplicationService
+    public class ApplicationServiceInMemory //: IApplicationService
     {
         
         private static List<Application> Applications = new List<Application>(){ new Application
@@ -96,8 +98,7 @@ namespace Exam2024t.Services
          
         }
 
-       
-
+        
 
     }
 }

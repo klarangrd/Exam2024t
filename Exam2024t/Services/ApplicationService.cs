@@ -46,6 +46,11 @@ namespace Exam2024t.Services
             await http.DeleteAsync($"{serverUrl}/delete/{Id}");
         }
 
+        public async Task<List<string>> GetVolunteerEmails()
+        {
+            return await http.GetFromJsonAsync<List<string>>($"{serverUrl}/newsletter");
+        }
+
 
     }
 }

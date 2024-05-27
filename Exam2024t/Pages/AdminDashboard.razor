@@ -133,7 +133,9 @@ else
                     <option value="@anOption">@anOption</option>
                 }
             </InputSelect>
-            <InputCheckbox></InputCheckbox>
+            <label>
+                <input type="checkbox" @bind="showOnlyVolunteers" /> Vis kun frivillige
+            </label>
             <button @onclick="FilterAndSort">Filtrer & Sorter</button>
         </div>
 
@@ -479,7 +481,11 @@ else
         approvedApplications = await applicationService.GetApprovedApplications(); //refresh the approved applications list
     }
 
-    private void FilterAndSort()//filtering and sorting the applications by certain things
+    private bool showOnlyVolunteers = false;
+
+
+    //filtering and sorting the applications by certain things
+    private void FilterAndSort()
     {
         if (Applicationlistcopy != null)
         {
@@ -496,6 +502,14 @@ else
             {
                 filteredApplications = filteredApplications.Where(application => application.FirstpriorityPeriod == selectedPeriod);
             }
+
+            // Filter applications by volunteer status
+            if (showOnlyVolunteers)
+            {
+                filteredApplications = filteredApplications.Where(application => application.IsVolunteer);
+            }
+            
+            
 
             //sort filtered applications by volunteer name
             filteredAndSortedApplications = filteredApplications.OrderBy(application => application.Child.Volunteer.Name).ToArray();

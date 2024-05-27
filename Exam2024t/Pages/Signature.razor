@@ -41,12 +41,12 @@
 
                     </td>
                     <td>
-                        <button @onclick="() => ShowApplicationDetails(item)">Se detaljer</button>
+                        <button class="btn" @onclick="() => ShowApplicationDetails(item)">Se detaljer</button>
                     </td>
                     <td>
                         @if (@item.Signature.Signed)
                         {
-                            <button @onclick="() => ShowSignature(item.Signature.Sign)">Se underskrift</button>
+                            <button class="btn" @onclick="() => ShowSignature(item.Signature.Sign)">Se underskrift</button>
                         }
                     </td>
                 </tr>
@@ -54,7 +54,7 @@
             </tbody>
         </table>
 }
-<NavLink href="/Tilmelding"> <button>Tilmeld et barn mere</button> </NavLink>
+<NavLink href="/Tilmelding"> <button class="btn">Tilmeld et barn mere</button> </NavLink>
 
 
     <ModalDialog @ref="addDialog" Title="Underskriv applikation">
@@ -125,7 +125,7 @@
             </div>
             @if (!selectedApplication.Signature.Signed) // Show the button only if Signature is not signed
             {
-                <button class="btn btn-primary" @onclick="OnClickAddDialog">Underskriv applikation</button>
+                <button class="btn" @onclick="OnClickAddDialog">Underskriv applikation</button>
             }
         }
     </ModalDialog>

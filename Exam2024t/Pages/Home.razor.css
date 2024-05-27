@@ -53,7 +53,7 @@ h1 {
 }
 
 .centerimage {
-    width 50%
+    width: 50%;
 }
 
 .reglerbaggrund {
@@ -120,7 +120,7 @@ h1 {
     position: relative;
     inset: 0;
     cursor: pointer;
-    transform: rotateX(0), rotateY(0) rotateZ(0);
+    transform: rotateX(0) rotateY(0) rotateZ(0);
     display: inline-block;
     outline: 2px dashed transparent;
     transition: all 600ms ease;

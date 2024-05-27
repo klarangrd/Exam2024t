@@ -23,7 +23,7 @@
         </tr>
     </thead>
     <tbody>
-        @foreach (var week in predefinedWeeks)
+        @foreach (var week in uge_27)
         {
             var applicationCount = weekApplicationCounts.ContainsKey(week) ? weekApplicationCounts[week] : 0;
             <tr class="@(GetWeekColumnClass(applicationCount))">
@@ -31,6 +31,36 @@
                 <td>3. juli - 5.juli</td>
                 <td>6. juli - 7. juli</td>
                 <td>3.juli - 7. juli</td>
+            </tr>
+        }
+        @foreach (var week in uge_28)
+        {
+            var applicationCount = weekApplicationCounts.ContainsKey(week) ? weekApplicationCounts[week] : 0;
+            <tr class="@(GetWeekColumnClass(applicationCount))">
+                <th>@week</th>
+                <td>10. juli - 12.juli</td>
+                <td>13. juli - 14. juli</td>
+                <td>10.juli - 14. juli</td>
+            </tr>
+        }
+        @foreach (var week in uge_30)
+        {
+            var applicationCount = weekApplicationCounts.ContainsKey(week) ? weekApplicationCounts[week] : 0;
+            <tr class="@(GetWeekColumnClass(applicationCount))">
+                <th>@week</th>
+                <td>24. juli - 26.juli</td>
+                <td>27. juli - 28. juli</td>
+                <td>24.juli - 28. juli</td>
+            </tr>
+        }
+        @foreach (var week in uge_31)
+        {
+            var applicationCount = weekApplicationCounts.ContainsKey(week) ? weekApplicationCounts[week] : 0;
+            <tr class="@(GetWeekColumnClass(applicationCount))">
+                <th>@week</th>
+                <td>31. juli - 2.august</td>
+                <td>3. august - 4. august</td>
+                <td>31. juli - 4. august</td>
             </tr>
         }
     </tbody>
@@ -240,6 +270,11 @@
     private ModalDialog? alertDialog { get; set; }
 
     // Predefined weeks and periods
+    private readonly string[] uge_27 = { "Uge 27" };
+    private readonly string[] uge_28 = { "Uge 28" };
+    private readonly string[] uge_30 = { "Uge 30" };
+    private readonly string[] uge_31 = { "Uge 31" };
+
     private readonly string[] predefinedWeeks = { "Uge 27", "Uge 28", "Uge 30", "Uge 31" };
     private readonly string[] predefinedPeriods = { "Onsdag-Søndag", "Onsdag-Fredag", "Fredag-Søndag" };
 

@@ -84,7 +84,7 @@
         <div class="form-group row">
             <label for="ChildAge" class="col-md-4 col-form-label">Alder barn</label>
             <div class="col-md-4">
-                <InputNumber id="ChildAge" @bind-Value="application.Child.ChildAge" class="form-control" placeholder="Alder" />
+                <InputNumber id="ChildAge" @bind-Value="application.Child.ChildAge" class="form-control" placeholder="Alder" required type="number" min="1" max="18" title="Alder skal være mellem 0-18 år" />
                 <ValidationMessage For="@(() => application.Child.ChildAge)" />
             </div>
         </div>
@@ -164,14 +164,14 @@
         <div class="form-group row">
             <label for="Interests" class="col-md-4 col-form-label">Interesser</label>
             <div class="col-md-4">
-                <InputText id="Interests" @bind-Value="application.Child.Interest" class="form-control" placeholder="fx sportsgrene, lege" required />
+                <InputText id="Interests" @bind-Value="application.Child.Interest" class="form-control" placeholder="fx sportsgrene, lege" />
             </div>
         </div>
 
         <div class="form-group row">
             <label for="Comment" class="col-md-4 col-form-label">Kommentarer</label>
             <div class="col-md-4">
-                <InputText id="Comment" @bind-Value="application.Child.Comment" class="form-control" placeholder="fx sygdomme, allergier" required />
+                <InputText id="Comment" @bind-Value="application.Child.Comment" class="form-control" placeholder="fx sygdomme, allergier" />
             </div>
         </div>
 
@@ -212,7 +212,7 @@
                 }
             </label>
             <div class="col-md-4">
-                <InputNumber id="Kræwnr" @bind-Value="application.Child.Volunteer.Kræwnr" class="form-control" placeholder="krævnr" />
+                <InputNumber id="Kræwnr" @bind-Value="application.Child.Volunteer.Kræwnr" class="form-control" placeholder="krævnr" required type="number" min="1" max="80000" title="krævnr skal være 8 cifre." />
                 <ValidationMessage For="@(() => application.Child.Volunteer.Kræwnr)" />
             </div>
         </div>

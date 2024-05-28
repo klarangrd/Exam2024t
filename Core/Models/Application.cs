@@ -27,11 +27,11 @@ namespace Core.Models
         public string? FirstpriorityWeek { get; set; }
 
         //[RequiredDropdownSelection("Vælg", ErrorMessage = "Førsteprioritet Periode er påkrævet")] 
-       // [Required(ErrorMessage = "Førsteprioritet Periode er påkrævet.")]
+        //[Required(ErrorMessage = "Førsteprioritet Periode er påkrævet.")]
         public string? FirstpriorityPeriod { get; set; }
 
         //[RequiredDropdownSelection("Vælg", ErrorMessage = "Andenprioritet uge er påkrævet")] 
-       // [Required(ErrorMessage = "Andenprioritet uge er påkrævet.")]
+        //[Required(ErrorMessage = "Andenprioritet uge er påkrævet.")]
         public string? SecondpriorityWeek { get; set; }
 
         //[RequiredDropdownSelection("Vælg", ErrorMessage = "Andenprioritet Periode er påkrævet")] 

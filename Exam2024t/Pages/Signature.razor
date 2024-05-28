@@ -144,14 +144,14 @@
     private IApplicationService mService { get; set; }
     private bool isModalVisible = false;
     private string? signatureImageUrl;
- 
+
     private Core.Models.Application? selectedApplication;
     private ModalDialog DetailsDialog;
     private ModalDialog SignatureDialog;
     private EditContext aEditContext;
     private ModalDialog? addDialog { get; set; }
 
-     
+
 
     protected override void OnInitialized()
     {
@@ -170,12 +170,12 @@
 
     private async Task ShowSignature(byte[] signatureBytes)
     {
-            // Convert the byte array to a base64 string
-            var stringBytes = Encoding.UTF8.GetString(signatureBytes);
-            
-            // Use the base64 string as an image source with the correct MIME type
-            signatureImageUrl = $"{stringBytes}";
-            SignatureDialog.Open();
+        // Convert the byte array to a base64 string
+        var stringBytes = Encoding.UTF8.GetString(signatureBytes);
+
+        // Use the base64 string as an image source with the correct MIME type
+        signatureImageUrl = $"{stringBytes}";
+        SignatureDialog.Open();
     }
 
 
@@ -240,8 +240,9 @@
         {
             Console.WriteLine("No signature captured.");
         }
-    
+
         await mService.Add(application);
+       
         addDialog?.Close();
         StateHasChanged();
     }

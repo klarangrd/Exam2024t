@@ -15,7 +15,7 @@ namespace Exam2024t.Services
             _httpClient = httpClient;
         }
 
-
+        //serviceklasse til at logge ind som admin
         public async Task<bool> CheckLoginAsync(string username, string password)
         {
             var response = await _httpClient.GetAsync($"/api/admins/checklogin?username={username}&password={password}");
@@ -24,7 +24,7 @@ namespace Exam2024t.Services
                 _currentAdmin = new Admin
                 {
                     Username = username
-                    // Populate other fields if necessary. This depends on what your API returns.
+                    
                 };
                 return true;
             }

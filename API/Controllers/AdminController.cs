@@ -19,7 +19,7 @@ namespace API.Controllers
         }
 
 
-        //test til userlofin fra genbrugsmarkedsprojekt
+        //admin login
         [HttpGet("checklogin")]
         public async Task<IActionResult> CheckLogin([FromQuery] string username, [FromQuery] string password)
         {

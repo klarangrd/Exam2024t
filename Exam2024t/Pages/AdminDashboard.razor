@@ -168,7 +168,7 @@ else
                             <button @onclick="() => ShowQueuedApplicationDetails(application)">Se detaljer</button><!--button to see queued application details-->
                         </td>
                         <td>
-                            <button @onclick="() => DeleteApplication(application.appId)" class="btn btn-danger">🗑️</button><!--button to delete queued application-->
+                            <button @onclick="() => DeleteApplicationconfirm(application.appId)" class="btn btn-danger">🗑️</button><!--button to delete queued application-->
                         </td>
                     </tr>
                 }
@@ -332,6 +332,12 @@ else
     }
 </ModalDialog>
 
+<ModalDialog @ref="Sletconfirm" Title="Bekræft sletning">
+    <p>Er du sikker på at du vil slette?</p>
+    <button @onclick="ConfirmDeleteApplication" class="btn btn-secondary">ja</button>
+    <button @onclick="() => Sletconfirm.Close()" class="btn btn-secondary">nej</button>
+</ModalDialog>
+
 @code {
     //setting up admin
     private Core.Models.Admin admin = new Core.Models.Admin();
@@ -346,6 +352,9 @@ else
     private ModalDialog DetailsDialog;
     private ModalDialog EditDialog;
     private ModalDialog EmailDialog;
+
+    //slette ting dialog
+    private ModalDialog Sletconfirm;
 
     //newsletteridalog og newsletter
     private List<string> emailsnewsletter;
@@ -460,13 +469,29 @@ else
         selectedOptionPeriode1 = e.Value?.ToString() ?? "null";
     }
 
+    private int ApplicationIdToDelete;
+
+    private void DeleteApplicationconfirm(int appId)//method to delete an application
+    {
+        ApplicationIdToDelete = appId;
+        Sletconfirm.Open();
+    }
+   
+    // Method to handle the actual deletion after confirmation
+    private async Task ConfirmDeleteApplication()
+    {
+        await DeleteApplication(ApplicationIdToDelete);
+    }
+    
     private async Task DeleteApplication(int appId)//method to delete an application
     {
         await applicationService.DeleteApplication(appId);
         queuedApplications = await applicationService.GetQueuedApplications();
         Applicationlistcopy = queuedApplications.ToArray();
         FilterAndSort();
+        Sletconfirm.Close();
     }
+    
 
     private async Task HandleEditApplication()//handling the editing of an application
     {

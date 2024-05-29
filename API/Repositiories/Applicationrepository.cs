@@ -3,8 +3,7 @@ using MongoDB.Driver;
 using System.Linq;
 using System.Threading.Tasks;
 using Core.Models;
-using Serverapi.Repositories;
-using Microsoft.Extensions.Hosting;
+using System.Net.NetworkInformation;
 
 namespace Serverapi.Repositories
 {
@@ -80,9 +79,6 @@ namespace Serverapi.Repositories
             _collection.DeleteOne(filter);
         }
 
-
-
-        //mails til alle der har issignedupfornewsletter = true
         public async Task<List<string>> GetVolunteerEmails()
         {
             var filter = Builders<Application>.Filter.And(
@@ -99,5 +95,17 @@ namespace Serverapi.Repositories
             return emails;
         }
 
+        //get an application by its id from the database
+        public async Task<Application> GetApplicationById(int id)
+        {
+            //filter to find application with the id
+            var filter = Builders<Application>.Filter.Eq(a => a.appId, id);
+
+            //using filter to find the first application that matches the filter criteria
+            var application = await _collection.Find(filter).FirstOrDefaultAsync();
+
+            //returning the application or null if no application was found
+            return application;
+        }
     }
 }

@@ -13,15 +13,14 @@ namespace Exam2024t
             builder.RootComponents.Add<App>("#app");
             builder.RootComponents.Add<HeadOutlet>("head::after");
 
-            
-            builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri(builder.HostEnvironment.BaseAddress) });
 
+            builder.Services.AddSingleton(sp => new HttpClient { BaseAddress = new Uri(builder.HostEnvironment.BaseAddress) });
 
             // builder.Services.AddSingleton<IApplicationService, ApplicationServiceInMemory>();
 
-            builder.Services.AddScoped<IApplicationService, ApplicationService>();
+            builder.Services.AddSingleton<IApplicationService, ApplicationService>();
 
-            builder.Services.AddScoped<IAdminService, AdminService>();
+            builder.Services.AddSingleton<IAdminService, AdminService>();
 
 
 

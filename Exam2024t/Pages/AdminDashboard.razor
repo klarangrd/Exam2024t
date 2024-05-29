@@ -26,7 +26,6 @@ else
     <button class="btn btn-primary" @onclick="ShowApplicationsApproved">Godkendte tilmeldinger</button>
     <button class="btn btn-primary" @onclick="ShowQueuedApplications">Ventelistede tilmeldinger</button>
     <button @onclick="shownewsletterdialog" class="btn btn-primary">vis folk der er tilmedt nyhedsbrevet</button>
-
 </div>
 <div>
     @if (showApprovedApplications)
@@ -37,7 +36,7 @@ else
             {
                 var applicationCount = GetApplicationCountForWeek(week);
                 <div class="week-column @(GetWeekColumnClass(applicationCount))">
-                    <h3>@week (Total: @applicationCount / 60)</h3>
+                    <h3>@week (Total: @applicationCount)</h3>
                     @foreach (var period in predefinedPeriods)
                     {
                         var periodCount = GetApplicationCountForWeekAndPeriod(week, period);
@@ -48,7 +47,7 @@ else
                                     <tr>
                                         <th>Frivillig navn</th>
                                         <th>Email</th>
-                                        <th>Underskrift Status</th>
+                                        <th>Er Frivillig?</th>
                                         <th>Uge</th>
                                         <th>Periode</th>
                                     </tr>
@@ -64,7 +63,7 @@ else
                                                 <p class="infotext">@application.Child.Volunteer.Email</p>
                                             </td>
                                             <td>
-                                                <p class="infotext">@(application.Signature?.Signed == true ? "Underskrevet" : "Ikke underskrevet")</p>
+                                                <p class="infotext">@(application.IsVolunteer == true ? "✔" : "X")</p>
                                             </td>
                                             <td>
                                                 <InputSelect @bind-Value="application.FirstpriorityWeek" @onchange="async (e) => await UpdateApplication(application.appId, application)">
@@ -566,6 +565,11 @@ else
                 filteredApplications = filteredApplications.Where(application => application.IsVolunteer);
             }
 
+            /*if (!showOnlyVolunteers)
+            {
+                filteredApplications = filteredApplications.Where(application => !application.IsVolunteer);
+            }*/
+
             //sort filtered applications by volunteer name
             filteredAndSortedApplications = filteredApplications.OrderBy(application => application.Child.Volunteer.Name).ToArray();
         }
@@ -603,6 +607,11 @@ else
     private int GetApplicationCountForWeek(string week)//counting how many applications are in each week total
     {
         return approvedApplications.Count(a => a.FirstpriorityWeek == week);
+    }
+
+    private int GetTotalApplicationsForWeek(string week)
+    {
+        return predefinedPeriods.Sum(period => GetApplicationCountForWeekAndPeriod(week, period));
     }
 
     private int GetApplicationCountForWeekAndPeriod(string week, string period)

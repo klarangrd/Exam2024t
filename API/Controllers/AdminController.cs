@@ -3,12 +3,14 @@ using Serverapi.Repositories;
 using Core;
 using MongoDB;
 using Core.Models;
+using Microsoft.AspNetCore.Cors;
 
 
 namespace API.Controllers
     {
         [ApiController]
         [Route("api/admins")]
+    [EnableCors("AllowSpecificOrigin")]
     public class AdminController : ControllerBase
     {
         private readonly IadminRepository mrepo;
@@ -50,7 +52,7 @@ namespace API.Controllers
             return Ok();
         }
 
-        [HttpGet]
+        [HttpGet("getall")]
         public async Task<ActionResult<Admin[]>> GetAllAdmin()
         {
             var admins = await mrepo.GetAllAdmin();

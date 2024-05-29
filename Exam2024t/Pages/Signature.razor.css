@@ -4,6 +4,10 @@ body {
     background-size: cover;
 }
 
+table {
+    width: 100%;
+}
+
 .parallax {
     background-image: url('summarumbaggrund.jpg');
     background-size: cover;

@@ -140,6 +140,13 @@
         }
     </ModalDialog>
     <div class="emptybox"></div>
+
+
+<ModalDialog @ref="duharnuunderskrevet" Title="Tillykke">
+    <p>Tilykke du har nu udfyldt alt der skal udfyldes. Sådan!</p>
+    <button @onclick="lukduharnuunderskrevet" class="btn btn-secondary">ok fuck hvor fedt</button>
+</ModalDialog>
+
 </div>
 @code {
     Core.Models.Application application = new Core.Models.Application();
@@ -153,8 +160,12 @@
     private ModalDialog SignatureDialog;
     private EditContext aEditContext;
     private ModalDialog? addDialog { get; set; }
+    private ModalDialog duharnuunderskrevet;
 
-
+    private void lukduharnuunderskrevet()
+    {
+        duharnuunderskrevet.Close();
+    }
 
     protected override void OnInitialized()
     {
@@ -219,6 +230,7 @@
 
         }
         UpdateApplicationListItem();
+        duharnuunderskrevet.Open();
     }
 
 

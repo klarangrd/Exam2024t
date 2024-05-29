@@ -114,9 +114,9 @@ h1 {
     text-transform: uppercase;
     font-family: calibri;
     border-radius: 3px;
-    border: 2px solid deeppink;
+    border: 2px solid orange;
     padding: 1rem 2rem;
-    box-shadow: .9px 1px 0 0 deeppink, 1.5px 2px 0 0 deeppink, 2.5px 3px 0 0 deeppink, 3.5px 4px 0 0 deeppink, 4.5px 5px 0 0 deeppink, 5.5px 6px 0 0 deeppink, 6.5px 7px 0 0 deeppink, 7.5px 8px 0 0 deeppink, 8.5px 9px 0 0 deeppink, 9.5px 10px 0 0 deeppink;
+    box-shadow: .9px 1px 0 0 orange, 1.5px 2px 0 0 orange, 2.5px 3px 0 0 orange, 3.5px 4px 0 0 orange, 4.5px 5px 0 0 orange, 5.5px 6px 0 0 orange, 6.5px 7px 0 0 orange, 7.5px 8px 0 0 orange, 8.5px 9px 0 0 orange, 9.5px 10px 0 0 orange;
     position: relative;
     inset: 0;
     cursor: pointer;

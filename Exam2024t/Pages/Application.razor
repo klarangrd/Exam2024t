@@ -10,21 +10,21 @@
 @inject IApplicationService ApplicationService
 
 <PageTitle>Application</PageTitle>
-
-<h3>Tilmeld til børneklub</h3>
-
-<table class="week-table">
-    <thead>
-        <tr>
-            <th></th>
-            <th>Onsdag - fredag</th>
-            <th>Lørdag - søndag</th>
-            <th>Onsdag - søndag</th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var week in uge_27)
-        {
+<div class="parallax">
+    <h3>Tilmeld til børneklub</h3>
+    <div class="tableitem_background">
+        <table class="week-table">
+            <thead>
+            <tr>
+                <th></th>
+                <th>Onsdag - fredag</th>
+                <th>Lørdag - søndag</th>
+                <th>Onsdag - søndag</th>
+            </tr>
+            </thead>
+            <tbody>
+            @foreach (var week in uge_27)
+            {
             var applicationCount = weekApplicationCounts.ContainsKey(week) ? weekApplicationCounts[week] : 0;
             <tr class="@(GetWeekColumnClass(applicationCount))">
                 <th>@week</th>
@@ -32,9 +32,9 @@
                 <td><strong>6. juli - 7. juli</strong></td>
                 <td><strong>3.juli - 7. juli</strong></td>
             </tr>
-        }
-        @foreach (var week in uge_28)
-        {
+            }
+            @foreach (var week in uge_28)
+            {
             var applicationCount = weekApplicationCounts.ContainsKey(week) ? weekApplicationCounts[week] : 0;
             <tr class="@(GetWeekColumnClass(applicationCount))">
                 <th>@week</th>
@@ -42,9 +42,9 @@
                 <td><strong>13. juli - 14. juli</strong></td>
                 <td><strong>10.juli - 14. juli</strong></td>
             </tr>
-        }
-        @foreach (var week in uge_30)
-        {
+            }
+            @foreach (var week in uge_30)
+            {
             var applicationCount = weekApplicationCounts.ContainsKey(week) ? weekApplicationCounts[week] : 0;
             <tr class="@(GetWeekColumnClass(applicationCount))">
                 <th>@week</th>
@@ -52,9 +52,9 @@
                 <td><strong>27. juli - 28. juli</strong></td>
                 <td><strong>24.juli - 28. juli</strong></td>
             </tr>
-        }
-        @foreach (var week in uge_31)
-        {
+            }
+            @foreach (var week in uge_31)
+            {
             var applicationCount = weekApplicationCounts.ContainsKey(week) ? weekApplicationCounts[week] : 0;
             <tr class="@(GetWeekColumnClass(applicationCount))">
                 <th>@week</th>
@@ -62,200 +62,205 @@
                 <td><strong>3. august - 4. august</strong></td>
                 <td><strong>31. juli - 4. august</strong></td>
             </tr>
-        }
-    </tbody>
-</table>
+            }
 
-<button class="btn btn-primary" @onclick="OnClickAddDialog">Tilmeld børneklub</button>
+            </tbody>
+        </table>
+    </div>
+    <div class="signupbtn">
+        <button class="btn" @onclick="OnClickAddDialog">Tilmeld børneklub</button>
+    </div>
 
-<ModalDialog @ref="addDialog" Title="Tilmeld børneklub">
-    <EditForm EditContext="@aEditContext" class="application-form" OnValidSubmit="@HandleValidSubmit">
-        <DataAnnotationsValidator />
-        <ValidationSummary />
 
-        <div class="form-group row">
-            <label for="ChildName" class="col-md-4 col-form-label">Navn Barn</label>
-            <div class="col-md-4">
-                <InputText id="ChildName" @bind-Value="application.Child.ChildName" class="form-control" placeholder="navn" required />
-                <ValidationMessage For="@(() => application.Child.ChildName)" />
+    <ModalDialog @ref="addDialog" Title="Tilmeld børneklub">
+        <EditForm EditContext="@aEditContext" class="application-form" OnValidSubmit="@HandleValidSubmit">
+            <DataAnnotationsValidator />
+            <ValidationSummary />
+
+            <div class="form-group row">
+                <label for="ChildName" class="col-md-4 col-form-label">Navn Barn</label>
+                <div class="col-md-4">
+                    <InputText id="ChildName" @bind-Value="application.Child.ChildName" class="form-control" placeholder="navn" required />
+                    <ValidationMessage For="@(() => application.Child.ChildName)" />
+                </div>
             </div>
-        </div>
 
-        <div class="form-group row">
-            <label for="ChildAge" class="col-md-4 col-form-label">Alder barn</label>
-            <div class="col-md-4">
-                <InputNumber id="ChildAge" @bind-Value="application.Child.ChildAge" class="form-control" placeholder="Alder" required type="number" min="1" max="18" title="Alder skal være mellem 0-18 år" />
-                <ValidationMessage For="@(() => application.Child.ChildAge)" />
+            <div class="form-group row">
+                <label for="ChildAge" class="col-md-4 col-form-label">Alder barn</label>
+                <div class="col-md-4">
+                    <InputNumber id="ChildAge" @bind-Value="application.Child.ChildAge" class="form-control" placeholder="Alder" required type="number" min="1" max="18" title="Alder skal være mellem 0-18 år" />
+                    <ValidationMessage For="@(() => application.Child.ChildAge)" />
+                </div>
             </div>
-        </div>
 
-        <div class="form-group row">
-            <label for="SecondPriorityWeek" class="col-md-4 col-form-label">Tøj størrelse</label>
-            <div class="col-md-4">
-                <InputSelect id="SecondPriorityWeek" @bind-Value="application.Child.ClothingSize" class="form-control" >
-                    @foreach (var anOption in clohtingsize)
-                    {
+            <div class="form-group row">
+                <label for="SecondPriorityWeek" class="col-md-4 col-form-label">Tøj størrelse</label>
+                <div class="col-md-4">
+                    <InputSelect id="SecondPriorityWeek" @bind-Value="application.Child.ClothingSize" class="form-control" >
+                        @foreach (var anOption in clohtingsize)
+                        {
                         <option value="@anOption"> @anOption</option>
-                    }
-                </InputSelect>
-                <ValidationMessage For="@(() => application.SecondpriorityWeek)" />
+                        }
+                    </InputSelect>
+                    <ValidationMessage For="@(() => application.SecondpriorityWeek)" />
+                </div>
             </div>
-        </div>
 
-        <div class="form-group row">
-            <label for="BeenBefore" class="col-md-4 col-form-label">Har du været i børneklub før?</label>
-            <div class="col-md-4">
-                <InputCheckbox id="BeenBefore" @bind-Value="application.Child.Beenbefore" />
+            <div class="form-group row">
+                <label for="BeenBefore" class="col-md-4 col-form-label">Har du været i børneklub før?</label>
+                <div class="col-md-4">
+                    <InputCheckbox id="BeenBefore" @bind-Value="application.Child.Beenbefore" />
+                </div>
             </div>
-        </div>
 
-        <div class="form-group row">
-            <label for="FirstPriorityWeek" class="col-md-4 col-form-label">Førsteprioritet uge</label>
-            <div class="col-md-4">
-                <InputSelect id="FirstPriorityWeek" @bind-Value="application.FirstpriorityWeek" class="form-control" @oninput="OnInputUge1">
-                    @foreach (var anOption in optionsUge1)
-                    {
+            <div class="form-group row">
+                <label for="FirstPriorityWeek" class="col-md-4 col-form-label">Førsteprioritet uge</label>
+                <div class="col-md-4">
+                    <InputSelect id="FirstPriorityWeek" @bind-Value="application.FirstpriorityWeek" class="form-control" @oninput="OnInputUge1">
+                        @foreach (var anOption in optionsUge1)
+                        {
                         <option value="@anOption">@anOption</option>
-                    }
-                </InputSelect>
-                <ValidationMessage For="@(() => application.FirstpriorityWeek)" />
+                        }
+                    </InputSelect>
+                    <ValidationMessage For="@(() => application.FirstpriorityWeek)" />
+                </div>
             </div>
-        </div>
 
-        <div class="form-group row">
-            <label for="FirstPriorityPeriod" class="col-md-4 col-form-label">Førsteprioritet periode</label>
-            <div class="col-md-4">
-                <InputSelect id="FirstPriorityPeriod" @bind-Value="application.FirstpriorityPeriod" class="form-control" @oninput="OnInputPeriode1">
-                    @foreach (var anOption in optionsPeriode1)
-                    {
+            <div class="form-group row">
+                <label for="FirstPriorityPeriod" class="col-md-4 col-form-label">Førsteprioritet periode</label>
+                <div class="col-md-4">
+                    <InputSelect id="FirstPriorityPeriod" @bind-Value="application.FirstpriorityPeriod" class="form-control" @oninput="OnInputPeriode1">
+                        @foreach (var anOption in optionsPeriode1)
+                        {
                         <option value="@anOption"> @anOption</option>
-                    }
-                </InputSelect>
-                <ValidationMessage For="@(() => application.FirstpriorityPeriod)" />
+                        }
+                    </InputSelect>
+                    <ValidationMessage For="@(() => application.FirstpriorityPeriod)" />
+                </div>
             </div>
-        </div>
 
-        <div class="form-group row">
-            <label for="SecondPriorityWeek" class="col-md-4 col-form-label">Andenprioritet uge</label>
-            <div class="col-md-4">
-                <InputSelect id="SecondPriorityWeek" @bind-Value="application.SecondpriorityWeek" class="form-control" @oninput="OnInputUge2">
-                    @foreach (var anOption in optionsUge2)
-                    {
+            <div class="form-group row">
+                <label for="SecondPriorityWeek" class="col-md-4 col-form-label">Andenprioritet uge</label>
+                <div class="col-md-4">
+                    <InputSelect id="SecondPriorityWeek" @bind-Value="application.SecondpriorityWeek" class="form-control" @oninput="OnInputUge2">
+                        @foreach (var anOption in optionsUge2)
+                        {
                         <option value="@anOption"> @anOption</option>
-                    }
-                </InputSelect>
-                <ValidationMessage For="@(() => application.SecondpriorityWeek)" />
+                        }
+                    </InputSelect>
+                    <ValidationMessage For="@(() => application.SecondpriorityWeek)" />
+                </div>
             </div>
-        </div>
 
-        <div class="form-group row">
-            <label for="SecondPriorityPeriod" class="col-md-4 col-form-label">Andenprioritet periode</label>
-            <div class="col-md-4">
-                <InputSelect id="SecondPriorityPeriod" @bind-Value="application.SecondpriorityPeriod" class="form-control" @oninput="OnInputPeriode2">
-                    @foreach (var anOption in optionsPeriode2)
-                    {
+            <div class="form-group row">
+                <label for="SecondPriorityPeriod" class="col-md-4 col-form-label">Andenprioritet periode</label>
+                <div class="col-md-4">
+                    <InputSelect id="SecondPriorityPeriod" @bind-Value="application.SecondpriorityPeriod" class="form-control" @oninput="OnInputPeriode2">
+                        @foreach (var anOption in optionsPeriode2)
+                        {
                         <option value="@anOption"> @anOption</option>
-                    }
-                </InputSelect>
-                <ValidationMessage For="@(() => application.SecondpriorityPeriod)" />
+                        }
+                    </InputSelect>
+                    <ValidationMessage For="@(() => application.SecondpriorityPeriod)" />
+                </div>
             </div>
-        </div>
 
-        <div class="form-group row">
-            <label for="Interests" class="col-md-4 col-form-label">Interesser</label>
-            <div class="col-md-4">
-                <InputText id="Interests" @bind-Value="application.Child.Interest" class="form-control" placeholder="fx sportsgrene, lege" />
+            <div class="form-group row">
+                <label for="Interests" class="col-md-4 col-form-label">Interesser</label>
+                <div class="col-md-4">
+                    <InputText id="Interests" @bind-Value="application.Child.Interest" class="form-control" placeholder="fx sportsgrene, lege" />
+                </div>
             </div>
-        </div>
 
-        <div class="form-group row">
-            <label for="Comment" class="col-md-4 col-form-label">Kommentarer</label>
-            <div class="col-md-4">
-                <InputText id="Comment" @bind-Value="application.Child.Comment" class="form-control" placeholder="fx sygdomme, allergier" />
+            <div class="form-group row">
+                <label for="Comment" class="col-md-4 col-form-label">Kommentarer</label>
+                <div class="col-md-4">
+                    <InputText id="Comment" @bind-Value="application.Child.Comment" class="form-control" placeholder="fx sygdomme, allergier" />
+                </div>
             </div>
-        </div>
 
-        <div class="form-group row">
-            <label for="IsVolunteer" class="col-md-4 col-form-label">Vil du være frivillig? kun for 15-18 årige</label>
-            <div class="col-md-4">
-                <InputCheckbox id="IsVolunteer" @bind-Value="application.IsVolunteer" @oninput="OnIsVolunteerChanged" />
+            <div class="form-group row">
+                <label for="IsVolunteer" class="col-md-4 col-form-label">Vil du være frivillig? kun for 15-18 årige</label>
+                <div class="col-md-4">
+                    <InputCheckbox id="IsVolunteer" @bind-Value="application.IsVolunteer" @oninput="OnIsVolunteerChanged" />
+                </div>
             </div>
-        </div>
 
 
-        <div class="form-group row">
-            <label for="ParentInformation" class="col-md-4 col-form-label">Forælder info</label>
-        </div>
-
-        <div class="form-group row">
-            <label for="VolunteerNavn" class="col-md-4 col-form-label">Navn</label>
-            <div class="col-md-4">
-                <InputText id="VolunteerNavn" @bind-Value="application.Child.Volunteer.Name" class="form-control" placeholder="navn" required />
-                <ValidationMessage For="@(() => application.Child.Volunteer.Name)" />
+            <div class="form-group row">
+                <label for="ParentInformation" class="col-md-4 col-form-label">Forælder info</label>
             </div>
-        </div>
 
-        <div class="form-group row">
-            <label for="VolunteerEmail" class="col-md-4 col-form-label">Email</label>
-            <div class="col-md-4">
-                <InputText id="VolunteerEmail" @bind-Value="application.Child.Volunteer.Email" class="form-control" placeholder="email" required />
-                <ValidationMessage For="@(() => application.Child.Volunteer.Email)" />
+            <div class="form-group row">
+                <label for="VolunteerNavn" class="col-md-4 col-form-label">Navn</label>
+                <div class="col-md-4">
+                    <InputText id="VolunteerNavn" @bind-Value="application.Child.Volunteer.Name" class="form-control" placeholder="navn" required />
+                    <ValidationMessage For="@(() => application.Child.Volunteer.Name)" />
+                </div>
             </div>
-        </div>
 
-        <div class="form-group row">
-            <label for="Kræwnr" class="col-md-4 col-form-label">
-                Kræwnr.
-                @if (showIsParent)
-                {
+            <div class="form-group row">
+                <label for="VolunteerEmail" class="col-md-4 col-form-label">Email</label>
+                <div class="col-md-4">
+                    <InputText id="VolunteerEmail" @bind-Value="application.Child.Volunteer.Email" class="form-control" placeholder="email" required />
+                    <ValidationMessage For="@(() => application.Child.Volunteer.Email)" />
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <label for="Kræwnr" class="col-md-4 col-form-label">
+                    Kræwnr.
+                    @if (showIsParent)
+                    {
                     <text>Voksen frivillig</text>
-                }
-            </label>
-            <div class="col-md-4">
-                <InputNumber id="Kræwnr" @bind-Value="application.Child.Volunteer.Kræwnr" class="form-control" placeholder="krævnr" required type="number" min="1" max="80000" title="krævnr skal være 8 cifre." />
-                <ValidationMessage For="@(() => application.Child.Volunteer.Kræwnr)" />
+                    }
+                </label>
+                <div class="col-md-4">
+                    <InputNumber id="Kræwnr" @bind-Value="application.Child.Volunteer.Kræwnr" class="form-control" placeholder="krævnr" required type="number" min="1" max="80000" title="krævnr skal være 8 cifre." />
+                    <ValidationMessage For="@(() => application.Child.Volunteer.Kræwnr)" />
+                </div>
             </div>
-        </div>
 
-        <div class="form-group row">
-            <label for="ParentInformation" class="col-md-4 col-form-label">Tilmeld dig nyhedsbrev!</label>
-        </div>
-
-        <div class="form-group row">
-            <label for="nyhedsbrev" class="col-md-4 col-form-label">Jeg vil gerne tilmelde mig nyhedsbrevet</label>
-            <div class="col-md-4">
-                <InputCheckbox id="nyhedsbrev" @bind-Value="application.Issignedupfornewsletter"  />
+            <div class="form-group row">
+                <label for="ParentInformation" class="col-md-4 col-form-label">Tilmeld dig nyhedsbrev!</label>
             </div>
-        </div>
 
-
-        <div class="form-group row">
-            <label for="vilkårogbetingelser" class="col-md-4 col-form-label"> Jeg accepterer <a href="/Police">vilkår og betingelser</a></label>
-            <div class="col-md-4">
-                <input type="checkbox" id="vilkårogbetingelser" required />
-                <div class="invalid-feedback">Please accept the terms and conditions.</div>
+            <div class="form-group row">
+                <label for="nyhedsbrev" class="col-md-4 col-form-label">Jeg vil gerne tilmelde mig nyhedsbrevet</label>
+                <div class="col-md-4">
+                    <InputCheckbox id="nyhedsbrev" @bind-Value="application.Issignedupfornewsletter"  />
+                </div>
             </div>
-        </div>
 
-        <div class="form-group row">
-            <div class="col-md-12">
-                <button type="submit" class="btn btn-primary btn-submit">Opret</button>
+
+            <div class="form-group row">
+                <label for="vilkårogbetingelser" class="col-md-4 col-form-label"> Jeg accepterer <a href="/Police">vilkår og betingelser</a></label>
+                <div class="col-md-4">
+                    <input type="checkbox" id="vilkårogbetingelser" required />
+                    <div class="invalid-feedback">Please accept the terms and conditions.</div>
+                </div>
             </div>
-        </div>
-    </EditForm>
-</ModalDialog>
 
-<ModalDialog @ref="alertDialog" Title="">
-    <div class="alertdiv">
-        <h3 class="h3">Tilmelding indsent!</h3>
-        <p>Husk at du skal underskrive for at dine børns tilmelding er gyldig!</p>
-        <h3 class="h3">Vil du underskrive nu?</h3>
-    </div>
-    <div class="btn-container">
-        <button @onclick="CloseDialog">Nej</button>
-        <NavLink href="/Underskrift"> <button @onclick="CloseDialog">Ja</button> </NavLink>
-    </div>
-</ModalDialog>
+            <div class="form-group row">
+                <div class="col-md-12">
+                    <button type="submit" class="btn btn-primary btn-submit">Opret</button>
+                </div>
+            </div>
+        </EditForm>
+    </ModalDialog>
+
+    <ModalDialog @ref="alertDialog" Title="">
+        <div class="alertdiv">
+            <h3 class="h3">Tilmelding indsent!</h3>
+            <p>Husk at du skal underskrive for at dine børns tilmelding er gyldig!</p>
+            <h3 class="h3">Vil du underskrive nu?</h3>
+        </div>
+        <div class="btn-container">
+            <button @onclick="CloseDialog">Nej</button>
+            <NavLink href="/Underskrift"> <button @onclick="CloseDialog">Ja</button> </NavLink>
+        </div>
+    </ModalDialog>
+</div>
 
 @code {
     string[] optionsUge1 = { "Vælg", "Uge 27", "Uge 28", "Uge 30", "Uge 31" };

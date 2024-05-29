@@ -4,74 +4,77 @@
 @inject Blazored.LocalStorage.ILocalStorageService localStore
 
 <PageTitle>Signature</PageTitle>
-
-<h1>Signatur underskrivning</h1>
-
-<h3>Dine applikationer</h3>
-
-
+<div class="parallax">
+    
+    <h3>Dine applikationer</h3>
+    
     @if (applicationliste != null)
     {
-        <table class="table">
+        <table>
             <tbody>
             @foreach (var item in applicationliste)
             {
-                <tr>
-                    <td>
-                        <p class="infotext"><strong>Frivilliges navn:</strong> <br /> @item.Child.Volunteer.Name</p>
-                    </td>
-                    <td>
-                        <p class="infotext"><strong>Email:</strong> <br />@item.Child.Volunteer.Email</p>
-                    </td>
-                    <td>
-                        <p class="infotext"><strong>Førsteprioritets uge:</strong><br /> @item.FirstpriorityWeek</p>
-                    </td>
-                    <td>
-                        <p class="infotext"><strong>Førsteprioritets periode:</strong><br /> @item.FirstpriorityPeriod</p>
-                    </td>
-                    <td>
-                        @if (@item.Signature.Signed == false)
-                        {
-                            <p class="infotext"><strong>Signatur status:</strong><br /> Ikke underskrevet </p>
-                        }
-                        else
-                        {
-                            <p class="infotext"><strong>Signatur status:</strong><br /> Underskrevet </p>
-                        }
+                <div class="tableitem_background">
+                    <div class="tableitem">
+                        <tr>
+                            <td>
+                                <p class="infotext"><strong>Frivilliges navn:</strong> <br/> @item.Child.Volunteer.Name</p>
+                            </td>
+                            <td>
+                                <p class="infotext"><strong>Email:</strong> <br/>@item.Child.Volunteer.Email</p>
+                            </td>
+                            <td>
+                                <p class="infotext"><strong>Førsteprioritets uge:</strong><br/> @item.FirstpriorityWeek</p>
+                            </td>
+                            <td>
+                                <p class="infotext"><strong>Førsteprioritets periode:</strong><br/> @item.FirstpriorityPeriod</p>
+                            </td>
+                            <td>
+                                @if (@item.Signature.Signed == false)
+                                {
+                                <p class="infotext"><strong>Signatur status:</strong><br/> Ikke underskrevet </p>
+                                }
+                                else
+                                {
+                                <p class="infotext"><strong>Signatur status:</strong><br/> Underskrevet </p>
+                                }
 
-                    </td>
-                    <td>
-                        <button class="btn" @onclick="() => ShowApplicationDetails(item)">Se detaljer</button>
-                    </td>
-                    <td>
-                        @if (@item.Signature.Signed)
-                        {
-                            <button class="btn" @onclick="() => ShowSignature(item.Signature.Sign)">Se underskrift</button>
-                        }
-                    </td>
-                </tr>
+                            </td>
+                            <td>
+                                <button class="btn" @onclick="() => ShowApplicationDetails(item)">Se detaljer</button>
+                            </td>
+                            <td>
+                                @if (@item.Signature.Signed)
+                                {
+                                <button class="btn" @onclick="() => ShowSignature(item.Signature.Sign)">Se underskrift</button>
+                                }
+                            </td>
+                        </tr>
+                    </div>
+                </div>
             }
             </tbody>
         </table>
-}
-<NavLink href="/Tilmelding"> <button class="btn">Tilmeld et barn mere</button> </NavLink>
-
+    }
+    <div class="signupbtn">
+        <NavLink href="/Tilmelding"> <button class="btn">Tilmeld et barn mere</button> </NavLink>  
+    </div>
 
     <ModalDialog @ref="addDialog" Title="Underskriv applikation">
         <EditForm EditContext="@aEditContext" class="application-form" OnValidSubmit="@HandleValidSubmit">
-            <DataAnnotationsValidator />
-            <ValidationSummary />
+            <DataAnnotationsValidator/>
+            <ValidationSummary/>
 
-                <div class="form-group row">
-                    <div class="col-md-12">
-                        @if (isModalVisible)
-                        {
-                                <SignaturePad class="signature" @bind-Value="selectedApplication.Signature.Sign" Options="_options" style="width: 100%; height: 200px"/>
-                        }
-                    </div>
-                </div> 
+            <div class="form-group row">
+                <div class="col-md-12">
+                    @if (isModalVisible)
+                    {
+                        <SignaturePad class="signature" @bind-Value="selectedApplication.Signature.Sign" Options="_options" style="width: 100%; height: 200px"/>
+                    }
+                </div>
+            </div>
 
- 
+
 
             <div class="form-group row">
                 <div class="col-md-12">
@@ -84,7 +87,7 @@
         @if (selectedApplication != null)
         {
             <div>
-                <p><strong>Kræwnr:</strong>  @selectedApplication.Child.Volunteer.Kræwnr</p>
+                <p><strong>Kræwnr:</strong> @selectedApplication.Child.Volunteer.Kræwnr</p>
                 <p><strong>Frivilliges navn:</strong> @selectedApplication.Child.Volunteer.Name</p>
                 <p><strong>Email:</strong> @selectedApplication.Child.Volunteer.Email</p>
                 <p><strong>Barnets navn:</strong> @selectedApplication.Child.ChildName</p>
@@ -109,15 +112,15 @@
                     <p><strong>Frivillig?:</strong> Nej</p>
                 }
 
-            @if (selectedApplication.Issignedupfornewsletter)
-            {
-                <p><strong>Tilmeldt nyhedsbrev?:</strong> Ja</p>
-            }
-            else
-            {
-                <p><strong>Tilmeldt nyhedsbrev?:</strong> Nej</p>
-            }
-              
+                @if (selectedApplication.Issignedupfornewsletter)
+                {
+                    <p><strong>Tilmeldt nyhedsbrev?:</strong> Ja</p>
+                }
+                else
+                {
+                    <p><strong>Tilmeldt nyhedsbrev?:</strong> Nej</p>
+                }
+
                 <p><strong>Førsteprioritets uge:</strong> @selectedApplication.FirstpriorityWeek</p>
                 <p><strong>Førsteprioritets periode:</strong> @selectedApplication.FirstpriorityPeriod</p>
                 <p><strong>Andenprioritets uge:</strong> @selectedApplication.SecondpriorityWeek</p>
@@ -129,15 +132,15 @@
             }
         }
     </ModalDialog>
-    
-<ModalDialog @ref="SignatureDialog" Title="Din underskrift">
-    @if (signatureImageUrl != null)
-    {
-    <img src="@signatureImageUrl" alt="Signature" style="width: 100%; height: auto;" />
-    }
-</ModalDialog>
 
+    <ModalDialog @ref="SignatureDialog" Title="Din underskrift">
+        @if (signatureImageUrl != null)
+        {
+            <img src="@signatureImageUrl" alt="Signature" style="width: 100%; height: auto;"/>
+        }
+    </ModalDialog>
 
+</div>
 @code {
     Core.Models.Application application = new Core.Models.Application();
     [Inject]
@@ -275,5 +278,5 @@
             localStore.SetItemAsync("applicationList", applicationliste);
         }
     }
+  
 }
-

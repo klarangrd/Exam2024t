@@ -9,6 +9,7 @@ namespace Exam2024t.Services
     {
         private readonly HttpClient _httpClient;
         private Admin _currentAdmin;
+        private readonly string serverUrl = "https://localhost:7010/api/admins";
 
         public AdminService(HttpClient httpClient)
         {
@@ -18,7 +19,7 @@ namespace Exam2024t.Services
         //serviceklasse til at logge ind som admin
         public async Task<bool> CheckLoginAsync(string username, string password)
         {
-            var response = await _httpClient.GetAsync($"/api/admins/checklogin?username={username}&password={password}");
+            var response = await _httpClient.GetAsync($"{serverUrl}/checklogin?username={username}&password={password}");
             if (response.IsSuccessStatusCode)
             {
                 _currentAdmin = new Admin

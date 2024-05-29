@@ -34,9 +34,10 @@ else
         <div class="week-grid">
             @foreach (var week in predefinedWeeks)
             {
+                var totalApplicationsForWeek = GetTotalApplicationsForWeek(week);
                 var applicationCount = GetApplicationCountForWeek(week);
                 <div class="week-column @(GetWeekColumnClass(applicationCount))">
-                    <h3>@week (Total: @applicationCount)</h3>
+                    <h3>@week (Total: @totalApplicationsForWeek / 60)</h3>
                     @foreach (var period in predefinedPeriods)
                     {
                         var periodCount = GetApplicationCountForWeekAndPeriod(week, period);
@@ -47,7 +48,7 @@ else
                                     <tr>
                                         <th>Frivillig navn</th>
                                         <th>Email</th>
-                                        <th>Er Frivillig?</th>
+                                        <th>Underskrift Status</th>
                                         <th>Uge</th>
                                         <th>Periode</th>
                                     </tr>
@@ -81,7 +82,6 @@ else
                                                     }
                                                 </InputSelect>
                                             </td>
-
                                             <td>
                                                 <button @onclick="() => ShowApprovedApplicationDetails(application)">Se detaljer</button>
                                             </td>
@@ -92,10 +92,10 @@ else
                         </div>
                     }
                     <button @onclick="() => ShowEmailModal(week)" class="btn btn-primary">Get emails</button>
-
                 </div>
             }
         </div>
+
     }
 </div>
 
@@ -103,13 +103,21 @@ else
     @if (emailApplications != null)
     {
         <div>
-            <h5>Emails for @selectedWeek</h5>
-            <ul>
-                @foreach (var application in emailApplications)
+            <h4>Emails for @selectedWeek</h4>
+            @foreach (var period in predefinedPeriods)
+            {
+                var periodApplications = emailApplications.Where(a => a.FirstpriorityPeriod == period).ToArray();
+                if (periodApplications.Any())
                 {
-                    <li>@application.Child.Volunteer.Email</li>
+                    <h5>Emails for @period</h5>
+                    <ul>
+                        @foreach (var application in periodApplications)
+                        {
+                            <li>@application.Child.Volunteer.Email</li>
+                        }
+                    </ul>
                 }
-            </ul>
+            }
             <button @onclick="() => EmailDialog.Close()" class="btn btn-secondary">Close</button>
         </div>
     }
@@ -451,12 +459,14 @@ else
         DetailsDialog.Close();
     }
 
-    private void ShowEmailModal(string week)//modal to show emails within a certain week 
+    private void ShowEmailModal(string week)
     {
         selectedWeek = week;
         emailApplications = approvedApplications.Where(a => a.FirstpriorityWeek == week).ToArray();
         EmailDialog.Open();
     }
+
+
 
     void OnInputUge1(ChangeEventArgs e)//dropdown in the edit modal
     {

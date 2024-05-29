@@ -249,17 +249,18 @@
         </EditForm>
     </ModalDialog>
 
-    <ModalDialog @ref="alertDialog" Title="">
-        <div class="alertdiv">
-            <h3 class="h3">Tilmelding indsent!</h3>
-            <p>Husk at du skal underskrive for at dine børns tilmelding er gyldig!</p>
-            <h3 class="h3">Vil du underskrive nu?</h3>
-        </div>
-        <div class="btn-container">
-            <button @onclick="CloseDialog">Nej</button>
-            <NavLink href="/Underskrift"> <button @onclick="CloseDialog">Ja</button> </NavLink>
-        </div>
-    </ModalDialog>
+<ModalDialog @ref="alertDialog" Title="">
+    <div class="alertdiv">
+        <h3 class="h3">Tilmelding indsent!</h3>
+        <p>Husk at du skal underskrive for at dine børns tilmelding er gyldig!</p>
+        <h3 class="h3">Vil du underskrive nu?</h3>
+    </div>
+    <div class="btn-container">
+        <button @onclick="CloseDialog">Nej</button>
+        <NavLink href="/Underskrift"> <button @onclick="CloseDialog">Ja</button> </NavLink>
+    </div>
+</ModalDialog>
+<div class="emptybox"></div>
 </div>
 
 @code {
@@ -416,8 +417,6 @@
                 return "red";
             }
         }
-
-    
 }
 
 

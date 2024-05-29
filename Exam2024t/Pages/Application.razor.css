@@ -16,6 +16,10 @@
     background-attachment: fixed;
 }
 
+.emptybox {
+    height: 200px;
+}
+
 label {
     margin-left: 15%; 
     display: block;

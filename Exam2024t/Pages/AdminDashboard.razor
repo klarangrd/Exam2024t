@@ -6,18 +6,15 @@
 @using System.Text
 @inject NavigationManager NavigationManager
 @inject IAdminService AdminService
+@inject IJSRuntime JSRuntime
 
 <PageTitle>Admin Dashboard</PageTitle>
 
 <h2>Admin Dashboard</h2>
 
-<h3>Du er logget ind som:</h3><!--showing info about the admin logged in -->
 @if (currentAdmin != null)
 {
-    <div>
-        <p>Brugernavn: @currentAdmin.Username</p>
-
-    </div>
+    <h3>Du er logget ind som: @currentAdmin.Username</h3><!--showing info about the admin logged in -->
     <button class="btn btn-primary" @onclick="Logout">Log ud</button>     <!--logout button-->
 }
 else
@@ -25,8 +22,13 @@ else
     <p>Indlæser admin data...</p>
 }
 
+<div class="button-container"><!--approved,queued,newletter email buttons-->
+    <button class="btn btn-primary" @onclick="ShowApplicationsApproved">Godkendte tilmeldinger</button>
+    <button class="btn btn-primary" @onclick="ShowQueuedApplications">Ventelistede tilmeldinger</button>
+    <button @onclick="shownewsletterdialog" class="btn btn-primary">vis folk der er tilmedt nyhedsbrevet</button>
+
+</div>
 <div>
-    <button class="btn btn-primary" @onclick="ShowApplicationsApproved">Godkendte tilmeldinger</button><!--see all approved applications-->
     @if (showApprovedApplications)
     {
         <h1>Godkendte tilmeldinger</h1>
@@ -40,52 +42,55 @@ else
                     {
                         var periodCount = GetApplicationCountForWeekAndPeriod(week, period);
                         <h4>Periode: @period (Total: @periodCount)</h4>
-                        <table>
-                            <thead>
-                                <tr>
-                                    <th>Frivillig navn</th>
-                                    <th>Email</th>
-                                    <th>Underskrift Status</th>
-                                    <th>Uge</th>
-                                    <th>Periode</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @foreach (var application in approvedApplications.Where(a => a.FirstpriorityWeek == week && a.FirstpriorityPeriod == period))
-                                {
+                        <div class="scrollable-container">
+                            <table>
+                                <thead>
                                     <tr>
-                                        <td>
-                                            <p class="infotext">@application.Child.Volunteer.Name</p>
-                                        </td>
-                                        <td>
-                                            <p class="infotext">@application.Child.Volunteer.Email</p>
-                                        </td>
-                                        <td>
-                                            <p class="infotext">@(application.Signature?.Signed == true ? "Underskrevet" : "Ikke underskrevet")</p>
-                                        </td>
-                                        <td>
-                                            <InputSelect @bind-Value="application.FirstpriorityWeek" @onchange="() => UpdateApplication(application.appId ,application)">
-                                                @foreach (var anOption in optionsUge1)
-                                                {
-                                                    <option value="@anOption">@anOption</option>
-                                                }
-                                            </InputSelect>
-                                        </td>
-                                        <td>
-                                            <InputSelect @bind-Value="application.FirstpriorityPeriod" @onchange="() => UpdateApplication(application.appId, application)">
-                                                @foreach (var anOption in optionsPeriode1)
-                                                {
-                                                    <option value="@anOption">@anOption</option>
-                                                }
-                                            </InputSelect>
-                                        </td>
-                                        <td>
-                                            <button @onclick="() => ShowApprovedApplicationDetails(application)">Se detaljer</button>
-                                        </td>
+                                        <th>Frivillig navn</th>
+                                        <th>Email</th>
+                                        <th>Underskrift Status</th>
+                                        <th>Uge</th>
+                                        <th>Periode</th>
                                     </tr>
-                                }
-                            </tbody>
-                        </table>
+                                </thead>
+                                <tbody>
+                                    @foreach (var application in approvedApplications.Where(a => a.FirstpriorityWeek == week && a.FirstpriorityPeriod == period))
+                                    {
+                                        <tr>
+                                            <td>
+                                                <p class="infotext">@application.Child.Volunteer.Name</p>
+                                            </td>
+                                            <td>
+                                                <p class="infotext">@application.Child.Volunteer.Email</p>
+                                            </td>
+                                            <td>
+                                                <p class="infotext">@(application.Signature?.Signed == true ? "Underskrevet" : "Ikke underskrevet")</p>
+                                            </td>
+                                            <td>
+                                                <InputSelect @bind-Value="application.FirstpriorityWeek" @onchange="async (e) => await UpdateApplication(application.appId, application)">
+                                                    @foreach (var anOption in optionsUge1)
+                                                    {
+                                                        <option value="@anOption">@anOption</option>
+                                                    }
+                                                </InputSelect>
+                                            </td>
+                                            <td>
+                                                <InputSelect @bind-Value="application.FirstpriorityPeriod" @onchange="async (e) => await UpdateApplication(application.appId, application)">
+                                                    @foreach (var anOption in optionsPeriode1)
+                                                    {
+                                                        <option value="@anOption">@anOption</option>
+                                                    }
+                                                </InputSelect>
+                                            </td>
+
+                                            <td>
+                                                <button @onclick="() => ShowApprovedApplicationDetails(application)">Se detaljer</button>
+                                            </td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
                     }
                     <button @onclick="() => ShowEmailModal(week)" class="btn btn-primary">Get emails</button>
 
@@ -103,7 +108,7 @@ else
             <ul>
                 @foreach (var application in emailApplications)
                 {
-                    <li>@application.Child.Volunteer.Email - @application.Child.Volunteer.Name</li>
+                    <li>@application.Child.Volunteer.Email</li>
                 }
             </ul>
             <button @onclick="() => EmailDialog.Close()" class="btn btn-secondary">Close</button>
@@ -113,7 +118,6 @@ else
 
 
 <div>
-    <button class="btn btn-primary" @onclick="ShowQueuedApplications">Ventelistede tilmeldinger</button><!--button to show all queued applications-->
     @if (showQueuedApplications)
     {
         <h1>Venteliste</h1>
@@ -172,7 +176,6 @@ else
         </table>
     }
 
-
 </div>
 
 <ModalDialog @ref="DetailsDialog" Title="Application Details">
@@ -193,8 +196,6 @@ else
             <p><strong>Frivillig?:</strong> @selectedApplication.IsVolunteer</p>
             <p><strong>Første prioritets uge:</strong> @selectedApplication.FirstpriorityWeek</p>
             <p><strong>Første prioritets periode:</strong> @selectedApplication.FirstpriorityPeriod</p>
-            <p><strong>Anden prioritets uge:</strong> @selectedApplication.SecondpriorityWeek</p>
-            <p><strong>Anden prioritets periode:</strong> @selectedApplication.SecondpriorityPeriod</p>
             @if (selectedApplication.Signature?.Signed == true && selectedApplication.Signature?.Sign != null)
             {
                 <img src="@($"{Encoding.UTF8.GetString(selectedApplication.Signature.Sign)}")" alt="Signature" style="max-width: 100%; height: auto;" />
@@ -202,15 +203,28 @@ else
         </div>
         @if (!selectedApplication.IsApproved)
         {
-            <button @onclick="() => ShowEditModal(selectedApplication)" class="btn btn-primary">Rediger</button>
+            <p><strong>Anden prioritets uge:</strong> @selectedApplication.SecondpriorityWeek</p>
+            <p><strong>Anden prioritets periode:</strong> @selectedApplication.SecondpriorityPeriod</p>
 
             <!--button to edit selected queued application-->
+            <button @onclick="() => ShowEditModal(selectedApplication)" class="btn btn-primary">Rediger</button>
+
+        }
+
+        @if (selectedApplication.IsApproved)
+        {
+            <!--button to download the selected application as pdf-->
+            <button @onclick="() => DownloadPdf(selectedApplication.appId)" class="btn btn-primary">Download PDF</button>
+
+                        <!--button to move the selected application to the queue-->
+            <button @onclick="() => MoveToQueued(selectedApplication.appId)" class="btn btn-warning">Flyt til venteliste</button>
+
         }
     }
 </ModalDialog>
 
+<!--modal to edit the actual details in case of errors etc-->
 <ModalDialog @ref="EditDialog" Title="Edit Application">
-    <!--modal to edit the actual details in case of errors etc-->
     @if (selectedApplication != null)
     {
         <EditForm Model="@selectedApplication" OnValidSubmit="HandleEditApplication">
@@ -302,7 +316,6 @@ else
     }
 </ModalDialog>
 
-<button @onclick="shownewsletterdialog" class="btn btn-primary">vis folk der er tilmedt nyhedsbrevet</button>
 
 <ModalDialog @ref="newsletterdialog" Title="Emails List">
     @if (emailsnewsletter != null)
@@ -356,8 +369,8 @@ else
     private readonly string[] predefinedPeriods = { "Onsdag-Søndag", "Onsdag-Fredag", "Fredag-Søndag" };
 
     // options for dropdowns in the edit modal
-    string[] optionsUge1 = { "Vælg", "Uge 27", "Uge 28", "Uge 30", "Uge 31" };
-    string[] optionsPeriode1 = { "Vælg", "Onsdag-Søndag", "Onsdag-Fredag", "Fredag-Søndag" };
+    string[] optionsUge1 = {"Vælg","Uge 27", "Uge 28", "Uge 30", "Uge 31" };
+    string[] optionsPeriode1 = {"Vælg","Onsdag-Søndag", "Onsdag-Fredag", "Fredag-Søndag" };
     string selectedOptionUge1 = "Vælg";
     string selectedOptionPeriode1 = "Vælg";
 
@@ -387,6 +400,36 @@ else
         DetailsDialog.Open();
     }
 
+    private async Task MoveToQueued(int appId)//method to move the application back to queued in case of errors etc
+    {
+        try
+        {
+            //find the application in the approved list
+            var application = approvedApplications.FirstOrDefault(a => a.appId == appId);
+            if (application != null)
+            {
+                //update the application status
+                application.IsApproved = false;
+
+                //updating the application in the database
+                await applicationService.UpdateApplication(appId, application);
+
+                //remove from approved list and add to queued list
+                approvedApplications = approvedApplications.Where(a => a.appId != appId).ToArray();
+                var queuedApplicationsList = queuedApplications.ToList();
+                queuedApplicationsList.Add(application);
+                queuedApplications = queuedApplicationsList.ToArray();
+
+                Applicationlistcopy = queuedApplications.ToArray();
+                FilterAndSort();
+            }
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Error moving application to queued: {ex.Message}");
+        }
+    }
+
     private void ShowApprovedApplicationDetails(Core.Models.Application application)//showing approved application details
     {
         selectedApplication = application;
@@ -397,16 +440,15 @@ else
     {
         selectedApplication = application;
         EditDialog.Open();
+        DetailsDialog.Close();
     }
 
-    private void ShowEmailModal(string week)
+    private void ShowEmailModal(string week)//modal to show emails within a certain week 
     {
         selectedWeek = week;
         emailApplications = approvedApplications.Where(a => a.FirstpriorityWeek == week).ToArray();
         EmailDialog.Open();
     }
-
-
 
     void OnInputUge1(ChangeEventArgs e)//dropdown in the edit modal
     {
@@ -432,10 +474,11 @@ else
         {
             await applicationService.UpdateApplication(selectedApplication.appId, selectedApplication);
             EditDialog.Close();
+            DetailsDialog.Open();
         }
     }
 
-    private async Task ApproveApplication()
+    private async Task ApproveApplication()//method to approve the application
     {
         try
         {
@@ -443,47 +486,61 @@ else
             {
                 selectedApplication.IsApproved = true;
 
-                // Update the application in the database
+                //update the application in the database
                 await applicationService.UpdateApplication(selectedApplication.appId, selectedApplication);
 
-                // Remove the approved application from the queued applications list
+                //removing the approved application from queued applications
                 queuedApplications = queuedApplications.Where(a => a.appId != selectedApplication.appId).ToArray();
 
-                // Append the approved application to the approved applications list
+                //append the approved application to the approved applications list
                 var approvedApplicationsList = approvedApplications.ToList();
                 approvedApplicationsList.Add(selectedApplication);
                 approvedApplications = approvedApplicationsList.ToArray();
 
-                // Update the local copy of applications for filtering and sorting
+                //update the local copy of applications for filtering and sorting
                 Applicationlistcopy = queuedApplications.ToArray();
 
-                // Apply filtering and sorting
+                //applying filtering and sorting
                 FilterAndSort();
 
-                // Close the edit dialog
                 EditDialog.Close();
             }
         }
         catch (Exception ex)
         {
-            // Handle any potential exceptions here
+            //handle any potential exceptions here
             Console.WriteLine($"Error approving application: {ex.Message}");
-            // Optionally, you can show an error message to the user
         }
     }
 
+    private async Task DownloadPdf(int appId)//method to download the pdf
+    {
+        //constructing the url to download the pdf for the specified application
+        var pdfUrl = $"https://localhost:7010/api/application/downloadpdf/{appId}";
 
+        //invoking a js function to download the file using the constructed URL
+        await JSRuntime.InvokeVoidAsync("downloadFile", pdfUrl);
+    }
 
 
     private async Task UpdateApplication(int id, Core.Models.Application application)
     {
-        await applicationService.UpdateApplication(id, application);
-        approvedApplications = await applicationService.GetApprovedApplications(); //refresh the approved applications list
+        Console.WriteLine("UpdateApplication called");
+        Console.WriteLine($"Updating application: {application.appId}, Week: {application.FirstpriorityWeek}, Period: {application.FirstpriorityPeriod}");
+        try
+        {
+            await applicationService.UpdateApplication(id, application);
+            approvedApplications = await applicationService.GetApprovedApplications(); // Refresh the approved applications list
+        }
+        catch (Exception ex)
+        {
+            // Handle any errors that occur during the update
+            Console.WriteLine($"Error updating application: {ex.Message}");
+        }
     }
 
+
     private bool showOnlyVolunteers = false;
-
-
     //filtering and sorting the applications by certain things
     private void FilterAndSort()
     {
@@ -509,16 +566,21 @@ else
                 filteredApplications = filteredApplications.Where(application => application.IsVolunteer);
             }
 
-            if (!showOnlyVolunteers)
-            {
-                filteredApplications = filteredApplications.Where(application => !application.IsVolunteer);
-            }
-            
-            
-
             //sort filtered applications by volunteer name
             filteredAndSortedApplications = filteredApplications.OrderBy(application => application.Child.Volunteer.Name).ToArray();
         }
+    }
+
+
+    public async void shownewsletterdialog()
+    {
+        await LoadEmails();
+        newsletterdialog.Open();
+    }
+
+    private async Task LoadEmails()
+    {
+        emailsnewsletter = await applicationService.GetVolunteerEmails();
     }
 
     [Inject]
@@ -565,16 +627,6 @@ else
     }
 
 
-    public async void shownewsletterdialog()
-    {
-        await LoadEmails();
-        newsletterdialog.Open();
-    }
-
-    private async Task LoadEmails()
-    {
-        emailsnewsletter = await applicationService.GetVolunteerEmails();
-    }
 }
 
 

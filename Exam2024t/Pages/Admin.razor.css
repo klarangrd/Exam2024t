@@ -1,4 +1,4 @@
-﻿/* General page styling */
+﻿/* General Page Styling */
 body, html {
     margin: 0;
     padding: 0;
@@ -64,9 +64,14 @@ button.btn, .submit-button {
         background-color: #0056b3;
     }
 
-/* Utility classes for alignment */
-.center {
-    text-align: center;
+/* Error message styling */
+.alert-danger {
+    margin-top: 20px;
+    padding: 15px;
+    background-color: #f8d7da;
+    color: #721c24;
+    border: 1px solid #f5c6cb;
+    border-radius: 5px;
 }
 
 /* Responsive media queries */

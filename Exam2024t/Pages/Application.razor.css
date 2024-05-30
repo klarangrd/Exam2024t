@@ -162,3 +162,7 @@ label {
     align-items: center;
     margin-top: 100px;
 }
+
+th, td {
+    font-family: 'Times New Roman', Times, serif;
+}

@@ -1,36 +1,39 @@
-﻿<div class="top-row ps-3 navbar navbar-dark">
+﻿<div class="navbar">
     <div class="container-fluid">
-        <a class="navbar-brand" href="">Eksamen2024</a>
+        <a class="navbar-brand" href=""></a>
     </div>
 </div>
 
-<input type="checkbox" title="Navigation menu" class="navbar-toggler" />
-
-<div class="nav-scrollable" onclick="document.querySelector('.navbar-toggler').click()">
-    <nav class="flex-column">
-        <div class="nav-item px-3">
+<div class="nav-scrollable">
+    <nav class="nav-container">
+        <div class="nav-item">
             <NavLink class="nav-link" href="" Match="NavLinkMatch.All">
-                <span class="bi bi-house-door-fill-nav-menu" aria-hidden="true"></span> Home
+                Home
             </NavLink>
         </div>
 
-        <div class="nav-item px-3">
-            <NavLink class="nav-link" href="Application">
-                <span class="bi bi-plus-square-fill-nav-menu" aria-hidden="true"></span> Application
+        <div class="nav-item">
+            <NavLink class="nav-link" href="Tilmelding">
+                Tilmelding
             </NavLink>
         </div>
 
-        <div class="nav-item px-3">
-            <NavLink class="nav-link" href="Signature">
-                <span class="bi bi-list-nested-nav-menu" aria-hidden="true"></span> Signature
+        <div class="nav-item">
+            <NavLink class="nav-link" href="Underskrift">
+                Underskrift siden
             </NavLink>
         </div>
 
-        <div class="nav-item px-3">
+        <div class="nav-item">
             <NavLink class="nav-link" href="Admin">
-                <span class="bi bi-list-nested-nav-menu" aria-hidden="true"></span> Admin
+                Administrator
+            </NavLink>
+        </div>
+
+        <div class="nav-item px-3">
+            <NavLink class="nav-link" href="Police">
+                Politikker
             </NavLink>
         </div>
     </nav>
 </div>
-

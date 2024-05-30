@@ -5,41 +5,57 @@
 @inject HttpClient Http
 @inject IAdminService AdminService
 @inject NavigationManager NavigationManager
+@using System.Net.Http.Json;
+
 
 
 <PageTitle>Admin</PageTitle>
 
-<h2>Login as Admin</h2>
+<h2>Login som Admin</h2>
 
 <EditForm Model="@adminLogin" OnValidSubmit="@HandleLogin">
     <DataAnnotationsValidator />
     <ValidationSummary />
 
     <div class="form-group">
-        <label for="username">Username:</label>
+        <label for="username">Brugernavn:</label>
         <InputText id="username" @bind-Value="adminLogin.Username" class="form-control" />
     </div>
     <div class="form-group">
-        <label for="password">Password:</label>
+        <label for="Kodeord">Password:</label>
         <InputText id="password" @bind-Value="adminLogin.Password" type="password" class="form-control" />
     </div>
     <button type="submit" class="btn btn-primary">Login</button>
 </EditForm>
 
 @code {
+
     private Core.Models.Admin adminLogin = new Core.Models.Admin();
+
+   
+    private EditContext aEditContext;
+
+
+    public bool erLoggetInd = false;
+
+    bool popUp = false;
+    private bool login;
+    private bool loginSuccessful;
+
 
     private async Task HandleLogin()
     {
-        var result = await AdminService.LoginAdmin(adminLogin.Username, adminLogin.Password);
-        if (result)
+        loginSuccessful = await AdminService.CheckLoginAsync(adminLogin.Username, adminLogin.Password);
+        if (loginSuccessful)
         {
             NavigationManager.NavigateTo("/AdminDashboard");
-            Console.WriteLine("login succesful!");
         }
         else
         {
-            Console.WriteLine("login failed");
+            // You can add additional logic here for handling failed login attempts.
+            Console.WriteLine("Login failed");
         }
     }
+   
 }
+

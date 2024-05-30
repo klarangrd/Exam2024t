@@ -1,9 +1,13 @@
 ﻿using Core.Models;
+using MongoDB.Bson;
+using MongoDB.Driver;
 using System.Diagnostics.Metrics;
+using System.Net.Http;
+using static System.Net.WebRequestMethods;
 
 namespace Exam2024t.Services
 {
-    public class ApplicationServiceInMemory : IApplicationService
+    public class ApplicationServiceInMemory //: IApplicationService
     {
         
         private static List<Application> Applications = new List<Application>(){ new Application
@@ -47,21 +51,18 @@ namespace Exam2024t.Services
                 return t;
             }
 
-        public Task UpdateApplication(Application application)
+        public Task UpdateApplication( int id, Application application)
         {
-            var existingApplication = Applications.FirstOrDefault(a => a.Child.Volunteer.Kræwnr == application.Child.Volunteer.Kræwnr);
+            var existingApplication = Applications.FirstOrDefault(a => a.Id == application.Id);
             if (existingApplication != null)
             {
+                existingApplication.FirstpriorityWeek = application.FirstpriorityWeek;
+                existingApplication.FirstpriorityPeriod = application.FirstpriorityPeriod;
                 existingApplication.IsApproved = application.IsApproved;
-                Console.WriteLine($"Application for {existingApplication.Child.Volunteer.Name} updated to Approved: {existingApplication.IsApproved}");
-            }
-            else
-            {
-                Console.WriteLine("No application found to update.");
+                // Other fields to update if necessary
             }
             return Task.CompletedTask;
         }
-
 
         public Task<Application[]> GetQueuedApplications()
         {
@@ -76,6 +77,28 @@ namespace Exam2024t.Services
             Console.WriteLine($"Fetched {approvedApps.Length} Approved Applications");
             return Task.FromResult(approvedApps);
         }
+
+
+        public Task DeleteApplication(ObjectId applicationId)
+        {
+            var application = Applications.FirstOrDefault(a => a.Id == applicationId);
+            if (application != null)
+            {
+                Applications.Remove(application);
+                Console.WriteLine($"Application with Id {applicationId} deleted.");
+            }
+            else
+            {
+                Console.WriteLine("No application found to delete.");
+            }
+            return Task.CompletedTask;
+        }
+        public async Task DeleteApplication(int Id)
+        {
+         
+        }
+
+        
 
     }
 }

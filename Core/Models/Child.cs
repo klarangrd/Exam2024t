@@ -13,8 +13,6 @@ namespace Core.Models
     {
         public ObjectId Id { get; set; }
 
-        public int ChildId { get; set; }
-
         [Required(ErrorMessage = "Navn barn er påkrævet")]
         public string ChildName { get; set; }
 

@@ -1,8 +1,30 @@
 body {
     font-family: Arial, sans-serif;
-    font-size: 14px;
-    color: #333;
+    background: radial-gradient(circle farthest-corner at 700px, #4169E0, #352A3B);
+    background-size: cover;
 }
+
+table {
+    width: 100%;
+}
+
+p {
+    margin-left: 10px;
+    margin-right: 10px;
+}
+
+.parallax {
+    background-image: url('summarumbaggrund.jpg');
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
+    background-attachment: fixed;
+}
+
+.emptybox {
+    height: 200px;
+}
+
 .signature {
     width: 100%;
     height: 100%;
@@ -16,16 +38,49 @@ body {
     font-size: 15px; /* Increased font size for better readability */
     color: #333; /* Dark color for better visibility */
 }
-.table {
-    width: 100%; /* Full-width table */
-    font-size: 12px; /* Smaller font size for table */
+.tableitem_background {
+    background-color: papayawhip;
+    border: 10px solid transparent;
+    border-image: url(border.png) 25% round;
+    margin-bottom: 20px;
 }
 
-table td {
-    border-top: 1px solid #eee;
-    padding: 8px; /* Compact padding */
+.tableitem {
+    display: flex;
+    justify-content: space-around;
 }
-td > p {
-    margin: 2px 0; /* Reduce margin between paragraphs within cells */
-    padding-left: 10px; /* Further indentation inside table cells */
+
+h3 {
+    color: white;
+    text-align: center;
+    margin-top: 20px;
+    margin-bottom: 30px;
 }
+
+.btn {
+    color: darkcyan;
+    text-decoration: none;
+    background-color: white;
+    font-size: 1.5em;
+    text-transform: uppercase;
+    font-family: calibri;
+    border-radius: 3px;
+    border: 2px solid orange;
+    padding: 1rem 2rem;
+    margin-left: 10px;
+    margin-right: 10px;
+    box-shadow: .9px 1px 0 0 orange, 1.5px 2px 0 0 orange, 2.5px 3px 0 0 orange, 3.5px 4px 0 0 orange, 4.5px 5px 0 0 orange, 5.5px 6px 0 0 orange, 6.5px 7px 0 0 orange, 7.5px 8px 0 0 orange, 8.5px 9px 0 0 orange, 9.5px 10px 0 0 orange;
+    inset: 0;
+    cursor: pointer;
+    transition: all 600ms ease;
+    display: inline-block;
+}
+
+.signupbtn {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 100px;
+}
+
+

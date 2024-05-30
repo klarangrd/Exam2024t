@@ -1,0 +1,59 @@
+﻿/* Styling af overksrifter og brødtekst */
+h2 {
+    font-family: 'imes New Roman', Times, serif;
+    font-size: 30px;
+    font-weight: bold;
+}
+
+h3 {
+    font-family: 'Times New Roman', Times, serif;
+    font-size: 18px;
+    font-weight: bold;
+}
+
+h4 {
+    font-family: 'Times New Roman', Times, serif;
+    font-size: 16px;
+    text-decoration: underline;
+}
+
+h5 {
+    font-family: cursive;
+    font-size: 16px;
+}
+
+
+p {
+    font-family: 'Times New Roman', Times, serif;
+    font-size: 16px;
+}
+
+/*  Styling af links */
+.link {
+    display: block;
+    font-family:'Times New Roman', Times, serif; 
+    font-size: 18px;
+    color:black;
+    text-decoration: none;
+    padding: 5px;
+    transition: color 0.3s; 
+}
+
+/*  Hover over links */
+.link:hover {
+    color: magenta;
+  }
+
+/*  Styling af boks rundt om links*/
+.link-box {
+    background-color: #f9f9f9;
+    padding: 10px;
+    margin-bottom: 10px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+}
+
+/* Overgangseffekt for baggrundsfarven i link-bokse */
+.link-box:hover {
+    background-color: #e0e0e0;
+}

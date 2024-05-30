@@ -4,6 +4,7 @@
 @using MongoDB.Bson
 @using Microsoft.AspNetCore.Authorization
 @using System.Text
+@using Microsoft.JSInterop
 @inject NavigationManager NavigationManager
 @inject IAdminService AdminService
 @inject IJSRuntime JSRuntime
@@ -223,8 +224,7 @@ else
         @if (selectedApplication.IsApproved)
         {
             <!--button to download the selected application as pdf-->
-            //<button @onclick="() => DownloadPdf(selectedApplication.appId)" class="btn btn-primary">Download PDF</button>
-            <button @onclick="() => DownloadPdf(1)">Download PDF</button>
+            <button @onclick="() => DownloadPdf(selectedApplication.appId)" class="btn btn-primary">Download PDF</button>
 
 
                         <!--button to move the selected application to the queue-->

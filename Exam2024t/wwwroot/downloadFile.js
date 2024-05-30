@@ -1,4 +1,8 @@
-﻿window.downloadFile = function (url) {
+﻿console.log("downloadFile.js is loadedddddddddddddddddddddddddddddddddd");
+
+
+window.downloadFile = function (url) {
+    console.log("downloadFile function called with URL:", url);
     fetch(url)
         .then(response => response.blob())
         .then(blob => {

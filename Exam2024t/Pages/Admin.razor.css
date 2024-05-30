@@ -36,6 +36,7 @@ label {
     margin-bottom: 8px;
     color: #333;
     font-weight: bold;
+    font-family: 'Times New Roman', Times, serif;
 }
 
 /* Input fields styling */
@@ -45,6 +46,7 @@ label {
     border: 1px solid #ccc;
     border-radius: 5px;
     font-size: 16px;
+    font-family: 'Times New Roman', Times, serif;
 }
 
 /* Button styling */
@@ -58,6 +60,7 @@ button.btn, .submit-button {
     cursor: pointer;
     font-size: 16px;
     transition: background-color 0.3s;
+    font-family: 'Times New Roman', Times, serif;
 }
 
     button.btn:hover, .submit-button:hover {
@@ -80,4 +83,8 @@ button.btn, .submit-button {
         width: 90%; /* Adjust width on smaller screens */
         padding: 20px;
     }
+}
+
+h2 {
+    font-family: 'Times New Roman', Times, serif;
 }

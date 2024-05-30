@@ -223,7 +223,9 @@ else
         @if (selectedApplication.IsApproved)
         {
             <!--button to download the selected application as pdf-->
-            <button @onclick="() => DownloadPdf(selectedApplication.appId)" class="btn btn-primary">Download PDF</button>
+            //<button @onclick="() => DownloadPdf(selectedApplication.appId)" class="btn btn-primary">Download PDF</button>
+            <button @onclick="() => DownloadPdf(1)">Download PDF</button>
+
 
                         <!--button to move the selected application to the queue-->
             <button @onclick="() => MoveToQueued(selectedApplication.appId)" class="btn btn-warning">Flyt til venteliste</button>
@@ -554,7 +556,6 @@ else
         var pdfUrl = $"https://localhost:7010/api/application/downloadpdf/{appId}";
         await JSRuntime.InvokeVoidAsync("downloadFile", pdfUrl);
     }
-
 
     private async Task UpdateApplication(int id, Core.Models.Application application)
     {

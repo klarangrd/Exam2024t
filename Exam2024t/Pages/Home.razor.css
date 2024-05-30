@@ -21,6 +21,11 @@ h1 {
     padding-top: 50px;
     font-size: 32px;
     margin-bottom: 200px;
+    font-family: 'Times New Roman', Times, serif;
+}
+
+h2, p {
+    font-family: 'Times New Roman', Times, serif;
 }
 
 /* Information box styling */

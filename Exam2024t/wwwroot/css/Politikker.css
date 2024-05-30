@@ -40,9 +40,9 @@ p {
 }
 
 /*  Hover over links */
-.link:hover {
-    color: magenta;
-  }
+    .link:hover {
+        color: orange;
+    }
 
 /*  Styling af boks rundt om links*/
 .link-box {

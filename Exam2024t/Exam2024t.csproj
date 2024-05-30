@@ -13,9 +13,16 @@
     <ExternalConsole>true</ExternalConsole>
   </PropertyGroup>
   <ItemGroup>
+    <Content Remove="wwwroot\downloadFile.js" />
+  </ItemGroup>
+  <ItemGroup>
+    <_ContentIncludedByDefault Remove="wwwroot\downloadFile.js" />
+  </ItemGroup>
+  <ItemGroup>
     <None Include="Layout\MainLayout.razor" />
     <None Include="Layout\NavMenu.razor" />
     <None Include="Pages\Home.razor" />
+    <None Include="wwwroot\downloadFile.js" />
   </ItemGroup>
 
   <ItemGroup>

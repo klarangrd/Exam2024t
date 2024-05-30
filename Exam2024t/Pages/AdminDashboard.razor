@@ -551,11 +551,7 @@ else
 
     private async Task DownloadPdf(int appId)
     {
-        // Use a network-accessible URL if the application is hosted on a server
-        var baseUrl = "https://localhost:7010"; // Change this to your server's address
-        var pdfUrl = $"{baseUrl}/api/application/downloadpdf/{appId}";
-
-        // Invoke the JS function to download the file
+        var pdfUrl = $"https://localhost:7010/api/application/downloadpdf/{appId}";
         await JSRuntime.InvokeVoidAsync("downloadFile", pdfUrl);
     }
 
@@ -672,8 +668,6 @@ else
             return "red";
         }
     }
-
-
 }
 
 

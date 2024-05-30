@@ -22,7 +22,7 @@ namespace API
             builder.Services.AddCors(options =>
             {
                 options.AddPolicy("AllowSpecificOrigin",
-                    builder => builder.WithOrigins("https://localhost:7263")
+                    builder => builder.WithOrigins("https://localhost:7263", "https://localhost:7010/application/downloadpdf/{appId}")
                                       .AllowAnyHeader()
                                       .AllowAnyMethod());
             });

@@ -32,12 +32,12 @@ else
     {
         <h1>Godkendte tilmeldinger</h1>
         <div class="week-grid">
-            @foreach (var week in predefinedWeeks)
+            @foreach (var week in predefinedWeeks)//counting total applications in each week based on the amount in each periods
             {
                 var totalApplicationsForWeek = GetTotalApplicationsForWeek(week);
                 var applicationCount = GetApplicationCountForWeek(week);
                 <div class="week-column @(GetWeekColumnClass(applicationCount))">
-                    <h3>@week (Total: @totalApplicationsForWeek / 60)</h3>
+                    <h3>@week (Total: @totalApplicationsForWeek)</h3>
                     @foreach (var period in predefinedPeriods)
                     {
                         var periodCount = GetApplicationCountForWeekAndPeriod(week, period);
@@ -48,12 +48,13 @@ else
                                     <tr>
                                         <th>Frivillig navn</th>
                                         <th>Email</th>
-                                        <th>Underskrift Status</th>
+                                        <th>Er Frivillig?</th>
                                         <th>Uge</th>
                                         <th>Periode</th>
                                     </tr>
                                 </thead>
                                 <tbody>
+                                    <!--application data to be shown immediately-->
                                     @foreach (var application in approvedApplications.Where(a => a.FirstpriorityWeek == week && a.FirstpriorityPeriod == period))
                                     {
                                         <tr>
@@ -83,7 +84,7 @@ else
                                                 </InputSelect>
                                             </td>
                                             <td>
-                                                <button @onclick="() => ShowApprovedApplicationDetails(application)">Se detaljer</button>
+                                                <button @onclick="() => ShowApprovedApplicationDetails(application)">Se detaljer</button><!--button to show approved applications details -->
                                             </td>
                                         </tr>
                                     }
@@ -91,7 +92,7 @@ else
                             </table>
                         </div>
                     }
-                    <button @onclick="() => ShowEmailModal(week)" class="btn btn-primary">Get emails</button>
+                    <button @onclick="() => ShowEmailModal(week)" class="btn btn-primary">Get emails</button><!--button to show emails in a week -->
                 </div>
             }
         </div>
@@ -100,6 +101,7 @@ else
 </div>
 
 <ModalDialog @ref="EmailDialog" Title="Emails List">
+    <!--emails in each period within a week-->
     @if (emailApplications != null)
     {
         <div>
@@ -547,12 +549,13 @@ else
         }
     }
 
-    private async Task DownloadPdf(int appId)//method to download the pdf
+    private async Task DownloadPdf(int appId)
     {
-        //constructing the url to download the pdf for the specified application
-        var pdfUrl = $"https://localhost:7010/api/application/downloadpdf/{appId}";
+        // Use a network-accessible URL if the application is hosted on a server
+        var baseUrl = "https://localhost:7010"; // Change this to your server's address
+        var pdfUrl = $"{baseUrl}/api/application/downloadpdf/{appId}";
 
-        //invoking a js function to download the file using the constructed URL
+        // Invoke the JS function to download the file
         await JSRuntime.InvokeVoidAsync("downloadFile", pdfUrl);
     }
 

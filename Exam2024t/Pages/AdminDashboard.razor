@@ -546,7 +546,7 @@ else
 
     private async Task DownloadPdf(int appId)
     {
-        var pdfUrl = $"https://localhost:7010/api/application/downloadpdf/{appId}";
+        var pdfUrl = $"https://exam2024tserver.azurewebsites.net/api/application/downloadpdf/{appId}";
         await JSRuntime.InvokeVoidAsync("downloadFile", pdfUrl);
     }
 

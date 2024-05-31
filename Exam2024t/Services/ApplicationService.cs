@@ -9,7 +9,7 @@ namespace Exam2024t.Services
         public class ApplicationService : IApplicationService
         {
         private readonly HttpClient http;
-        private readonly string serverUrl = "https://localhost:7010/api/application";
+        private readonly string serverUrl = "https://exam2024tserver.azurewebsites.net/api/application";
 
         public ApplicationService(HttpClient http)
         {

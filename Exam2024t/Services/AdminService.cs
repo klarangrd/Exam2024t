@@ -9,7 +9,7 @@ namespace Exam2024t.Services
     {
         private readonly HttpClient _httpClient;
         private Admin _currentAdmin;
-        private readonly string serverUrl = "https://localhost:7010/api/admins";
+        private readonly string serverUrl = "https://exam2024tserver.azurewebsites.net/api/admins";
 
         public AdminService(HttpClient httpClient)
         {

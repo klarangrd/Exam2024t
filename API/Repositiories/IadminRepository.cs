@@ -9,7 +9,6 @@ namespace Serverapi.Repositories
         void AddItem(Admin item);
         void DeleteById(int id);
         List<Admin> GetAll();
-       // Task<bool> LoginAdmin(string username, string password);
         Task<Admin> GetCurrentAdmin();
         Task LogoutAdmin();
         Task<Admin[]> GetAllAdmin();

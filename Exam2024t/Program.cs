@@ -30,5 +30,4 @@ namespace Exam2024t
         }
     }
 
-    //kommentar
 }

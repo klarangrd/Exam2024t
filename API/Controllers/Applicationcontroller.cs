@@ -103,18 +103,14 @@ namespace Serverapi.Controllers
         {
             try
             {
-                //logging start pdf generation
-                Console.WriteLine($"Starting PDF generation for application ID {appId}");
 
                 //fetching application details by id, using the application repository
                 var application = await _appRepository.GetApplicationById(appId);
                 if (application == null)
                 {
-                    Console.WriteLine($"Application not found for ID {appId}");
                     return NotFound("Application not found."); //if not fetched return error
                 }
 
-                Console.WriteLine($"Application found: {application.Child.Volunteer.Name}");
 
                 //setting the license key for the nuget gembox.pdf
                 ComponentInfo.SetLicense("FREE-LIMITED-KEY");
@@ -197,15 +193,11 @@ namespace Serverapi.Controllers
                         {
                             try
                             {
-                                Console.WriteLine($"Signature byte array length: {application.Signature.Sign.Length}");
-                                Console.WriteLine($"Signature byte array content: {BitConverter.ToString(application.Signature.Sign.Take(20).ToArray())}");
-
                                 //convert the byte array to a string
                                 var base64String = Encoding.UTF8.GetString(application.Signature.Sign);
 
                                 //remove the data:image/png;base64, part if present
                                 var base64Data = base64String.Split(',')[1];
-                                Console.WriteLine($"Base64 data: {base64Data.Substring(0, 50)}...");
 
                                 //decode the base64 string to get the raw image bytes
                                 var imageBytes = Convert.FromBase64String(base64Data);
@@ -230,8 +222,6 @@ namespace Serverapi.Controllers
                             }
                             catch (Exception ex)
                             {
-                                Console.WriteLine($"Error processing signature image: {ex.Message}");
-                                Console.WriteLine(ex.StackTrace);
                                 page.Content.DrawText(new PdfFormattedText().AppendLine("Signature image is invalid"), new PdfPoint(50, yPosition - 100));
                             }
                         }
@@ -244,14 +234,10 @@ namespace Serverapi.Controllers
                     pdfBytes = ms.ToArray();
                 }
 
-                Console.WriteLine($"PDF generation successful for application ID {appId}");
-
                 return File(pdfBytes, "application/pdf", $"application_{appId}.pdf");
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"Error generating PDF for application ID {appId}: {ex.Message}");
-                Console.WriteLine(ex.StackTrace);
                 return StatusCode(500, "Internal server error. Please check the server logs for more details.");
             }
         }

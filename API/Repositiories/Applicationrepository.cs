@@ -61,7 +61,6 @@ namespace Serverapi.Repositories
         {
             var filter = Builders<Application>.Filter.Eq(a => a.IsApproved, false);
             var applications = await _collection.Find(filter).ToListAsync();
-            Console.WriteLine($"Fetched {applications.Count} Queued Applications");
             return applications.ToArray();
         }
 
@@ -69,7 +68,6 @@ namespace Serverapi.Repositories
         {
             var filter = Builders<Application>.Filter.Eq(a => a.IsApproved, true);
             var applications = await _collection.Find(filter).ToListAsync();
-            Console.WriteLine($"Fetched {applications.Count} Approved Applications");
             return applications.ToArray();
         }
 

@@ -251,14 +251,7 @@
 
     public async Task HandleValidSubmit()
     {
-        if (applicationliste[0].Signature.Sign != null && applicationliste[0].Signature.Sign.Length > 0)
-        {
-            Console.WriteLine($"Submitting Application with Signature: {Convert.ToBase64String(application.Signature.Sign)}");
-        }
-        else
-        {
-            Console.WriteLine("No signature captured.");
-        }
+        
 
         await mService.Add(application);
        

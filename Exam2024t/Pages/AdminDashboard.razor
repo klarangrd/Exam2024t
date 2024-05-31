@@ -422,8 +422,6 @@ else
 
     private async Task MoveToQueued(int appId)//method to move the application back to queued in case of errors etc
     {
-        try
-        {
             //find the application in the approved list
             var application = approvedApplications.FirstOrDefault(a => a.appId == appId);
             if (application != null)
@@ -443,11 +441,6 @@ else
                 Applicationlistcopy = queuedApplications.ToArray();
                 FilterAndSort();
             }
-        }
-        catch (Exception ex)
-        {
-            Console.WriteLine($"Error moving application to queued: {ex.Message}");
-        }
     }
 
     private void ShowApprovedApplicationDetails(Core.Models.Application application)//showing approved application details
@@ -559,20 +552,10 @@ else
 
     private async Task UpdateApplication(int id, Core.Models.Application application)
     {
-        Console.WriteLine("UpdateApplication called");
-        Console.WriteLine($"Updating application: {application.appId}, Week: {application.FirstpriorityWeek}, Period: {application.FirstpriorityPeriod}");
-        try
-        {
             await applicationService.UpdateApplication(id, application);
             approvedApplications = await applicationService.GetApprovedApplications(); // Refresh the approved applications list
-        }
-        catch (Exception ex)
-        {
-            // Handle any errors that occur during the update
-            Console.WriteLine($"Error updating application: {ex.Message}");
-        }
+        
     }
-
 
     private bool showOnlyVolunteers = false;
     //filtering and sorting the applications by certain things

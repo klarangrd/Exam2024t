@@ -67,14 +67,12 @@ namespace Exam2024t.Services
         public Task<Application[]> GetQueuedApplications()
         {
             var queuedApps = Applications.Where(a => !a.IsApproved).ToArray();
-            Console.WriteLine($"Fetched {queuedApps.Length} Queued Applications");
             return Task.FromResult(queuedApps);
         }
 
         public Task<Application[]> GetApprovedApplications()
         {
             var approvedApps = Applications.Where(a => a.IsApproved).ToArray();
-            Console.WriteLine($"Fetched {approvedApps.Length} Approved Applications");
             return Task.FromResult(approvedApps);
         }
 
@@ -85,21 +83,14 @@ namespace Exam2024t.Services
             if (application != null)
             {
                 Applications.Remove(application);
-                Console.WriteLine($"Application with Id {applicationId} deleted.");
             }
-            else
-            {
-                Console.WriteLine("No application found to delete.");
-            }
+            
             return Task.CompletedTask;
         }
         public async Task DeleteApplication(int Id)
         {
          
         }
-
-        
-
     }
 }
 

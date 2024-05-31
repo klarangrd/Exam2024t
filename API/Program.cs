@@ -34,7 +34,6 @@ namespace API
 
 
             // Configure the HTTP request pipeline.
-
             app.UseCors("AllowSpecificOrigin");
 
             app.UseHttpsRedirection();
@@ -44,26 +43,6 @@ namespace API
             app.UseCors("policy");
 
             app.MapControllers();
-
-
-            //indsæt admin
-            /*
-            var nyadmindatabase = new Admin
-            {
-                adminid = 4,
-                Name = "Magnusbbb",
-                Email = "magnusbbb@hotmail.com",
-                Password = "123",
-                Username = "magbach"
-
-            };
-
-          
-
-            var adminrepo = new AdminRepository();
-
-            adminrepo.AddItem(nyadmindatabase);
-              */
 
             app.Run();
         }
